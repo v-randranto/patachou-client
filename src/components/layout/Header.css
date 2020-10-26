@@ -1,0 +1,23 @@
+.text-white {
+  color: ivory !important;
+}
+
+input[type=search] {
+  height:2rem;
+}
+ul {
+  list-style: none;
+}
+
+.dropdown-item.active {
+  background-color: #343a40 !important;
+}
+
+.dropdown-item:hover {
+  background-color:  gray !important;
+}
+.dropdown-menu {
+  background-color: #343a40 !important;
+  border-color: #343a40;
+  /* border-color: none; */
+}

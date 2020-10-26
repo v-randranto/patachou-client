@@ -1,4 +1,83 @@
+body {background-color: #343a40;}
+
 .App {
   text-align: center;
 }
+.container {
+  background: url('https://res.cloudinary.com/ndege65/image/upload/v1603743585/patachou/assets/bg-home_joj85u.jpg') center center;
+  background-size: cover;
+  min-height: 100vh;
+}
 
+input,
+textarea {
+  background-color: #f7f5ec;
+}
+
+.text-dark {
+  color: darkslategray !important;
+}
+
+.text-white {
+  color: ivory !important;
+}
+
+.card {
+  background-color: ivory;
+}
+
+button .btn {
+  outline: 0;
+}
+
+.intro {
+  font-size: 1.2rem;
+}
+
+.btn-primary {
+  border: 1px solid #9e4000 !important;
+  background-color: #9e4000 !important;
+}
+
+
+.card-body,
+.card-footer,
+ul,
+li {
+background-color: ivory;
+}
+
+.card-body {
+border-radius: 2%;
+}
+
+fa-icon {
+font-size: 1.4rem;
+color: darkslategray;
+}
+
+fa-icon.action {
+font-size: 1rem;
+color: #007bff;
+}
+
+.progress {
+  background-color: #c6c6c6 !important;
+  height:0.50rem;
+  width: 65%;
+}
+
+.label-file {
+  cursor: pointer;
+  font-weight: bold;
+}
+
+fa-icon {
+  font-size: 1.4rem;
+  color: darkslategray
+}
+
+button fa-icon {
+  font-size: 1.8rem;
+  color: black
+}

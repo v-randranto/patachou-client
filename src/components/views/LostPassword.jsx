@@ -1,9 +1,16 @@
-import React from 'react';
+import React, {useContext} from 'react';
+import { Redirect } from "react-router-dom";
 import Col from 'react-bootstrap/Col';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
+import { authContext } from '../../contexts/authContext';
 
 export default function LostPassword() {
+  const { auth } = useContext(authContext);
+  if (auth.data) {
+    return <Redirect to='/profile'/>;
+  }
+
   return (
     <>
       <Col md="6" lg="4" className="mx-auto">

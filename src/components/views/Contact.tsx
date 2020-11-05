@@ -3,7 +3,7 @@ import Col from 'react-bootstrap/Col'
 import Button from 'react-bootstrap/Button'
 import Form from 'react-bootstrap/Form'
 
-export default function contact() {
+export default function Contact() {
   return (
     <>
       <Col md="6" lg="4" className="mx-auto">

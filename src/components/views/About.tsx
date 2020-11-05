@@ -1,9 +1,8 @@
 import React from 'react'
 import Card from 'react-bootstrap/Card'
-import {IMG_BASE_URL, ABOUT_IMG} from '../../constants/img-url'
+import aboutImg from '../../img/about.jpg'
 
-export default function about() {
-  const aboutImg = `${IMG_BASE_URL}${ABOUT_IMG}`
+export default function About() {
   return (
     <>
     <Card className="col-lg-6 mx-auto pt-3">

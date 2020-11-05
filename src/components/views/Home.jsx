@@ -1,8 +1,10 @@
-import React from 'react'
+import React, {useContext} from 'react'
 import Col from 'react-bootstrap/Col'
 import Button from 'react-bootstrap/Button'
+import { authContext } from '../../contexts/authContext'
 
-export default function home() {
+export default function Home() {
+  const { auth } = useContext(authContext);
   return (
     <div className="home py-5">
       <div className="h-40 mx-0" style={{ backgroundColor: 'ivory' }}>
@@ -22,16 +24,18 @@ export default function home() {
         </div>
       </div>
 
-      <Col md="8" lg="6" className="mx-auto my-5 ">
+{ !auth.data && (
+  <Col className="mx-auto my-5 ">
        
-          <Button variant="dark mx-4 my-3" href="/login">
-            Je me connecte
-          </Button>
-     
-          <Button variant="info mx-4 my-3" href="/register">
-            Je me crée un compte
-          </Button>
-      </Col>
+       <Button variant="info mx-4 my-3 col col-md-4" href="/login">
+         Je me connecte
+       </Button>
+  
+       <Button variant="warning mx-4 my-3 col col-md-4" href="/register">
+         Je me crée un compte
+       </Button>
+   </Col>
+)}      
     </div>
   );
 }

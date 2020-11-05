@@ -1,9 +1,8 @@
 import React from 'react'
 import Card from 'react-bootstrap/Card'
-import {IMG_BASE_URL, NOT_FOUND_IMG} from '../../constants/img-url'
+import notFoundImg from '../../img/404.png'
 
 export default function Notfound() {
-  const notFoundImg = `${IMG_BASE_URL}${NOT_FOUND_IMG}`
   return (
     <>
       <Card bg="secondary" text="white" className="col-lg-3 mx-auto pt-3">

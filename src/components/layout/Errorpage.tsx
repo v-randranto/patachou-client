@@ -1,15 +1,15 @@
 import React from 'react'
 import Card from 'react-bootstrap/Card'
-import {IMG_BASE_URL, ERROR_PAGE_IMG} from '../../constants/img-url'
+import errorImg from '../../img/error.jpg'
 
-export default function Errorpage() {
-  const errorPageImg = `${IMG_BASE_URL}${ERROR_PAGE_IMG}`
+export default function ErrorPage() {
+  
   return (
     <>
       <Card className="col-lg-6 mx-auto pt-3">
         <Card.Img
           variant="top"
-          src={errorPageImg}
+          src={errorImg}
         />
         <Card.Body>
           <Card.Title>Oups, des corps étrangers dans la pâte! </Card.Title>

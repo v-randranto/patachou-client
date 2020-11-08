@@ -2,13 +2,17 @@ import React, { useContext } from 'react'
 import Nav from 'react-bootstrap/Nav'
 import Navbar from 'react-bootstrap/Navbar'
 import brandImg from '../../img/brand.png'
-import { authContext } from '../../contexts/authContext'
+import { AuthContext } from '../../contexts/AuthContext'
+import { AuthContextType, FixLater } from '../../models/types'
 
 export default function Header() {
-  const { setAuthData, auth } = useContext(authContext)
+  const { setAuthData, auth }: AuthContextType = useContext<FixLater>(
+    AuthContext
+  );
+
   const onLogOut = () => {
     setAuthData(null)
-  }; //clearing the context
+  }
 
   return (
     <Navbar
@@ -32,16 +36,12 @@ export default function Header() {
         <Nav className="mr-auto">
           <Nav.Link href="/home">Home</Nav.Link>
           <Nav.Link href="/about">A propos</Nav.Link>
-          {auth.data && (
-          <Nav.Link href="/contact">Contact</Nav.Link>
-          )}
+          {auth.data && <Nav.Link href="/contact">Contact</Nav.Link>}
         </Nav>
-        {auth.data && (
-          <Navbar.Text>Salut {auth.data}</Navbar.Text>
-        )}
-        
+        {auth.data && <Navbar.Text>Salut {auth.data}</Navbar.Text>}
+
         <Nav>
-        {!auth.data && (
+          {!auth.data && (
             <>
               <Nav.Link href="/register">Inscription</Nav.Link>
               <Nav.Link href="/login">Connexion</Nav.Link>
@@ -49,8 +49,7 @@ export default function Header() {
           )}
           {auth.data && <Nav.Link onClick={onLogOut}>Déconnexion</Nav.Link>}
         </Nav>
-        
       </Navbar.Collapse>
     </Navbar>
-  );
+  )
 }

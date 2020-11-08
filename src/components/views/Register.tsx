@@ -1,20 +1,23 @@
-import React, {useContext} from 'react';
-import { Redirect } from "react-router-dom";
-import Col from 'react-bootstrap/Col';
-import Form from 'react-bootstrap/Form';
-import Button from 'react-bootstrap/Button';
-import { authContext } from '../../contexts/authContext';
+import React, {useContext} from 'react'
+import { Redirect } from "react-router-dom"
+import Col from 'react-bootstrap/Col'
+import Form from 'react-bootstrap/Form'
+import Button from 'react-bootstrap/Button'
+import { AuthContext } from '../../contexts/AuthContext'
+import { IAuth } from '../../models/auth'
+import { FixLater } from '../../models/types'
 
+// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export default function Register() {
-  const { auth } = useContext(authContext);
+  const { auth }: {auth:IAuth} = useContext<FixLater>(AuthContext)
   if (auth.data) {
-    return <Redirect to='/profile'/>;
+    return <Redirect to='/profile'/>
   }
 
   return (
     <>
       <Col md="6" lg="4" className="mx-auto">
-        <h3 className="text-dark text-center pt-4 pb-3 ">Je m'inscris...</h3>
+        <h3 className="text-dark text-center pt-4 pb-3 ">Je m&apos;inscris...</h3>
 
         <Form>
           <Form.Group className="my-3">
@@ -66,15 +69,15 @@ export default function Register() {
             />
           </Form.Group>
 
-          <Button className="my-4" variant="primary" block>
-            J'envoie la sauce caramel
+          <Button className="my-4" variant="primary" href="/login"block>
+            C&apos;est parti, chaud devant!
           </Button>
 
           <Button variant="info" href="/login" block>
-            J'ai déjà un compte
+            J&apos;ai déjà un compte
           </Button>
         </Form>
       </Col>
     </>
-  );
+  )
 }

@@ -1,4 +1,4 @@
-export interface Auth {
-    pseudo: string;
-  }
-  
+export interface IAuth {
+  loading: boolean;
+  data: string | null
+}

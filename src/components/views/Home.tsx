@@ -1,10 +1,13 @@
 import React, {useContext} from 'react'
 import Col from 'react-bootstrap/Col'
 import Button from 'react-bootstrap/Button'
-import { authContext } from '../../contexts/authContext'
+import { AuthContext } from '../../contexts/AuthContext'
+import { IAuth } from '../../models/auth'
+import { FixLater } from '../../models/types'
 
+// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export default function Home() {
-  const { auth } = useContext(authContext);
+  const { auth }: {auth:IAuth} = useContext<FixLater>(AuthContext)
   return (
     <div className="home py-5">
       <div className="h-40 mx-0" style={{ backgroundColor: 'ivory' }}>
@@ -37,5 +40,5 @@ export default function Home() {
    </Col>
 )}      
     </div>
-  );
+  )
 }

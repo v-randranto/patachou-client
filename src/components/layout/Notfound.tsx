@@ -13,7 +13,7 @@ export default function Notfound() {
         <Card.Body>
           <Card.Title>Oups, ingrédient introuvable! </Card.Title>
           <Card.Text>
-            <p>Ah bin c'est ballot! </p>
+            <p>Ah bin c&apos est ballot! </p>
           </Card.Text>
         </Card.Body>
       </Card>

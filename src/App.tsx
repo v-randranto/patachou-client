@@ -1,20 +1,21 @@
-import React from 'react';
-import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import './App.css';
-import Container from 'react-bootstrap/Container';
-import Header from './components/layout/Header.jsx';
-import Notfound from './components/layout/Notfound';
-import Home from './components/views/Home.jsx';
-import About from './components/views/About';
-import Contact from './components/views/Contact';
-import Login from './components/views/Login.jsx';
-import Register from './components/views/Register.jsx';
-import Profile from './components/views/Profile';
-import LostPassword from './components/views/LostPassword.jsx';
-import PrivateRoute from './components/PrivateRoute';
+/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
+import React from 'react'
+import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
+import 'bootstrap/dist/css/bootstrap.min.css'
+import './App.css'
+import Container from 'react-bootstrap/Container'
+import Header from './components/layout/Header'
+import Notfound from './components/layout/Notfound'
+import Home from './components/views/Home'
+import About from './components/views/About'
+import Contact from './components/views/Contact'
+import Login from './components/views/Login'
+import Register from './components/views/Register'
+import Profile from './components/views/Profile'
+import LostPassword from './components/views/LostPassword'
+import PrivateRoute from './components/PrivateRoute.jsx'
 
-function App() {
+function App()  {
   return (
     <Router>
       <Container className="p-0">
@@ -32,7 +33,7 @@ function App() {
         </Switch>
       </Container>
     </Router>
-  );
+  )
 }
 
 export default App;

@@ -3,11 +3,12 @@ import Col from 'react-bootstrap/Col'
 import Button from 'react-bootstrap/Button'
 import Form from 'react-bootstrap/Form'
 
+// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export default function Contact() {
   return (
     <>
       <Col md="6" lg="4" className="mx-auto">
-        <h3 className="text-center text-color py-5">Je laisse un 'ti mot...</h3>
+        <h3 className="text-center text-color py-5">Je laisse un &apos;ti mot...</h3>
         <Form>
           <Form.Group className="my-3">
           <Form.Control
@@ -39,7 +40,7 @@ export default function Contact() {
           </Form.Group>
 
           <Button className="my-4" variant="primary" block>
-            J'envoie
+            J&apos;envoie
           </Button>
           <Button className="my-4" variant="secondary" block>
             Je réinitialise
@@ -47,5 +48,5 @@ export default function Contact() {
         </Form>
       </Col>
     </>
-  );
+  )
 }

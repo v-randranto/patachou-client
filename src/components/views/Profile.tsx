@@ -3,6 +3,7 @@ import Col from 'react-bootstrap/Col'
 import Button from 'react-bootstrap/Button'
 import Image from 'react-bootstrap/Image'
 
+// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export default function Profile() {
   return (
     <Col md="6" lg="4" className="mx-auto pt-3">
@@ -27,5 +28,5 @@ export default function Profile() {
         Présentation
       </Button>
     </Col>
-  );
+  )
 }

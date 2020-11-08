@@ -1,25 +1,26 @@
-import React, { useState, useContext } from 'react';
-import { Redirect } from "react-router-dom";
-import Col from 'react-bootstrap/Col';
-import Button from 'react-bootstrap/Button';
-import Form from 'react-bootstrap/Form';
-import { authContext } from '../../contexts/authContext';
+import React, { useState, useContext } from 'react'
+import { Redirect } from "react-router-dom"
+import Col from 'react-bootstrap/Col'
+import Button from 'react-bootstrap/Button'
+import Form from 'react-bootstrap/Form'
+import { AuthContext } from '../../contexts/AuthContext'
+import { AuthContextType, FixLater } from '../../models/types'
 
-export default function Login({ history }) {
-  const [pseudo, setPseudo] = useState('');
-  const [password, setPassword] = useState('');
-  const { setAuthData, auth } = useContext(authContext);
+// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+export default function Login({ history }: { history: FixLater }) {
+  const [pseudo, setPseudo] = useState('')
+  const [password, setPassword] = useState('')
+  const { setAuthData, auth} : AuthContextType = useContext<FixLater>(AuthContext)
 
-  const onFormSubmit = (e) => {
+  const onFormSubmit = (e: FixLater) => {
     e.preventDefault();
-    
-    setAuthData(pseudo); // typically here we send a request to our API and in response, we receive the user token.
-    //As this article is about the front-end part of authentication, we will save in the context the user's pseudo.
-    history.replace('/profile'); //after saving pseudo the user will be sent to Panel;
+    console.log(password)
+    setAuthData(pseudo);
+    history.replace('/profile'); 
   };
 
   if (auth.data) {
-    return <Redirect to='/profile'/>;
+    return <Redirect to='/profile'/>
   }
 
   return (
@@ -52,18 +53,18 @@ export default function Login({ history }) {
           
 
           <Button type="submit" variant="primary my-4" block >
-            J'envoie la sauce caramel
+            J&apos;envoie la sauce caramel
           </Button>
 
           <Button variant="secondary mt-5" href="/register" block>
-            Je n'ai pas de compte
+            Je n&apos;ai pas de compte
           </Button>
 
           <Button variant="info my-3" href="/lost-password" block>
-            J'ai perdu mon mot de passe
+            J&aposai perdu mon mot de passe
           </Button>
         </Form>
       </Col>
     </>
-  );
+  )
 }

@@ -22,5 +22,5 @@ export default function ErrorPage() {
         </Card.Body>
       </Card>
     </>
-  );
+  )
 }

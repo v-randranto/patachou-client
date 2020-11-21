@@ -2,7 +2,7 @@ import React from 'react'
 import Card from 'react-bootstrap/Card'
 import notFoundImg from '../../img/404.png'
 
-export default function Notfound() {
+const NotFound: React.FC = () => {
   return (
     <>
       <Card bg="secondary" text="white" className="col-lg-3 mx-auto pt-3">
@@ -13,10 +13,12 @@ export default function Notfound() {
         <Card.Body>
           <Card.Title>Oups, ingrédient introuvable! </Card.Title>
           <Card.Text>
-            <p>Ah bin c&apos est ballot! </p>
+            <p>Ah bin c&apos;est ballot! </p>
           </Card.Text>
         </Card.Body>
       </Card>
     </>
   );
 }
+
+export default NotFound

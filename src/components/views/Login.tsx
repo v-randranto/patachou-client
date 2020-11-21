@@ -1,70 +1,83 @@
-import React, { useState, useContext } from 'react'
-import { Redirect } from "react-router-dom"
-import Col from 'react-bootstrap/Col'
-import Button from 'react-bootstrap/Button'
-import Form from 'react-bootstrap/Form'
-import { AuthContext } from '../../contexts/AuthContext'
-import { AuthContextType, FixLater } from '../../models/types'
+import React, { useState, useContext } from 'react';
+import { Redirect } from 'react-router-dom';
+import Col from 'react-bootstrap/Col';
+import Button from 'react-bootstrap/Button';
+import Form from 'react-bootstrap/Form';
+import InputGroup from 'react-bootstrap/InputGroup';
+import { AuthContext } from '../../contexts/AuthContext';
+import { AuthContextType, FixLater } from '../../models/types';
 
-// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-export default function Login({ history }: { history: FixLater }) {
-  const [pseudo, setPseudo] = useState('')
-  const [password, setPassword] = useState('')
-  const { setAuthData, auth} : AuthContextType = useContext<FixLater>(AuthContext)
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faLock, faUserNinja, faPaperPlane } from '@fortawesome/free-solid-svg-icons';
+const passwordIcon = <FontAwesomeIcon icon={faLock} />;
+const pseudoIcon = <FontAwesomeIcon icon={faUserNinja} />;
+const submitIcon = <FontAwesomeIcon icon={faPaperPlane} />;
 
-  const onFormSubmit = (e: FixLater) => {
-    e.preventDefault();
-    console.log(password)
-    setAuthData(pseudo);
-    history.replace('/profile'); 
-  };
+type LoginProps = { history: FixLater };
 
-  if (auth.data) {
-    return <Redirect to='/profile'/>
-  }
+const Login: React.FC<{ history: FixLater }> = ({ history }: LoginProps) => {
+    const [pseudo, setPseudo] = useState('');
+    const [password, setPassword] = useState('');
+    const { setAuthData, auth }: AuthContextType = useContext<FixLater>(AuthContext);
 
-  return (
-    <>
-      <Col md="6" lg="4" className="mx-auto">
-        <h3 className="text-dark text-center pt-4 pb-3 ">Je me connecte...</h3>
-        <Form onSubmit={onFormSubmit}>
-          <Form.Group>
-            <Form.Control
-              className="my-3"
-              name="pseudo"
-              type="text"
-              placeholder="* Pseudonyme"
-              onChange={(e) => {
-                setPseudo(e.target.value);
-              }}
-            />
-          </Form.Group>
-          <Form.Group>
-          <Form.Control
-            className="my-3"
-            name="password"
-            type="password"
-            placeholder="* Password"
-            onChange={(e) => {
-              setPassword(e.target.value);
-            }}
-          />
-          </Form.Group>
-          
+    const onFormSubmit = (e: FixLater) => {
+        e.preventDefault();
+        console.log(password);
+        setAuthData(pseudo);
+        history.replace('/profile');
+    };
 
-          <Button type="submit" variant="primary my-4" block >
-            J&apos;envoie la sauce caramel
-          </Button>
+    if (auth.data) {
+        return <Redirect to="/profile" />;
+    }
 
-          <Button variant="secondary mt-5" href="/register" block>
-            Je n&apos;ai pas de compte
-          </Button>
+    return (
+        <>
+            <Col md="6" lg="4" className="mx-auto">
+                <h3 className="text-dark text-center pt-4 pb-3 ">Je me connecte...</h3>
+                <Form onSubmit={onFormSubmit}>
+                    <InputGroup className="mt-4" size="lg">
+                        <InputGroup.Prepend>
+                            <InputGroup.Text>{pseudoIcon}</InputGroup.Text>
+                        </InputGroup.Prepend>
+                        <Form.Control
+                            name="pseudo"
+                            type="text"
+                            placeholder="mon pseudo"
+                            onChange={(e) => {
+                                setPseudo(e.target.value);
+                            }}
+                        />
+                    </InputGroup>
+                    <InputGroup className="mt-4" size="lg">
+                        <InputGroup.Prepend>
+                            <InputGroup.Text>{passwordIcon}</InputGroup.Text>
+                        </InputGroup.Prepend>
+                        <Form.Control
+                            name="password"
+                            type="password"
+                            placeholder="mon mot de passe"
+                            onChange={(e) => {
+                                setPassword(e.target.value);
+                            }}
+                        />
+                    </InputGroup>
 
-          <Button variant="info my-3" href="/lost-password" block>
-            J&aposai perdu mon mot de passe
-          </Button>
-        </Form>
-      </Col>
-    </>
-  )
-}
+                    <Button type="submit" variant="send my-5 col-4 auto" size="lg">
+                        {submitIcon}
+                    </Button>
+
+                    <Button variant="link mt-5" href="/register" block>
+                        Je n&apos;ai pas de compte
+                    </Button>
+
+                    <Button variant="link my-3" href="/lost-password" block>
+                        J&apos;ai perdu mon mot de passe
+                    </Button>
+                </Form>
+            </Col>
+        </>
+    );
+};
+
+export default Login;

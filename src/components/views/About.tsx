@@ -2,8 +2,7 @@ import React from 'react'
 import Card from 'react-bootstrap/Card'
 import aboutImg from '../../img/about.jpg'
 
-// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-export default function About() {
+const About: React.FC = () => {
   return (
     <>
     <Card className="col-lg-6 mx-auto pt-3">
@@ -22,3 +21,5 @@ export default function About() {
     </>
   )
 }
+
+export default About

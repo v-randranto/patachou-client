@@ -5,8 +5,7 @@ import { AuthContext } from '../../contexts/AuthContext'
 import { IAuth } from '../../models/auth'
 import { FixLater } from '../../models/types'
 
-// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-export default function Home() {
+const Home: React.FC = () => {
   const { auth }: {auth:IAuth} = useContext<FixLater>(AuthContext)
   return (
     <div className="home py-5">
@@ -42,3 +41,5 @@ export default function Home() {
     </div>
   )
 }
+
+export default Home

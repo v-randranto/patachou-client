@@ -7,8 +7,8 @@ import { AuthContext } from '../../contexts/AuthContext'
 import { IAuth } from '../../models/auth'
 import { FixLater } from '../../models/types'
 
-// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-export default function LostPassword() {
+const LostPassword: React.FC = () => {
+  
   const { auth }: {auth:IAuth} = useContext<FixLater>(AuthContext)
   if (auth.data) {
     return <Redirect to='/profile'/>
@@ -39,3 +39,5 @@ export default function LostPassword() {
     </>
   )
 }
+
+export default LostPassword

@@ -3,8 +3,7 @@ import Col from 'react-bootstrap/Col'
 import Button from 'react-bootstrap/Button'
 import Image from 'react-bootstrap/Image'
 
-// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-export default function Profile() {
+const Profile: React.FC = () => {
   return (
     <Col md="6" lg="4" className="mx-auto pt-3">
       <h5 className="text-center text-white">Véroche</h5>
@@ -30,3 +29,5 @@ export default function Profile() {
     </Col>
   )
 }
+
+export default Profile

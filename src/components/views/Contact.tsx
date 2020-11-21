@@ -3,8 +3,7 @@ import Col from 'react-bootstrap/Col'
 import Button from 'react-bootstrap/Button'
 import Form from 'react-bootstrap/Form'
 
-// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-export default function Contact() {
+const Contact: React.FC = () =>  {
   return (
     <>
       <Col md="6" lg="4" className="mx-auto">
@@ -50,3 +49,5 @@ export default function Contact() {
     </>
   )
 }
+
+export default Contact

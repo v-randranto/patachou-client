@@ -4,18 +4,24 @@ body {background-color: #343a40;}
   text-align: center;
 }
 .container {
-  background: url('https://res.cloudinary.com/ndege65/image/upload/v1603743585/patachou/assets/bg-home_joj85u.jpg') center center;
+  background: url('img/bg-home.jpg') center center;
   background-size: cover;
   min-height: 100vh;
 }
 
-input,
-textarea {
+.required::before {
+  content: ' *';
+  color: red;
+}
+
+.form-control {
   background-color: #f7f5ec;
 }
 
-.text-dark {
-  color: darkslategray !important;
+input[type="file"]
+
+label .form-label {
+  cursor: pointer;
 }
 
 .text-white {
@@ -34,11 +40,18 @@ button .btn {
   font-size: 1.2rem;
 }
 
-.btn-primary {
-  border: 1px solid #9e4000 !important;
-  background-color: #9e4000 !important;
+.btn-send {  
+  background-color: #c65000;
+  color: ivory
+}
+.btn-send:hover {  
+  background-color: #9e4000;
+  color: ivory
 }
 
+.btn-outline-bland { 
+  border: 2px solid grey
+}
 
 .card-body,
 .card-footer,

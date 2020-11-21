@@ -4,7 +4,7 @@ import React, { useContext } from 'react'
 import { Route, Redirect } from 'react-router-dom'
 import { AuthContext } from '../contexts/AuthContext'
 
-export default function PrivateRoute ({ component: Component, ...rest }) {
+const PrivateRoute = ({ component: Component, ...rest }) => {
     const { auth } = useContext(AuthContext);
     const { loading } = auth
   
@@ -33,4 +33,5 @@ export default function PrivateRoute ({ component: Component, ...rest }) {
       />
     )
   }
-  
+
+  export default PrivateRoute

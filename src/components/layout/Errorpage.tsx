@@ -2,7 +2,7 @@ import React from 'react'
 import Card from 'react-bootstrap/Card'
 import errorImg from '../../img/error.jpg'
 
-export default function ErrorPage() {
+const ErrorPage: React.FC = () => {
   
   return (
     <>
@@ -24,3 +24,4 @@ export default function ErrorPage() {
     </>
   )
 }
+export default ErrorPage

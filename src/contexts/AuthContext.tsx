@@ -4,7 +4,8 @@ import { FixLater } from '../models/types'
 
 export const AuthContext = createContext({})
 
-export default function AuthProvider({ children }:{ children: FixLater }) {
+// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+const AuthProvider = ({ children }:{ children: FixLater }) => {
   const initAuth: IAuth = { loading: true, data: null }
   const [auth, setAuth] = useState(initAuth)
 
@@ -41,3 +42,5 @@ export default function AuthProvider({ children }:{ children: FixLater }) {
     </AuthContext.Provider>
   )
 }
+
+export default AuthProvider

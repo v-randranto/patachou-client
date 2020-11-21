@@ -5,7 +5,7 @@ import brandImg from '../../img/brand.png'
 import { AuthContext } from '../../contexts/AuthContext'
 import { AuthContextType, FixLater } from '../../models/types'
 
-export default function Header() {
+const Header: React.FC = () => {
   const { setAuthData, auth }: AuthContextType = useContext<FixLater>(
     AuthContext
   );
@@ -34,7 +34,7 @@ export default function Header() {
       <Navbar.Toggle aria-controls="basic-navbar-nav" />
       <Navbar.Collapse id="basic-navbar-nav">
         <Nav className="mr-auto">
-          <Nav.Link href="/home">Home</Nav.Link>
+          <Nav.Link href="/home">Accueil</Nav.Link>
           <Nav.Link href="/about">A propos</Nav.Link>
           {auth.data && <Nav.Link href="/contact">Contact</Nav.Link>}
         </Nav>
@@ -53,3 +53,5 @@ export default function Header() {
     </Navbar>
   )
 }
+
+export default Header

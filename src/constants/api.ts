@@ -1,9 +1,14 @@
 export const METHOD = {
-    POST: 'post'
+    DELETE: 'delete',
+    GET: 'get',
+    POST: 'post',
+    PUT: 'put'
 }
 
-export const CONNECTION = {
+export const CONNECTION_API = {
     SERVICE: 'connection',
-    REGISTER : 'register'
+    REGISTER : 'register',
+    LOGIN : 'login',
+    LOGOUT : 'logout'
 }
 

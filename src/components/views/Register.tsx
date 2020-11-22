@@ -24,8 +24,9 @@ import { IAuth } from '../../models/auth';
 import { FixLater } from '../../models/types';
 import { Account, IProfile, IPhoto } from '../../models/account';
 
-import { ADD_ACCOUNT, ACTION_DONE, ACTION_FAILED } from '../../constants/events';
+import { ACTION_ACCOUNT, ACTION_DONE, ACTION_FAILED } from '../../constants/events';
 import { REGISTER, ERROR_NOTE } from '../../constants/modalConfig';
+import { CONNECTION_ACTIONS } from '../../constants/actionTypes';
 // import { FORMAT_RULES } from '../../constants/formRules';
 // import BsSpinner from '../layout/Spinner'
 
@@ -92,7 +93,7 @@ const Register: FC = () => {
         }
 
         const account = new Account(profile);
-        account.emit(ADD_ACCOUNT);
+        account.emit(ACTION_ACCOUNT, CONNECTION_ACTIONS.register);
         account.on(ACTION_DONE, () => {
             setSuccess(true);
         });

@@ -1,9 +1,11 @@
+import { CONNECTION_ACTIONS } from './../constants/actionTypes';
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 import EventEmitter from 'eventemitter3'
 import { apiCall } from '../api/axios';
-import { CONNECTION } from '../constants/api';
-import { ADD_ACCOUNT, ACTION_DONE, ACTION_FAILED } from '../constants/events';
+import { CONNECTION_API, METHOD } from '../constants/api';
+import { ACTION_ACCOUNT, ACTION_DONE, ACTION_FAILED } from '../constants/events';
+
 
 export interface IPhoto {
   name: string;
@@ -15,10 +17,11 @@ export interface IProfile {
   pseudo: string;
   password?: string;
   isAdmin?: boolean;
-  email: string;
+  email?: string;
   presentation?: string;
   photo?: string | IPhoto;
   creationDate?: Date;
+  modificationDate?: Date;
 }
 
 export class Account extends EventEmitter {
@@ -26,21 +29,42 @@ export class Account extends EventEmitter {
   constructor(profile: IProfile) {
     super();
     console.log('> account constructor')
-    this.on(ADD_ACCOUNT, () => this.addAccount())
+    this.on(ACTION_ACCOUNT, (actionType) => this.actionAccount(actionType))
     this.profile = profile
   }
 
-  addAccount() {
-    console.log('>addAccount')
-    const { SERVICE, REGISTER } = CONNECTION
-    const path = `${SERVICE}/${REGISTER}`
-    const data = {
-      account: this.profile
+  actionAccount(actionType) {
+    const { SERVICE, REGISTER, LOGIN } = CONNECTION_API,
+      { register, login } = CONNECTION_ACTIONS
+
+    let path = `${SERVICE}`, data: any
+
+    switch (actionType) {
+      case register:
+        path += `/${REGISTER}`
+        data = {
+          account: this.profile
+        }
+        break;
+      case login:
+        path += `/${LOGIN}`
+        data = {
+          login: {
+            pseudo: this.profile.pseudo,
+            password: this.profile.password
+          }
+        }
+        break;
+      default:
+        throw new Error('Unknown action type')
     }
-    this.callApiAccounts(path, 'post', data)
+
+    this.callApiAccounts(path, METHOD.POST, data)
       .then(() => this.emit(ACTION_DONE))
       .catch(() => this.emit(ACTION_FAILED))
   }
+
+
 
   async callApiAccounts(path: string, method: string, data: any) {
     console.log('>callApiAccounts with', path, data)

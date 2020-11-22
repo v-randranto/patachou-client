@@ -6,12 +6,13 @@ import Button from 'react-bootstrap/Button'
 import { AuthContext } from '../../contexts/AuthContext'
 import { IAuth } from '../../models/auth'
 import { FixLater } from '../../models/types'
+import { PROFILE } from '../../constants/paths'
 
 const LostPassword: React.FC = () => {
   
   const { auth }: {auth:IAuth} = useContext<FixLater>(AuthContext)
   if (auth.data) {
-    return <Redirect to='/profile'/>
+    return <Redirect to={PROFILE} />
   }
 
   return (

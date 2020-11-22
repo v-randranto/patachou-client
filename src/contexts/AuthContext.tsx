@@ -9,10 +9,10 @@ const AuthProvider = ({ children }:{ children: FixLater }) => {
   const initAuth: IAuth = { loading: true, data: null }
   const [auth, setAuth] = useState(initAuth)
 
-  const setAuthData = (data: FixLater) => {
+  const setAuthData = (data: string) => {
     const authUpdate: IAuth = {
       loading: auth.loading,
-      data: data,
+      data,
     }
     setAuth(authUpdate)
     console.log('setAuthData auth=', auth)

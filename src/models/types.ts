@@ -4,6 +4,6 @@ import { IAuth } from './auth'
 export type FixLater = any
 
 export type AuthContextType = {
-    setAuthData: any;
+    setAuthData: FixLater;
     auth: IAuth
   }

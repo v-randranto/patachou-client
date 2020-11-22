@@ -1,24 +1,32 @@
-import React from 'react'
+import React, {useContext} from 'react'
+import { AuthContext } from '../../contexts/AuthContext'
+import { AuthContextType, FixLater } from '../../models/types'
 import Col from 'react-bootstrap/Col'
 import Button from 'react-bootstrap/Button'
 import Image from 'react-bootstrap/Image'
 
 const Profile: React.FC = () => {
+  const { auth }: AuthContextType = useContext<FixLater>(
+    AuthContext
+  )
+
+  const {pseudo, presentation, creationDate, photoUrl} = auth.data ? JSON.parse(auth.data).account : null;
+
   return (
     <Col md="6" lg="4" className="mx-auto pt-3">
-      <h5 className="text-center text-white">Véroche</h5>
+      <h5 className="text-center text-white">{pseudo}</h5>
       <div className="text-center">
         <Image
-          src="https://res.cloudinary.com/ndege65/image/upload/v1603743572/patachou/assets/default-avatar_c2s9sr.png"
+          src={photoUrl}
           rounded
           width="45px"
         />
         <div className="text-center">
-          <small className="text-white">Membre depuis le 01/10/2020</small>
+  <small className="text-white">Membre depuis le {creationDate}</small>
         </div>
       </div>
 
-      <div className="mx-auto my-3">bla bla de présentation</div>
+  <div className="mx-auto my-3">{presentation}</div>
 
       <Button className="my-3" variant="outline-primary" block>
         Identifiants

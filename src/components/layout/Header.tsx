@@ -1,14 +1,26 @@
 import React, { useContext } from 'react'
+
 import Nav from 'react-bootstrap/Nav'
 import Navbar from 'react-bootstrap/Navbar'
 import brandImg from '../../img/brand.png'
+
 import { AuthContext } from '../../contexts/AuthContext'
 import { AuthContextType, FixLater } from '../../models/types'
+import { ABOUT, CONTACT, HOME, LOGIN, REGISTER } from '../../constants/paths'
 
 const Header: React.FC = () => {
   const { setAuthData, auth }: AuthContextType = useContext<FixLater>(
     AuthContext
   );
+
+  const getPseudo = () => {
+    console.log("authData", auth.data)
+    let pseudo: string | null = null
+    if (auth.data) {
+      pseudo = JSON.parse(auth.data).account.pseudo
+    }
+    return pseudo
+  }
 
   const onLogOut = () => {
     setAuthData(null)
@@ -22,7 +34,7 @@ const Header: React.FC = () => {
       expand="lg"
       className="py-0 px-2 mb-2"
     >
-      <Navbar.Brand href="/home">
+      <Navbar.Brand href={HOME}>
         <img
           src={brandImg}
           width="35"
@@ -34,17 +46,17 @@ const Header: React.FC = () => {
       <Navbar.Toggle aria-controls="basic-navbar-nav" />
       <Navbar.Collapse id="basic-navbar-nav">
         <Nav className="mr-auto">
-          <Nav.Link href="/home">Accueil</Nav.Link>
-          <Nav.Link href="/about">A propos</Nav.Link>
-          {auth.data && <Nav.Link href="/contact">Contact</Nav.Link>}
+          <Nav.Link href={HOME}>Accueil</Nav.Link>
+          <Nav.Link href={ABOUT}>A propos</Nav.Link>
+          {auth.data && <Nav.Link href={CONTACT}>Contact</Nav.Link>}
         </Nav>
-        {auth.data && <Navbar.Text>Salut {auth.data}</Navbar.Text>}
+        {auth.data && <Navbar.Text>Salut {getPseudo()}</Navbar.Text>}
 
         <Nav>
           {!auth.data && (
             <>
-              <Nav.Link href="/register">Inscription</Nav.Link>
-              <Nav.Link href="/login">Connexion</Nav.Link>
+              <Nav.Link href={REGISTER}>Inscription</Nav.Link>
+              <Nav.Link href={LOGIN}>Connexion</Nav.Link>
             </>
           )}
           {auth.data && <Nav.Link onClick={onLogOut}>Déconnexion</Nav.Link>}

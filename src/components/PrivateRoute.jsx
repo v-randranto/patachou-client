@@ -2,6 +2,7 @@
 /* eslint-disable react/prop-types */
 import React, { useContext } from 'react'
 import { Route, Redirect } from 'react-router-dom'
+import { LOGIN } from '../constants/paths';
 import { AuthContext } from '../contexts/AuthContext'
 
 const PrivateRoute = ({ component: Component, ...rest }) => {
@@ -27,7 +28,7 @@ const PrivateRoute = ({ component: Component, ...rest }) => {
           return auth.data ? (
             <Component {...routeProps} />
           ) : (
-            <Redirect to="/login" />
+            <Redirect to={LOGIN} />
           )
         }}
       />

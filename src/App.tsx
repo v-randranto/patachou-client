@@ -17,6 +17,8 @@ import Profile from './components/views/Profile'
 import LostPassword from './components/views/LostPassword'
 import PrivateRoute from './components/PrivateRoute.jsx'
 
+import { ABOUT, CONTACT, HOME, LOGIN, LOST_PASSWORD, PROFILE, REGISTER} from './constants/paths'
+
 const App: React.FC = () => {
     return (
         <Router>
@@ -24,13 +26,13 @@ const App: React.FC = () => {
                 <Header />
                 <Switch>
                     <Route exact path="/" component={Home} />
-                    <Route exact path="/home" component={Home} />
-                    <Route exact path="/about" component={About} />
-                    <Route exact path="/login" component={Login} />
-                    <Route exact path="/register" component={Register} />
-                    <Route exact path="/lost-password" component={LostPassword} />
-                    <PrivateRoute exact path="/contact" component={Contact} />
-                    <PrivateRoute exact path="/profile" component={Profile} />
+                    <Route exact path={HOME} component={Home} />
+                    <Route exact path={ABOUT} component={About} />
+                    <Route exact path={LOGIN} component={Login} />
+                    <Route exact path={REGISTER} component={Register} />
+                    <Route exact path={LOST_PASSWORD} component={LostPassword} />
+                    <PrivateRoute exact path={CONTACT} component={Contact} />
+                    <PrivateRoute exact path={PROFILE} component={Profile} />
                     <Route component={NotFound} />
                 </Switch>
             </Container>

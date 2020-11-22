@@ -1,16 +1,17 @@
-import { CONNECTION_ACTIONS } from './../constants/actionTypes';
+import { CONNECTION_ACTIONS } from './../constants/actionTypes'
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 import EventEmitter from 'eventemitter3'
-import { apiCall } from '../api/axios';
-import { CONNECTION_API, METHOD } from '../constants/api';
-import { ACTION_ACCOUNT, ACTION_DONE, ACTION_FAILED } from '../constants/events';
+import { apiCall } from '../api/axios'
+import { CONNECTION_API, METHOD } from '../constants/api'
+import { ACTION_ACCOUNT, ACTION_DONE, ACTION_FAILED } from '../constants/events'
+import { FixLater } from '../models/types'
 
 
 export interface IPhoto {
   name: string;
   contentType: string;
-  content: any;
+  content: FixLater;
 }
 
 export interface IProfile {
@@ -37,15 +38,15 @@ export class Account extends EventEmitter {
     const { SERVICE, REGISTER, LOGIN } = CONNECTION_API,
       { register, login } = CONNECTION_ACTIONS
 
-    let path = `${SERVICE}`, data: any
+    let path = `${SERVICE}`, data: FixLater
 
     switch (actionType) {
       case register:
         path += `/${REGISTER}`
         data = {
-          account: this.profile
-        }
-        break;
+          account: this.profile          
+        }        
+        break
       case login:
         path += `/${LOGIN}`
         data = {
@@ -53,26 +54,16 @@ export class Account extends EventEmitter {
             pseudo: this.profile.pseudo,
             password: this.profile.password
           }
-        }
-        break;
+        }        
+        break
       default:
         throw new Error('Unknown action type')
     }
-
-    this.callApiAccounts(path, METHOD.POST, data)
-      .then(() => this.emit(ACTION_DONE))
-      .catch(() => this.emit(ACTION_FAILED))
-  }
-
-
-
-  async callApiAccounts(path: string, method: string, data: any) {
-    console.log('>callApiAccounts with', path, data)
-    try {
-      await apiCall(path, method, data)
-    } catch (error) {
-      console.log('oups!', error)
-      throw error;
-    }
+    
+    apiCall(path, METHOD.POST, data)
+      .then(res => {
+        this.emit(ACTION_DONE, res)
+      })
+      .catch(err => this.emit(ACTION_FAILED, err))
   }
 }

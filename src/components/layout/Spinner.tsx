@@ -4,7 +4,7 @@ import Button from 'react-bootstrap/Button'
 
 const Spinner: React.FC = () => {
     return (
-        <Button variant="dark" disabled>
+        <Button variant="dark" className="mx-auto" disabled>
         <BsSpinner
           as="span"
           animation="border"

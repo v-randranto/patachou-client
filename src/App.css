@@ -1,10 +1,17 @@
-body {background-color: #343a40;}
+body {background-color: #3a3c3b;}
 
 .App {
   text-align: center;
 }
-.container {
+.home {
+  padding: 10px 0;
   background: url('img/bg-home.jpg') center center;
+  background-size: cover;
+  min-height: 100vh;
+}
+
+.profile {
+  background: url('img/profile.jpg') center center;
   background-size: cover;
   min-height: 100vh;
 }
@@ -27,6 +34,9 @@ label .form-label {
 .text-white {
   color: ivory !important;
 }
+.text-ivory {
+  color: ivory;
+}
 
 .card {
   background-color: ivory;
@@ -40,6 +50,13 @@ button .btn {
   font-size: 1.2rem;
 }
 
+.bg-patachou {  
+  background-color: #3a3c3b;
+}
+.bg-ivory {
+  background-color: ivory;
+}
+
 .btn-send {  
   background-color: #c65000;
   color: ivory
@@ -49,12 +66,34 @@ button .btn {
   color: ivory
 }
 
+.btn-choice1 {  
+  background-color: #ff7b00;
+  color: ivory
+}
+.btn-choice1:hover {  
+  background-color: #cc6200;
+}
+
+.btn-choice2 {  
+  background-color: #de2916;
+  color: ivory
+}
+.btn-choice2:hover {  
+  background-color: #b22112;
+}
+
 .btn-outline-bland { 
   border: 2px solid grey
 }
 
-.card-body,
-.card-footer,
+.btn-gotolink {
+  background-color: #c6c6c6;
+  color: #4f4f4f;
+}
+.btn-gotolink:hover {
+  background-color: #969696;
+}
+
 ul,
 li {
 background-color: ivory;
@@ -64,33 +103,8 @@ background-color: ivory;
 border-radius: 2%;
 }
 
-fa-icon {
-font-size: 1.4rem;
-color: darkslategray;
-}
-
-fa-icon.action {
-font-size: 1rem;
-color: #007bff;
-}
-
-.progress {
-  background-color: #c6c6c6 !important;
-  height:0.50rem;
-  width: 65%;
-}
-
 .label-file {
   cursor: pointer;
   font-weight: bold;
 }
 
-fa-icon {
-  font-size: 1.4rem;
-  color: darkslategray
-}
-
-button fa-icon {
-  font-size: 1.8rem;
-  color: black
-}

@@ -10,6 +10,9 @@ import { LOGIN, REGISTER } from '../../constants/paths';
 
 const Home: React.FC = () => {
     const { auth }: { auth: IAuth } = useContext<FixLater>(AuthContext);
+
+    const mediaQuery = window.matchMedia('(max-width: 640px)')
+    
     return (
         <div className="home pt-5">
             <div className="h-40 mx-0" style={{ backgroundColor: 'ivory' }}>
@@ -27,7 +30,7 @@ const Home: React.FC = () => {
 
             {!auth.data && (
                 <Col md={5} className="mx-auto my-5">
-                  <ButtonGroup className="mt-4 col" size="lg">
+                  <ButtonGroup className="mt-4 col" size="lg" vertical={mediaQuery.matches}>
                     <Button variant="choice1" href={REGISTER}>
                     &nbsp;&nbsp;&nbsp;Je m&apos;inscris&nbsp;&nbsp;&nbsp;
                     </Button>

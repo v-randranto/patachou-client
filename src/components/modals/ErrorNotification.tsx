@@ -22,7 +22,7 @@ const ErrorNotification: FC<ErrorProps> = ({config}:ErrorProps) => {
             show={show}
             onHide={() => setShow(false)}
             backdrop="static"
-            animation={true}
+            animation={false}
             centered={true}
             keyboard={false}
         >

@@ -139,6 +139,7 @@ const Register: FC = () => {
                                     type="text"
                                     name="pseudo"
                                     id="pseudo"
+                                    maxLength={20}
                                     placeholder="mon pseudonyme"
                                     value={formik.values.pseudo}
                                     onChange={formik.handleChange}
@@ -235,6 +236,7 @@ const Register: FC = () => {
                                     type="password"
                                     name="password"
                                     id="password"
+                                    maxLength={10}
                                     placeholder="mon mot de passe"
                                     value={formik.values.password}
                                     onChange={formik.handleChange}
@@ -253,6 +255,7 @@ const Register: FC = () => {
                                     type="password"
                                     name="confirmPassword"
                                     id="confirmPassword"
+                                    maxLength={10}
                                     placeholder="je confirme"
                                     value={formik.values.confirmPassword}
                                     onChange={formik.handleChange}

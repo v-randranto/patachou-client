@@ -21,12 +21,14 @@ const Notification: FC<NotifProps> = ({config, onClose}: NotifProps) => {
     return (
         <Modal
         show={show}
-        onHide={() => setShow(false)}
+        onHide={() => {
+            setShow(false)
+            onClose()
+        }}
         backdrop="static"
         keyboard={false}
-        animation={true}
+        animation={false}
         centered={true}
-        onExited={onClose}
       >
             <Modal.Header closeButton>
                 <Modal.Title style={colorStyle}>{title}</Modal.Title>

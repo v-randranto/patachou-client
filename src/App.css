@@ -7,13 +7,7 @@ body {background-color: #3a3c3b;}
   padding: 10px 0;
   background: url('img/bg-home.jpg') center center;
   background-size: cover;
-  min-height: 100vh;
-}
-
-.profile {
-  background: url('img/profile.jpg') center center;
-  background-size: cover;
-  min-height: 100vh;
+  min-height: 92.98vh;
 }
 
 .required::before {
@@ -42,7 +36,7 @@ label .form-label {
   background-color: ivory;
 }
 
-button .btn {
+button:active {
   outline: 0;
 }
 

@@ -1,6 +1,6 @@
 export const EDIT_PROFILE = {
   color: '#28a745',
-  title: 'A y est, demande traitée.',
+  title: 'Demande traitée.',
   credentials_text: 'Vos identifiants sont modifiés.',
   personal_data_text: 'Vos données personnelles sont modifiées'
 }
@@ -8,25 +8,25 @@ export const EDIT_PROFILE = {
 
 export const REGISTER = {
   color: '#28a745',
-  title: 'A y est, vous êtes des nôtres!',
+  title: 'Vous êtes des nôtres!',
   text: 'Un email de confirmation vous a été envoyé. Si vous ne le recevez pas, vérifiez votre adresse dans le profil de votre compte.'
 }
 
 export const LOST_PASSWORD = {
   color: '#28a745',
-  title: 'A y est, demande traitée!',
+  title: 'Demande traitée!',
   text: 'Un mot de passe provisoire vous a été envoyé par email. Pensez à le modifier après connexion.'
 }
 
 export const CONTACT_EMAIL = {
   color: '#28a745',
-  title: `A y est, c'est dans la boîte!`,
+  title: `C'est dans la boîte!`,
   text: 'Merci pour votre message, nous y répondrons dans les plus brefs délais.'
 }
 
 export const NETWORK_REQUEST = {
   color: '#28a745',
-  title: 'A y est, demande traitée!',
+  title: 'Demande traitée!',
   request_text: 'Votre demande a été envoyée à',
   confirm_text: 'Vous êtes désormais pote avec',
   reject_text: 'Vous avez refusé la demande de',

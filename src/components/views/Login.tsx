@@ -20,6 +20,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faLock, faUserNinja, faPaperPlane } from '@fortawesome/free-solid-svg-icons';
 import { LOST_PASSWORD, PROFILE, REGISTER } from '../../constants/paths';
 import BsSpinner from '../layout/Spinner';
+import { validate } from '../../validators/loginForm';
+import { useFormik } from 'formik';
 
 const passwordIcon = <FontAwesomeIcon icon={faLock} />;
 const pseudoIcon = <FontAwesomeIcon icon={faUserNinja} />;
@@ -28,52 +30,59 @@ const submitIcon = <FontAwesomeIcon icon={faPaperPlane} />;
 type LoginProps = { history: FixLater };
 
 const Login: React.FC<{ history: FixLater }> = ({ history }: LoginProps) => {
-    const [pseudo, setPseudo] = useState('');
-    const [password, setPassword] = useState('');
-    const [success, setSuccess] = useState<boolean>(false);
-    const [failure, setFailure] = useState<boolean>(false);
-    const [loading, setLoading] = useState<boolean>(false);
-    const [errorStatus, setErrorStatus] = useState<number>(0);
+    const loginStateInit = {
+        isLoading: false,
+        isSuccessful: false,
+        hasFailed: false,
+        errorCode: 0
+    };
+    const [loginState, setLoginState] = useState<FixLater>(loginStateInit);
     const { setAuthData, auth }: AuthContextType = useContext<FixLater>(AuthContext);
 
-    const onFormSubmit = (e: FixLater) => {
-        setLoading(true);
-        setSuccess(false);
-        setFailure(false);
-        setErrorStatus(0);
-        e.preventDefault();
+    const initialValues = {
+        pseudo: '',
+        password: '',
+    };
 
+    const formik = useFormik({
+        initialValues,
+        validate,
+        onSubmit: (values) => {
+            loginAccount(values);
+        },
+    });
+
+    const loginAccount = (values) => {
+        setLoginState((prevState) => ({
+            ...prevState,
+            isLoading: true,
+        }));
+        const {pseudo, password} = values
         const profile: IProfile = { pseudo, password };
 
         const account = new Account(profile);
         account.emit(ACTION_ACCOUNT, CONNECTION_ACTIONS.login);
         account.on(ACTION_DONE, (res) => {
             console.log('returnData', res);
-            setSuccess(true);
-            setLoading(false);
+            setLoginState((prevState) => ({
+                ...prevState,
+                isLoading: false,
+                isSuccessful: true,
+            }));
             setAuthData(JSON.stringify(res));
             console.log('authData', auth.data);
             history.replace(PROFILE);
         });
         account.on(ACTION_FAILED, (err) => {
             console.log(err);
-            if (err.response) {
-                const status = err.response.status;
-                setErrorStatus(status);
-                if (status !== 404 && status !== 401) {
-                    setFailure(true);
-                }
-            } else {
-                setErrorStatus(999);
-                setFailure(true);
-            }
-            setLoading(true);
+            setLoginState((prevState) => ({
+                ...prevState,
+                isLoading: false,
+                hasFailed: true,
+                errorCode: err.response.status || 999
+            }));
         });
 
-        //to avoid eslint error
-        if (success) {
-            console.log(success);
-        }
     };
 
     // if already connected go to profile
@@ -85,35 +94,44 @@ const Login: React.FC<{ history: FixLater }> = ({ history }: LoginProps) => {
         <div className="home">
             <Col md="6" lg="4" className="mx-auto">
                 <h3 className="text-dark text-center pt-4 pb-3 ">Je me connecte...</h3>
-                <Form onSubmit={onFormSubmit}>
+                <Form onSubmit={formik.handleSubmit} noValidate>
                     <InputGroup className="mt-4" size="lg">
                         <InputGroup.Prepend>
                             <InputGroup.Text>{pseudoIcon}*</InputGroup.Text>
                         </InputGroup.Prepend>
                         <Form.Control
-                            name="pseudo"
                             type="text"
+                            name="pseudo"
+                            id="pseudo"
                             maxLength={20}
-                            placeholder="mon pseudo"
-                            onChange={({ target }) => {
-                                setPseudo(target.value);
-                            }}
+                            placeholder="mon pseudonyme"
+                            value={formik.values.pseudo}
+                            onChange={formik.handleChange}
+                            onBlur={formik.handleBlur}
                         />
                     </InputGroup>
+                    {formik.errors.pseudo && formik.touched.pseudo && (
+                        <Alert variant="danger py-0">{formik.errors.pseudo}</Alert>
+                    )}
+
                     <InputGroup className="mt-4" size="lg">
                         <InputGroup.Prepend>
                             <InputGroup.Text>{passwordIcon}*</InputGroup.Text>
                         </InputGroup.Prepend>
                         <Form.Control
-                            name="password"
                             type="password"
-                            maxLength={30}
+                            name="password"
+                            id="password"
+                            maxLength={10}
                             placeholder="mon mot de passe"
-                            onChange={({ target }) => {
-                                setPassword(target.value);
-                            }}
+                            value={formik.values.password}
+                            onChange={formik.handleChange}
+                            onBlur={formik.handleBlur}
                         />
                     </InputGroup>
+                    {formik.errors.password && formik.touched.password && (
+                                <Alert variant="danger py-0">{formik.errors.password}</Alert>
+                            )}
 
                     <ButtonGroup className="mt-4 col p-0" size="lg">
                         <Button type="submit" variant="send">
@@ -121,10 +139,9 @@ const Login: React.FC<{ history: FixLater }> = ({ history }: LoginProps) => {
                         </Button>
                     </ButtonGroup>
 
-                    {errorStatus > 0 && !failure && (
-                        <Alert variant="danger py-0">Mes identifiants sont incorrects</Alert>
+                    {loginState.hasFailed && (loginState.errorCode === 401 || loginState.errorCode === 404) && (
+                        <Alert variant="danger py-0 mt-2">Mes identifiants sont incorrects</Alert>
                     )}
-                    {!loading && (
                         <ButtonGroup className="mt-5 col" vertical>
                             <Button variant="gotolink p-1" href={REGISTER}>
                                 Je n&apos;ai pas de compte
@@ -133,12 +150,11 @@ const Login: React.FC<{ history: FixLater }> = ({ history }: LoginProps) => {
                             <Button variant="gotolink p-1" href={LOST_PASSWORD}>
                                 J&apos;ai perdu mon mot de passe
                             </Button>
-                        </ButtonGroup>
-                    )}
+                        </ButtonGroup>            
 
-                    {loading && <BsSpinner />}
+                    {loginState.loading && <BsSpinner />}
                 </Form>
-                {failure && <ErrorNotification config={ERROR_NOTE} />}
+                {loginState.hasFailed && (loginState.errorCode !== 401 && loginState.errorCode !== 404) && <ErrorNotification config={ERROR_NOTE} />}
             </Col>
         </div>
     );

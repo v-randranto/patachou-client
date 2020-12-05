@@ -1,12 +1,11 @@
-import React, { useContext } from 'react';
+import React, { useState, useEffect } from 'react';
 
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import brandImg from '../../img/brand.png';
 
-import { AuthContext } from '../../contexts/AuthContext';
-import { AuthContextType, FixLater } from '../../models/types';
-import { ABOUT, CONTACT, HOME, LOGIN, REGISTER, PROFILE } from '../../constants/paths';
+import { FixLater } from '../../models/types';
+import { ABOUT, ADMIN, CONTACT, HOME, LOGIN, REGISTER, PROFILE, USER } from '../../constants/paths';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
     faHome,
@@ -16,7 +15,10 @@ import {
     faSignInAlt,
     faSignOutAlt,
     faAddressCard,
+    faTable,
+    faColumns,
 } from '@fortawesome/free-solid-svg-icons';
+import AuthService from '../services/authService.js';
 
 const homeIcon = <FontAwesomeIcon icon={faHome} />;
 const aboutIcon = <FontAwesomeIcon icon={faInfoCircle} />;
@@ -25,22 +27,26 @@ const registerIcon = <FontAwesomeIcon icon={faUserPlus} />;
 const loginIcon = <FontAwesomeIcon icon={faSignInAlt} />;
 const logoutIcon = <FontAwesomeIcon icon={faSignOutAlt} />;
 const profileIcon = <FontAwesomeIcon icon={faAddressCard} />;
+const boardUserIcon = <FontAwesomeIcon icon={faColumns} />;
+const boardAdminIcon = <FontAwesomeIcon icon={faTable} />;
 
 const Header: React.FC = () => {
-    const { setAuthData, auth }: AuthContextType = useContext<FixLater>(AuthContext);
+    const [currentAccount, setCurrentAccount] = useState<FixLater>();
+    const [showBoardAdmin, setShowBoardAdmin] = useState<boolean>(false);
 
-    const getPseudo = () => {
-        console.log('authData', auth.data);
-        let pseudo: string | null = null;
-        if (auth.data) {
-            pseudo = JSON.parse(auth.data).account.pseudo;
+    useEffect(() => {
+        const user = AuthService.getCurrentUser();
+
+        if (user) {
+            setCurrentAccount(user.account);
+            setShowBoardAdmin(true);
         }
-        return pseudo;
-    };
+    }, [currentAccount]);
 
-    const onLogOut = () => {
-        setAuthData(null);
-    };
+    
+  const logOut = () => {
+    AuthService.logout();
+  }
 
     return (
         <Navbar sticky="top" bg="patachou" variant="dark" className="py-0 pl-2 pr-0" expand="lg">
@@ -58,23 +64,37 @@ const Header: React.FC = () => {
                         {aboutIcon}
                         <span className="d-none d-md-inline"> à propos</span>
                     </Nav.Link>
-                    {auth.data && (
+                    {currentAccount && (
                         <Nav.Link className="d-inline mx-2" href={CONTACT}>
                             {contactIcon} <span className="d-none d-md-inline"> contact</span>
                         </Nav.Link>
                     )}
                 </Nav>
             </Navbar>
+            <Navbar>
+                <Nav>
+                {showBoardAdmin && (
+                    <Nav.Link className="d-inline mx-2" href={USER}>
+                        {boardAdminIcon} <span className="d-none d-md-inline">administration</span>
+                    </Nav.Link>
+                    )}
+                {currentAccount && (
+                    <Nav.Link className="d-inline mx-2" href={ADMIN}>
+                        {boardUserIcon} <span className="d-none d-md-inline">dashboard</span>
+                    </Nav.Link>
+                    )}
+                </Nav>
+            </Navbar>
 
             <Navbar className="ml-auto p-0">
                 <Nav>
-                    {auth.data && (
+                    {currentAccount && (
                         <Nav.Link className="d-inline mx-2" href={PROFILE}>
-                            {profileIcon} <span className="d-none d-md-inline">{getPseudo()}</span>
+                            {profileIcon} <span className="d-none d-md-inline">{currentAccount.pseudo}</span>
                         </Nav.Link>
                     )}
 
-                    {!auth.data && (
+                    {!currentAccount && (
                         <>
                             <Nav.Link className="d-inline mx-2" href={REGISTER}>
                                 {registerIcon} <span className="d-none d-md-inline">inscription</span>
@@ -85,8 +105,8 @@ const Header: React.FC = () => {
                             </Nav.Link>
                         </>
                     )}
-                    {auth.data && (
-                        <Nav.Link className="d-inline mx-2" onClick={onLogOut}>
+                    {currentAccount && (
+                        <Nav.Link className="d-inline mx-2" onClick={logOut}>
                             {logoutIcon}
                             <span className="d-none d-md-inline"> déconnexion</span>
                         </Nav.Link>

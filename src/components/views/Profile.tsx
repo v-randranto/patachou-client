@@ -1,6 +1,4 @@
-import React, { useContext } from 'react';
-import { AuthContext } from '../../contexts/AuthContext';
-import { AuthContextType, FixLater } from '../../models/types';
+import React, { useState } from 'react';
 import Card from 'react-bootstrap/Card';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
@@ -8,11 +6,13 @@ import ButtonGroup from 'react-bootstrap/ButtonGroup';
 import Image from 'react-bootstrap/Image';
 import Media from 'react-bootstrap/Media';
 import {ddmmyyyyFormat} from '../../utils/dateHandler'
+import AuthService from "../services/authService";
+import { FixLater } from '../../models/types';
 
 const Profile: React.FC = () => {
-    const { auth }: AuthContextType = useContext<FixLater>(AuthContext);
 
-    const { pseudo, presentation, creationDate, photoUrl } = auth.data ? JSON.parse(auth.data).account : null;
+    const [currentUser] = useState<FixLater>(AuthService.getCurrentUser())
+    const { pseudo, presentation, creationDate, photoUrl } = currentUser;
 
     return (
         <div className="home">

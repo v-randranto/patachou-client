@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-import React, { FC, useState} from 'react';
-import { useHistory } from 'react-router-dom';
+import React, { FC, useState, useContext } from 'react';
+import { Redirect, useHistory } from 'react-router-dom';
 import Form from 'react-bootstrap/Form';
 import InputGroup from 'react-bootstrap/InputGroup';
 import Button from 'react-bootstrap/Button';
@@ -19,9 +19,15 @@ import {
     faCamera,
 } from '@fortawesome/free-solid-svg-icons';
 
+import { AuthContext } from '../../contexts/AuthContext';
+import { IAuth } from '../../models/auth';
 import { FixLater } from '../../models/types';
-import { IProfile, IPhoto } from '../../models/account';
+import { Account, IProfile, IPhoto } from '../../models/account';
+
+import { ACTION_ACCOUNT, ACTION_DONE, ACTION_FAILED } from '../../constants/events';
 import { REGISTER, ERROR_NOTE } from '../../constants/modalConfig';
+import { CONNECTION_ACTIONS } from '../../constants/actionTypes';
+
 import BsSpinner from '../layout/Spinner';
 
 import { validate } from '../../validators/registerForm';
@@ -29,7 +35,6 @@ import Notification from '../modals/Notification';
 import ErrorNotification from '../modals/ErrorNotification';
 import { LOGIN } from '../../constants/paths';
 import { FORMAT_RULES } from '../../constants/formRules';
-import AuthService from "../services/authService";
 
 const acceptFileExtensions = FORMAT_RULES.fileExtensions.join(',');
 const passwordIcon = <FontAwesomeIcon icon={faLock} />,
@@ -50,7 +55,11 @@ const Register: FC = () => {
     const [photoFile, setPhotoFile] = useState<any>(false);
 
     const history = useHistory();
-    
+    const { auth }: { auth: IAuth } = useContext<FixLater>(AuthContext);
+    if (auth.data) {
+        return <Redirect to="/profile" />;
+    }
+
     const initialValues = {
         pseudo: '',
         presentation: '',
@@ -93,28 +102,26 @@ const Register: FC = () => {
             profile.photo = { ...photoFile };
         }
 
-        AuthService.register(profile).then(
-            () => {
-                setRegisterState((prevState) => ({
-                    ...prevState,
-                    isLoading: false,
-                    isSuccessful: true,
-                }))
-            },
-            error => {              
-                setRegisterState((prevState) => ({
-                    ...prevState,
-                    isLoading: false,
-                    hasFailed: true,
-                    errorCode: error.response.status || 999
-                }))
-            }
-          );
+        const account = new Account(profile);
+        account.emit(ACTION_ACCOUNT, CONNECTION_ACTIONS.register);
+        account.on(ACTION_DONE, () => {
+            setRegisterState((prevState) => ({
+                ...prevState,
+                isLoading: false,
+                isSuccessful: true,
+            }));
+        });
+        account.on(ACTION_FAILED, () => {
+            setRegisterState((prevState) => ({
+                ...prevState,
+                isLoading: false,
+                hasFailed: true,
+            }));
+        });
     };
 
     const onCloseNotificationModal = () => {
-        history.push(LOGIN);
-        window.location.reload();
+        history.push('/login');
     };
 
     return (
@@ -167,7 +174,7 @@ const Register: FC = () => {
                                 </InputGroup.Prepend>
                                 <Form.Label className="form-control">
                                     <span className="text-secondary">
-                                    {photoFile ? photoFile.name : 'Je charge ma photo'}                                        
+                                    {photoFile ? photoFile.name : 'Je charge une photo'}                                        
                                         </span>
                                     <Form.File
                                         className="form-control d-none"
@@ -187,7 +194,7 @@ const Register: FC = () => {
                             <ButtonGroup className="mt-4 col p-0" size="lg">
                                 <Button variant="outline-bland p-0" disabled></Button>
                                 <Button
-                                    variant="info col-3"
+                                    variant="info col-4"
                                     onClick={() => {
                                         setRegisterState((prevState) => ({
                                             ...prevState,
@@ -262,7 +269,7 @@ const Register: FC = () => {
                             {!registerState.loading && (
                                 <ButtonGroup className="mt-4 col p-0" size="lg">
                                     <Button
-                                        variant="info p-0 col-3"
+                                        variant="info p-0 col-4"
                                         onClick={() => {
                                             setRegisterState((prevState) => ({
                                                 ...prevState,

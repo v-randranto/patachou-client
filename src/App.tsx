@@ -17,7 +17,10 @@ import Profile from './components/views/Profile'
 import LostPassword from './components/views/LostPassword'
 import PrivateRoute from './components/PrivateRoute.jsx'
 
-import { ABOUT, CONTACT, HOME, LOGIN, LOST_PASSWORD, PROFILE, REGISTER} from './constants/paths'
+import BoardUser from "./components/views/BoardUser";
+import BoardAdmin from "./components/views/BoardAdmin";
+
+import { ABOUT, ADMIN, CONTACT, HOME, LOGIN, LOST_PASSWORD, PROFILE, REGISTER, USER} from './constants/paths'
 
 const App: React.FC = () => {
     return (
@@ -26,13 +29,15 @@ const App: React.FC = () => {
                 <Header />
                 <Switch>
                     <Route exact path="/" component={Home} />
-                    <Route exact path={HOME} component={Home} />
                     <Route exact path={ABOUT} component={About} />
+                    <Route exact path={HOME} component={Home} />
                     <Route exact path={LOGIN} component={Login} />
-                    <Route exact path={REGISTER} component={Register} />
                     <Route exact path={LOST_PASSWORD} component={LostPassword} />
+                    <Route exact path={REGISTER} component={Register} />
+                    <PrivateRoute path={ADMIN} component={BoardAdmin} />
                     <PrivateRoute exact path={CONTACT} component={Contact} />
                     <PrivateRoute exact path={PROFILE} component={Profile} />
+                    <PrivateRoute path={USER} component={BoardUser} />
                     <Route component={NotFound} />
                 </Switch>
             </Container>

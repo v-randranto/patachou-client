@@ -1,4 +1,5 @@
-import React, { useState} from 'react';
+import React, { useState, useContext } from 'react';
+import { Redirect } from 'react-router-dom';
 
 import Alert from 'react-bootstrap/Alert';
 import Button from 'react-bootstrap/Button';
@@ -6,7 +7,12 @@ import ButtonGroup from 'react-bootstrap/ButtonGroup';
 import Col from 'react-bootstrap/Col';
 import Form from 'react-bootstrap/Form';
 import InputGroup from 'react-bootstrap/InputGroup';
-import { FixLater } from '../../models/types';
+
+import { AuthContext } from '../../contexts/AuthContext';
+import { AuthContextType, FixLater } from '../../models/types';
+import { Account, IProfile } from '../../models/account';
+import { ACTION_ACCOUNT, ACTION_DONE, ACTION_FAILED } from '../../constants/events';
+import { CONNECTION_ACTIONS } from '../../constants/actionTypes';
 import { ERROR_NOTE } from '../../constants/modalConfig';
 import ErrorNotification from '../modals/ErrorNotification';
 
@@ -16,8 +22,6 @@ import { LOST_PASSWORD, PROFILE, REGISTER } from '../../constants/paths';
 import BsSpinner from '../layout/Spinner';
 import { validate } from '../../validators/loginForm';
 import { useFormik } from 'formik';
-import AuthService from "../services/authService.js";
-import { ILoginForm } from '../../models/forms';
 
 const passwordIcon = <FontAwesomeIcon icon={faLock} />;
 const pseudoIcon = <FontAwesomeIcon icon={faUserNinja} />;
@@ -33,6 +37,7 @@ const Login: React.FC<{ history: FixLater }> = ({ history }: LoginProps) => {
         errorCode: 0
     };
     const [loginState, setLoginState] = useState<FixLater>(loginStateInit);
+    const { setAuthData, auth }: AuthContextType = useContext<FixLater>(AuthContext);
 
     const initialValues = {
         pseudo: '',
@@ -53,28 +58,37 @@ const Login: React.FC<{ history: FixLater }> = ({ history }: LoginProps) => {
             isLoading: true,
         }));
         const {pseudo, password} = values
-        const login: ILoginForm = { pseudo, password };
+        const profile: IProfile = { pseudo, password };
 
-        AuthService.login(login).then(
-            () => {
-                setLoginState((prevState) => ({
-                    ...prevState,
-                    isLoading: false,
-                    isSuccessful: true,
-                }))
-              history.push(PROFILE);
-              window.location.reload();
-            },
-            error => {              
-                setLoginState((prevState) => ({
-                    ...prevState,
-                    isLoading: false,
-                    hasFailed: true,
-                    errorCode: error.response.status || 999
-                }))
-            }
-          );
+        const account = new Account(profile);
+        account.emit(ACTION_ACCOUNT, CONNECTION_ACTIONS.login);
+        account.on(ACTION_DONE, (res) => {
+            console.log('returnData', res);
+            setLoginState((prevState) => ({
+                ...prevState,
+                isLoading: false,
+                isSuccessful: true,
+            }));
+            setAuthData(JSON.stringify(res));
+            console.log('authData', auth.data);
+            history.replace(PROFILE);
+        });
+        account.on(ACTION_FAILED, (err) => {
+            console.log(err);
+            setLoginState((prevState) => ({
+                ...prevState,
+                isLoading: false,
+                hasFailed: true,
+                errorCode: err.response.status || 999
+            }));
+        });
+
     };
+
+    // if already connected go to profile
+    if (auth.data) {
+        return <Redirect to="/profile" />;
+    }
 
     return (
         <div className="home">

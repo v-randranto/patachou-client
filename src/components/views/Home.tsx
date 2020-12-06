@@ -1,16 +1,14 @@
-import React, { useContext } from 'react';
+import React, { useState } from 'react';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 import ButtonGroup from 'react-bootstrap/ButtonGroup';
-import { AuthContext } from '../../contexts/AuthContext';
-import { IAuth } from '../../models/auth';
+import AuthService from "../services/authService.js";
 import { FixLater } from '../../models/types';
 
 import { LOGIN, REGISTER } from '../../constants/paths';
 
 const Home: React.FC = () => {
-    const { auth }: { auth: IAuth } = useContext<FixLater>(AuthContext);
-
+    const [currentUser] = useState<FixLater>(AuthService.currentUser)
     const mediaQuery = window.matchMedia('(max-width: 640px)')
     
     return (
@@ -28,7 +26,7 @@ const Home: React.FC = () => {
                 </div>
             </div>
 
-            {!auth.data && (
+            {!currentUser && (
                 <Col md={5} className="mx-auto my-5">
                   <ButtonGroup className="mt-4 col" size="lg" vertical={mediaQuery.matches}>
                     <Button variant="choice1" href={REGISTER}>

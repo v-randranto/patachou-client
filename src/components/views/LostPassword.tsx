@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useState } from 'react';
 import { Redirect } from 'react-router-dom';
 
 import Col from 'react-bootstrap/Col';
@@ -6,13 +6,12 @@ import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import ButtonGroup from 'react-bootstrap/ButtonGroup';
 import InputGroup from 'react-bootstrap/InputGroup';
-import { AuthContext } from '../../contexts/AuthContext';
-import { IAuth } from '../../models/auth';
-import { FixLater } from '../../models/types';
+import AuthService from '../../components/services/authService'
 import { LOGIN, PROFILE } from '../../constants/paths';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUserNinja, faPaperPlane } from '@fortawesome/free-solid-svg-icons';
+import { FixLater } from '../../models/types';
 
 const pseudoIcon = <FontAwesomeIcon icon={faUserNinja} />;
 const submitIcon = <FontAwesomeIcon icon={faPaperPlane} />;
@@ -21,9 +20,8 @@ type LostProps = { history: FixLater };
 
 const LostPassword: React.FC<{ history: FixLater }> = ({ history }: LostProps) => {
     const [pseudo, setPseudo] = useState('');
-
-    const { auth }: { auth: IAuth } = useContext<FixLater>(AuthContext);
-    if (auth.data) {
+    const currentUser = AuthService.currentUser;
+    if (currentUser) {
         return <Redirect to={PROFILE} />;
     }
 

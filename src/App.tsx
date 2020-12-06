@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 import React from 'react'
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
-
 import 'bootstrap/dist/css/bootstrap.min.css'
 import './App.css'
 
@@ -24,7 +23,7 @@ import { ABOUT, ADMIN, CONTACT, HOME, LOGIN, LOST_PASSWORD, PROFILE, REGISTER, U
 
 const App: React.FC = () => {
     return (
-        <Router>
+        <Router >
             <Container className="p-0">
                 <Header />
                 <Switch>

@@ -1,5 +1,6 @@
 import React, { useState} from 'react';
 
+import { Redirect } from 'react-router-dom'
 import Alert from 'react-bootstrap/Alert';
 import Button from 'react-bootstrap/Button';
 import ButtonGroup from 'react-bootstrap/ButtonGroup';
@@ -26,6 +27,10 @@ const submitIcon = <FontAwesomeIcon icon={faPaperPlane} />;
 type LoginProps = { history: FixLater };
 
 const Login: React.FC<{ history: FixLater }> = ({ history }: LoginProps) => {
+    const currentUser = AuthService.currentUser;
+    if (currentUser) {
+        return <Redirect to={PROFILE} />;
+    }
     const loginStateInit = {
         isLoading: false,
         isSuccessful: false,
@@ -62,8 +67,7 @@ const Login: React.FC<{ history: FixLater }> = ({ history }: LoginProps) => {
                     isLoading: false,
                     isSuccessful: true,
                 }))
-              history.push(PROFILE);
-              window.location.reload();
+              history.replace(PROFILE);
             },
             error => {              
                 setLoginState((prevState) => ({

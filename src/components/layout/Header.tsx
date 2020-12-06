@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
-
+import { useHistory } from 'react-router-dom';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import brandImg from '../../img/brand.png';
 
 import { FixLater } from '../../models/types';
-import { ABOUT, ADMIN, CONTACT, HOME, LOGIN, REGISTER, PROFILE, USER } from '../../constants/paths';
+import { ABOUT, CONTACT, HOME, LOGIN, REGISTER, PROFILE, USER } from '../../constants/paths';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
     faHome,
@@ -15,7 +15,6 @@ import {
     faSignInAlt,
     faSignOutAlt,
     faAddressCard,
-    faTable,
     faColumns,
 } from '@fortawesome/free-solid-svg-icons';
 import AuthService from '../services/authService.js';
@@ -28,25 +27,19 @@ const loginIcon = <FontAwesomeIcon icon={faSignInAlt} />;
 const logoutIcon = <FontAwesomeIcon icon={faSignOutAlt} />;
 const profileIcon = <FontAwesomeIcon icon={faAddressCard} />;
 const boardUserIcon = <FontAwesomeIcon icon={faColumns} />;
-const boardAdminIcon = <FontAwesomeIcon icon={faTable} />;
 
 const Header: React.FC = () => {
-    const [currentAccount, setCurrentAccount] = useState<FixLater>();
-    const [showBoardAdmin, setShowBoardAdmin] = useState<boolean>(false);
-
+    const [currentUser, setCurrentUser] = useState<FixLater>(AuthService.currentUser);
+    const history = useHistory();
     useEffect(() => {
-        const user = AuthService.getCurrentUser();
+        setCurrentUser(AuthService.currentUser);
+    }, []);
 
-        if (user) {
-            setCurrentAccount(user.account);
-            setShowBoardAdmin(true);
-        }
-    }, [currentAccount]);
-
-    
-  const logOut = () => {
-    AuthService.logout();
-  }
+    const logOut = () => {
+        console.log('click logout');
+        AuthService.logout();
+        history.push(HOME)
+    };
 
     return (
         <Navbar sticky="top" bg="patachou" variant="dark" className="py-0 pl-2 pr-0" expand="lg">
@@ -64,7 +57,7 @@ const Header: React.FC = () => {
                         {aboutIcon}
                         <span className="d-none d-md-inline"> à propos</span>
                     </Nav.Link>
-                    {currentAccount && (
+                    {currentUser && currentUser.account && (
                         <Nav.Link className="d-inline mx-2" href={CONTACT}>
                             {contactIcon} <span className="d-none d-md-inline"> contact</span>
                         </Nav.Link>
@@ -73,28 +66,23 @@ const Header: React.FC = () => {
             </Navbar>
             <Navbar>
                 <Nav>
-                {showBoardAdmin && (
-                    <Nav.Link className="d-inline mx-2" href={USER}>
-                        {boardAdminIcon} <span className="d-none d-md-inline">administration</span>
-                    </Nav.Link>
-                    )}
-                {currentAccount && (
-                    <Nav.Link className="d-inline mx-2" href={ADMIN}>
-                        {boardUserIcon} <span className="d-none d-md-inline">dashboard</span>
-                    </Nav.Link>
+                    {currentUser && currentUser.account && (
+                        <Nav.Link className="d-inline mx-2" href={USER}>
+                            {boardUserIcon} <span className="d-none d-md-inline">dashboard</span>
+                        </Nav.Link>
                     )}
                 </Nav>
             </Navbar>
 
             <Navbar className="ml-auto p-0">
                 <Nav>
-                    {currentAccount && (
+                    {currentUser && currentUser.account && (
                         <Nav.Link className="d-inline mx-2" href={PROFILE}>
-                            {profileIcon} <span className="d-none d-md-inline">{currentAccount.pseudo}</span>
+                            {profileIcon} <span className="d-none d-md-inline">{currentUser.account.pseudo}</span>
                         </Nav.Link>
                     )}
 
-                    {!currentAccount && (
+                    {!currentUser && (
                         <>
                             <Nav.Link className="d-inline mx-2" href={REGISTER}>
                                 {registerIcon} <span className="d-none d-md-inline">inscription</span>
@@ -105,7 +93,8 @@ const Header: React.FC = () => {
                             </Nav.Link>
                         </>
                     )}
-                    {currentAccount && (
+
+                    {currentUser && currentUser.account && (
                         <Nav.Link className="d-inline mx-2" onClick={logOut}>
                             {logoutIcon}
                             <span className="d-none d-md-inline"> déconnexion</span>

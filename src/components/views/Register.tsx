@@ -27,7 +27,7 @@ import BsSpinner from '../layout/Spinner';
 import { validate } from '../../validators/registerForm';
 import Notification from '../modals/Notification';
 import ErrorNotification from '../modals/ErrorNotification';
-import { LOGIN } from '../../constants/paths';
+import { LOGIN, PROFILE } from '../../constants/paths';
 import { FORMAT_RULES } from '../../constants/formRules';
 import AuthService from "../services/authService";
 
@@ -40,6 +40,12 @@ const passwordIcon = <FontAwesomeIcon icon={faLock} />,
     submitIcon = <FontAwesomeIcon icon={faPaperPlane} />;
 
 const Register: FC = () => {
+    
+    const history = useHistory();
+    const currentUser = AuthService.currentUser;
+    if (currentUser) {
+        history.replace(PROFILE)
+    }
     const registerStateInit = {
         showStepOne: true,
         isLoading: false,
@@ -49,7 +55,6 @@ const Register: FC = () => {
     const [registerState, setRegisterState] = useState<FixLater>(registerStateInit);
     const [photoFile, setPhotoFile] = useState<any>(false);
 
-    const history = useHistory();
     
     const initialValues = {
         pseudo: '',

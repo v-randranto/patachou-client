@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from 'react';
-import { useHistory } from 'react-router-dom';
+import React from 'react';
+import { useHistory, useLocation, withRouter } from 'react-router-dom';
 import Nav from 'react-bootstrap/Nav';
+import NavLink from 'react-bootstrap/NavLink';
 import Navbar from 'react-bootstrap/Navbar';
 import brandImg from '../../img/brand.png';
 
-import { FixLater } from '../../models/types';
 import { ABOUT, CONTACT, HOME, LOGIN, REGISTER, PROFILE, USER } from '../../constants/paths';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
@@ -17,7 +17,7 @@ import {
     faAddressCard,
     faColumns,
 } from '@fortawesome/free-solid-svg-icons';
-import AuthService from '../services/authService.js';
+import { useAuth } from '../../contexts/AuthContext';
 
 const homeIcon = <FontAwesomeIcon icon={faHome} />;
 const aboutIcon = <FontAwesomeIcon icon={faInfoCircle} />;
@@ -29,15 +29,11 @@ const profileIcon = <FontAwesomeIcon icon={faAddressCard} />;
 const boardUserIcon = <FontAwesomeIcon icon={faColumns} />;
 
 const Header: React.FC = () => {
-    const [currentUser, setCurrentUser] = useState<FixLater>(AuthService.currentUser);
+    const { currentUser, setCurrentUser } = useAuth();
+    const location = useLocation();
     const history = useHistory();
-    useEffect(() => {
-        setCurrentUser(AuthService.currentUser);
-    }, []);
-
     const logOut = () => {
-        console.log('click logout');
-        AuthService.logout();
+        setCurrentUser(null)
         history.push(HOME)
     };
 
@@ -48,57 +44,57 @@ const Header: React.FC = () => {
                 <span className="d-none d-md-inline">Patachou</span>
             </Navbar.Brand>
             <Navbar className="mr-auto p-0">
-                <Nav>
-                    <Nav.Link className="d-inline mx-2" href={HOME}>
+                <Nav activeKey={location.pathname}>
+                    <NavLink className="d-inline mx-1" href={HOME}>
                         {homeIcon}
                         <span className="d-none d-md-inline"> accueil</span>
-                    </Nav.Link>
-                    <Nav.Link className="d-inline mx-2" href={ABOUT}>
+                    </NavLink>
+                    <NavLink className="d-inline mx-1" href={ABOUT}>
                         {aboutIcon}
                         <span className="d-none d-md-inline"> à propos</span>
-                    </Nav.Link>
+                    </NavLink>
                     {currentUser && currentUser.account && (
-                        <Nav.Link className="d-inline mx-2" href={CONTACT}>
+                        <NavLink className="d-inline mx-1" href={CONTACT}>
                             {contactIcon} <span className="d-none d-md-inline"> contact</span>
-                        </Nav.Link>
+                        </NavLink>
                     )}
                 </Nav>
             </Navbar>
             <Navbar>
-                <Nav>
+                <Nav activeKey={location.pathname}>
                     {currentUser && currentUser.account && (
-                        <Nav.Link className="d-inline mx-2" href={USER}>
+                        <NavLink className="d-inline mx-1" href={USER}>
                             {boardUserIcon} <span className="d-none d-md-inline">dashboard</span>
-                        </Nav.Link>
+                        </NavLink>
                     )}
                 </Nav>
             </Navbar>
 
             <Navbar className="ml-auto p-0">
-                <Nav>
+                <Nav activeKey={location.pathname}>
                     {currentUser && currentUser.account && (
-                        <Nav.Link className="d-inline mx-2" href={PROFILE}>
+                        <NavLink className="d-inline mx-1" href={PROFILE}>
                             {profileIcon} <span className="d-none d-md-inline">{currentUser.account.pseudo}</span>
-                        </Nav.Link>
+                        </NavLink>
                     )}
 
                     {!currentUser && (
                         <>
-                            <Nav.Link className="d-inline mx-2" href={REGISTER}>
+                            <NavLink className="d-inline mx-1" href={REGISTER}>
                                 {registerIcon} <span className="d-none d-md-inline">inscription</span>
-                            </Nav.Link>
-                            <Nav.Link className="d-inline mx-2" href={LOGIN}>
+                            </NavLink>
+                            <NavLink className="d-inline mx-1" href={LOGIN}>
                                 {loginIcon}
                                 <span className="d-none d-md-inline"> connexion</span>
-                            </Nav.Link>
+                            </NavLink>
                         </>
                     )}
 
                     {currentUser && currentUser.account && (
-                        <Nav.Link className="d-inline mx-2" onClick={logOut}>
+                        <NavLink className="d-inline mx-1" onClick={logOut}>
                             {logoutIcon}
                             <span className="d-none d-md-inline"> déconnexion</span>
-                        </Nav.Link>
+                        </NavLink>
                     )}
                 </Nav>
             </Navbar>
@@ -106,4 +102,4 @@ const Header: React.FC = () => {
     );
 };
 
-export default Header;
+export default withRouter(Header);

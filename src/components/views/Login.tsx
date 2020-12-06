@@ -1,6 +1,5 @@
 import React, { useState} from 'react';
 
-import { Redirect } from 'react-router-dom'
 import Alert from 'react-bootstrap/Alert';
 import Button from 'react-bootstrap/Button';
 import ButtonGroup from 'react-bootstrap/ButtonGroup';
@@ -17,8 +16,9 @@ import { LOST_PASSWORD, PROFILE, REGISTER } from '../../constants/paths';
 import BsSpinner from '../layout/Spinner';
 import { validate } from '../../validators/loginForm';
 import { useFormik } from 'formik';
-import AuthService from "../services/authService.js";
 import { ILoginForm } from '../../models/forms';
+import AuthService from '../services/authService';
+import { useAuth } from '../../contexts/AuthContext';
 
 const passwordIcon = <FontAwesomeIcon icon={faLock} />;
 const pseudoIcon = <FontAwesomeIcon icon={faUserNinja} />;
@@ -27,10 +27,7 @@ const submitIcon = <FontAwesomeIcon icon={faPaperPlane} />;
 type LoginProps = { history: FixLater };
 
 const Login: React.FC<{ history: FixLater }> = ({ history }: LoginProps) => {
-    const currentUser = AuthService.currentUser;
-    if (currentUser) {
-        return <Redirect to={PROFILE} />;
-    }
+    const { setCurrentUser} = useAuth();
     const loginStateInit = {
         isLoading: false,
         isSuccessful: false,
@@ -61,12 +58,14 @@ const Login: React.FC<{ history: FixLater }> = ({ history }: LoginProps) => {
         const login: ILoginForm = { pseudo, password };
 
         AuthService.login(login).then(
-            () => {
+            (data) => {
+                console.log('login result', data)
                 setLoginState((prevState) => ({
                     ...prevState,
                     isLoading: false,
                     isSuccessful: true,
                 }))
+                setCurrentUser(data);
               history.replace(PROFILE);
             },
             error => {              

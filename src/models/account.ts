@@ -3,7 +3,7 @@ import { CONNECTION_ACTIONS } from './../constants/actionTypes'
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 import EventEmitter from 'eventemitter3'
 import { apiCall } from '../api/axios'
-import { CONNECTION_API, METHOD } from '../constants/api'
+import { AUTH_API, METHOD } from '../constants/api'
 import { ACTION_ACCOUNT, ACTION_DONE, ACTION_FAILED } from '../constants/events'
 import { FixLater } from '../models/types'
 
@@ -35,10 +35,10 @@ export class Account extends EventEmitter {
   }
 
   actionAccount(actionType) {
-    const { SERVICE, REGISTER, LOGIN } = CONNECTION_API,
+    const { RESSOURCE, REGISTER, LOGIN } = AUTH_API,
       { register, login } = CONNECTION_ACTIONS
 
-    let path = `${SERVICE}`, data: FixLater
+    let path = `${RESSOURCE}`, data: FixLater
 
     switch (actionType) {
       case register:

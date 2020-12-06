@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
-import React from 'react'
+import React, {useState} from 'react'
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import './App.css'
@@ -19,10 +19,21 @@ import PrivateRoute from './components/PrivateRoute.jsx'
 import BoardUser from "./components/views/BoardUser";
 import BoardAdmin from "./components/views/BoardAdmin";
 
+import { AuthContext } from "./contexts/AuthContext.js";
+import AuthService from "./components/services/authService.js";
 import { ABOUT, ADMIN, CONTACT, HOME, LOGIN, LOST_PASSWORD, PROFILE, REGISTER, USER} from './constants/paths'
 
 const App: React.FC = () => {
+
+    const [currentUser, setCurrentUser] = useState(AuthService.currentUser);   
+    const setUser = (data) => {
+        console.log('>set user data', data)
+        AuthService.setCurrentUser(data);
+        setCurrentUser(data);
+      }
+
     return (
+        <AuthContext.Provider value={{currentUser, setCurrentUser: setUser}}>
         <Router >
             <Container className="p-0">
                 <Header />
@@ -41,6 +52,7 @@ const App: React.FC = () => {
                 </Switch>
             </Container>
         </Router>
+        </AuthContext.Provider>
     );
 }
 

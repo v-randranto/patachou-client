@@ -5,8 +5,8 @@ export const METHOD = {
     PUT: 'put'
 }
 
-export const CONNECTION_API = {
-    SERVICE: 'connection',
+export const AUTH_API = {
+    RESSOURCE: 'auth',
     REGISTER : 'register',
     LOGIN : 'login',
     LOGOUT : 'logout'

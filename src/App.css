@@ -66,6 +66,7 @@ button:active {
 }
 .btn-choice1:hover {  
   background-color: #cc6200;
+  color: ivory
 }
 
 .btn-choice2 {  
@@ -74,6 +75,7 @@ button:active {
 }
 .btn-choice2:hover {  
   background-color: #b22112;
+  color: ivory
 }
 
 .btn-outline-bland { 
@@ -102,3 +104,6 @@ border-radius: 2%;
   font-weight: bold;
 }
 
+.bg-profile {
+  background-color: #f7f4e8;
+}

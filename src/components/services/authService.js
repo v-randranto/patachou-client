@@ -1,14 +1,14 @@
-import axios from 'axios';
+import { apiCall } from '../../api/axios';
+import { AUTH_API, METHOD } from '../../constants/api';
 
-const API_URL = 'http://localhost:3001/api/auth/';       
+const { RESSOURCE, LOGIN, REGISTER } = AUTH_API;
 
 class AuthService {
+    path = '';
     login(login) {
-        return axios.post(API_URL + 'login', { login }).then((response) => {
-            if (response.data.accessToken) {
-                localStorage.setItem('user', JSON.stringify(response.data));
-            }
-            return response.data;
+        this.path = `${RESSOURCE}/${LOGIN}`;
+        return apiCall(this.path, METHOD.POST, { login }).then(data => {
+            return data;
         });
     }
 
@@ -18,11 +18,18 @@ class AuthService {
     }
 
     register(account) {
-        return axios.post(API_URL + 'register', { account });
+        this.path = `${RESSOURCE}/${REGISTER}`;
+        return apiCall(this.path, METHOD.POST, { account }).then(data => {
+            return data;
+        });
     }
 
     get currentUser() {
         return JSON.parse(localStorage.getItem('user'));
+    }
+
+    setCurrentUser(data) {
+        localStorage.setItem('user', JSON.stringify(data));
     }
 }
 

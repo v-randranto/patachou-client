@@ -1,13 +1,11 @@
 import React, { useState } from 'react';
-import { Redirect } from 'react-router-dom';
 
 import Col from 'react-bootstrap/Col';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import ButtonGroup from 'react-bootstrap/ButtonGroup';
 import InputGroup from 'react-bootstrap/InputGroup';
-import AuthService from '../../components/services/authService'
-import { LOGIN, PROFILE } from '../../constants/paths';
+import { LOGIN } from '../../constants/paths';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUserNinja, faPaperPlane } from '@fortawesome/free-solid-svg-icons';
@@ -20,11 +18,6 @@ type LostProps = { history: FixLater };
 
 const LostPassword: React.FC<{ history: FixLater }> = ({ history }: LostProps) => {
     const [pseudo, setPseudo] = useState('');
-    const currentUser = AuthService.currentUser;
-    if (currentUser) {
-        return <Redirect to={PROFILE} />;
-    }
-
     const onFormSubmit = (e: FixLater) => {
         e.preventDefault();
         console.log(pseudo);

@@ -1,15 +1,14 @@
-import React, { useState } from 'react';
+import React from 'react';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 import ButtonGroup from 'react-bootstrap/ButtonGroup';
-import AuthService from "../services/authService.js";
-import { FixLater } from '../../models/types';
+import { useAuth } from '../../contexts/AuthContext';
 
 import { LOGIN, REGISTER } from '../../constants/paths';
 
 const Home: React.FC = () => {
-    const [currentUser] = useState<FixLater>(AuthService.currentUser)
     const mediaQuery = window.matchMedia('(max-width: 640px)')
+    const { currentUser } = useAuth();
     
     return (
         <div className="home pt-5">

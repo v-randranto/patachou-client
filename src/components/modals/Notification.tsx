@@ -8,12 +8,13 @@ import { ModalConfig } from '../../types/modals'
 
 type NotifProps = { 
     config: ModalConfig,
+    emailHasFailed: boolean,
     onClose: any
 }
 
-const Notification: FC<NotifProps> = ({config, onClose}: NotifProps) => {
+const Notification: FC<NotifProps> = ({config, emailHasFailed, onClose}: NotifProps) => {
     const [show, setShow] = useState(true)
-    const {color, title, text} = config 
+    const {color, title, text, text2} = config 
     const colorStyle: CSS.Properties = {
         color: color
     }
@@ -35,7 +36,8 @@ const Notification: FC<NotifProps> = ({config, onClose}: NotifProps) => {
             </Modal.Header>
 
             <Modal.Body>
-                <p>{text}</p>
+                {emailHasFailed ? <p>{text2}</p> : <p>{text}</p>}            
+                
             </Modal.Body>
 
         </Modal>

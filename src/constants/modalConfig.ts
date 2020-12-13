@@ -9,7 +9,8 @@ export const EDIT_PROFILE = {
 export const REGISTER = {
   color: '#28a745',
   title: 'Vous êtes des nôtres!',
-  text: 'Un email de confirmation vous a été envoyé. Si vous ne le recevez pas, vérifiez votre adresse dans le profil de votre compte.'
+  text: 'Un email de confirmation vous a été envoyé. Si vous ne le recevez pas, vérifiez votre adresse dans le profil de votre compte.',
+  text2: `Votre profil est créé.`
 }
 
 export const LOST_PASSWORD = {

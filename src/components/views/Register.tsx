@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-import React, { FC, useState} from 'react';
+import React, { FC, useState, useRef, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import Form from 'react-bootstrap/Form';
 import InputGroup from 'react-bootstrap/InputGroup';
@@ -29,7 +29,7 @@ import Notification from '../modals/Notification';
 import ErrorNotification from '../modals/ErrorNotification';
 import { LOGIN } from '../../constants/paths';
 import { FORMAT_RULES } from '../../constants/formRules';
-import AuthService from "../services/authService";
+import AuthService from '../services/authService';
 
 const acceptFileExtensions = FORMAT_RULES.fileExtensions.join(',');
 const passwordIcon = <FontAwesomeIcon icon={faLock} />,
@@ -40,17 +40,18 @@ const passwordIcon = <FontAwesomeIcon icon={faLock} />,
     submitIcon = <FontAwesomeIcon icon={faPaperPlane} />;
 
 const Register: FC = () => {
-    
     const history = useHistory();
+
     const registerStateInit = {
         showStepOne: true,
         isLoading: false,
         isSuccessful: false,
+        emailHasFailed: false,
         hasFailed: false,
     };
     const [registerState, setRegisterState] = useState<FixLater>(registerStateInit);
-    const [photoFile, setPhotoFile] = useState<any>(false);
-    
+    const [photoFile, setPhotoFile] = useState<any>();
+
     const initialValues = {
         pseudo: '',
         presentation: '',
@@ -67,20 +68,67 @@ const Register: FC = () => {
             registerAccount(values);
         },
     });
+
+    const pseudoRef = useRef<HTMLInputElement>(null);
+    const emailRef = useRef<HTMLInputElement>(null);
+
+    useEffect(() => {
+        if (pseudoRef && pseudoRef.current) {
+            console.log('focus pseudo');
+            pseudoRef.current.focus();
+        }
+    }, []);
     
+    const resetPhotoInput = () => {
+        setPhotoFile(null);
+    };
+
+    const stepOneIsValid = () => {
+        if (!formik.touched.pseudo) return true;
+        if (formik.errors) {
+            if (formik.errors.pseudo || formik.errors.photo) {
+                return true;
+            }
+        }
+    };
+
+    const goToStepTwo = () => {
+        setRegisterState((prevState) => ({
+            ...prevState,
+            showStepOne: false,
+        }));
+        if (emailRef && emailRef.current) {
+            console.log('focus email');
+            emailRef.current.focus();
+        }
+    };
+
+    const resetStepOne = () => {
+        formik.setFieldValue('pseudo', '');
+        formik.setFieldValue('presentation', '');
+        formik.setFieldValue('photo', '');
+    };
+
+    const resetStepTwo = () => {
+        formik.setFieldValue('email', '');
+        formik.setFieldValue('password', '');
+        formik.setFieldValue('confirmPassword', '');
+    };
 
     const readFile = (file) => {
-        const reader = new FileReader();
-        formik.setFieldValue('photo', file);
-        reader.readAsDataURL(file);
-        reader.onload = () => {
-            const photo: IPhoto = {
-                name: file.name,
-                contentType: file.type,
-                content: reader.result,
+        if (file) {
+            const reader = new FileReader();
+            formik.setFieldValue('photo', file);
+            reader.readAsDataURL(file);
+            reader.onload = () => {
+                const photo: IPhoto = {
+                    name: file.name,
+                    contentType: file.type,
+                    content: reader.result,
+                };
+                setPhotoFile(photo);
             };
-            setPhotoFile(photo);
-        };
+        }
     };
 
     const registerAccount = (values) => {
@@ -94,22 +142,36 @@ const Register: FC = () => {
         }
 
         AuthService.register(profile).then(
-            () => {
-                setRegisterState((prevState) => ({
-                    ...prevState,
-                    isLoading: false,
-                    isSuccessful: true,
-                }))
+            (status) => {
+                console.log(status)
+                if (!status.pseudoUnavailable) {
+                    setRegisterState((prevState) => ({
+                        ...prevState,
+                        isLoading: false,
+                        isSuccessful: true,
+                        emailHasFailed: !status.email
+                    }));
+                   
+                } else {
+                    formik.setFieldError('pseudo', 'Pseudo déjà utilisé');
+                    setRegisterState((prevState) => ({
+                        ...prevState,
+                        showStepOne: true,
+                    }));
+                    if (pseudoRef && pseudoRef.current) {
+                        pseudoRef.current.focus();
+                    }
+                }
             },
-            error => {              
+            (error) => {
                 setRegisterState((prevState) => ({
                     ...prevState,
                     isLoading: false,
                     hasFailed: true,
-                    errorCode: error.response.status || 999
-                }))
-            }
-          );
+                    errorCode: error.response.status || 999,
+                }));
+            },
+        );
     };
 
     const onCloseNotificationModal = () => {
@@ -129,6 +191,7 @@ const Register: FC = () => {
                                     <InputGroup.Text>{pseudoIcon}*</InputGroup.Text>
                                 </InputGroup.Prepend>
                                 <Form.Control
+                                    ref={pseudoRef}
                                     type="text"
                                     name="pseudo"
                                     id="pseudo"
@@ -167,8 +230,8 @@ const Register: FC = () => {
                                 </InputGroup.Prepend>
                                 <Form.Label className="form-control">
                                     <span className="text-secondary">
-                                    {photoFile ? photoFile.name : 'Je charge ma photo'}                                        
-                                        </span>
+                                        {photoFile ? photoFile.name : 'Je charge ma photo'}
+                                    </span>
                                     <Form.File
                                         className="form-control d-none"
                                         accept={acceptFileExtensions}
@@ -182,19 +245,15 @@ const Register: FC = () => {
                                 </Form.Label>
                                 <small>Fichier de 500ko max. et d&apos;extension jpg, jpeg, png ou gif</small>
                             </InputGroup>
+                            <span onClick={resetPhotoInput}>X</span>
                             {formik.errors.photo && <Alert variant="danger py-0">{formik.errors.photo}</Alert>}
 
                             <ButtonGroup className="mt-4 col p-0" size="lg">
-                                <Button variant="outline-bland p-0" disabled></Button>
-                                <Button
-                                    variant="info col-3"
-                                    onClick={() => {
-                                        setRegisterState((prevState) => ({
-                                            ...prevState,
-                                            showStepOne: false,
-                                        }));
-                                    }}
-                                >
+                                <Button variant="secondary p-0" onClick={resetStepOne}>
+                                    Je refais
+                                </Button>
+
+                                <Button variant="info col-3" onClick={goToStepTwo} disabled={stepOneIsValid()}>
                                     {nextIcon}
                                 </Button>
                             </ButtonGroup>
@@ -208,6 +267,7 @@ const Register: FC = () => {
                                     <InputGroup.Text>@*</InputGroup.Text>
                                 </InputGroup.Prepend>
                                 <Form.Control
+                                    ref={emailRef}
                                     type="email"
                                     name="email"
                                     id="email"
@@ -275,6 +335,9 @@ const Register: FC = () => {
                                     <Button type="submit" variant="send" disabled={!formik.isValid}>
                                         {submitIcon} J&apos;envoie!
                                     </Button>
+                                    <Button variant="secondary p-0 col-3" onClick={resetStepTwo}>
+                                        Je refais
+                                    </Button>
                                 </ButtonGroup>
                             )}
 
@@ -287,7 +350,9 @@ const Register: FC = () => {
                     </Button>
                 </Form>
 
-                {registerState.isSuccessful && <Notification config={REGISTER} onClose={onCloseNotificationModal} />}
+                {registerState.isSuccessful && (
+                    <Notification config={REGISTER} emailHasFailed={registerState.emailHasFailed} onClose={onCloseNotificationModal} />
+                )}
 
                 {registerState.hasFailed && <ErrorNotification config={ERROR_NOTE} />}
             </Col>

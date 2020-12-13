@@ -13,15 +13,12 @@ class AuthService {
     }
 
     logout() {
-        console.log('>logout');
         localStorage.removeItem('user');
     }
 
     register(account) {
         this.path = `${RESSOURCE}/${REGISTER}`;
-        return apiCall(this.path, METHOD.POST, { account }).then(data => {
-            return data;
-        });
+        return apiCall(this.path, METHOD.POST, { account }).then(status => status);
     }
 
     get currentUser() {

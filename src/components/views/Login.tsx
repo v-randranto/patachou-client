@@ -1,4 +1,4 @@
-import React, { useState} from 'react';
+import React, { useState, useEffect, useRef} from 'react';
 
 import Alert from 'react-bootstrap/Alert';
 import Button from 'react-bootstrap/Button';
@@ -49,6 +49,14 @@ const Login: React.FC<{ history: FixLater }> = ({ history }: LoginProps) => {
         },
     });
 
+    const pseudoRef = useRef<HTMLInputElement>(null);
+
+    useEffect(() => {
+       if (pseudoRef && pseudoRef.current) {
+            pseudoRef.current.focus()
+        }        
+    }, [])
+
     const loginAccount = (values) => {
         setLoginState((prevState) => ({
             ...prevState,
@@ -89,6 +97,7 @@ const Login: React.FC<{ history: FixLater }> = ({ history }: LoginProps) => {
                             <InputGroup.Text>{pseudoIcon}*</InputGroup.Text>
                         </InputGroup.Prepend>
                         <Form.Control
+                            ref={pseudoRef}
                             type="text"
                             name="pseudo"
                             id="pseudo"

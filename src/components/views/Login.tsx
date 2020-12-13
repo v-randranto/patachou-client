@@ -1,14 +1,25 @@
-import React, { useState, useContext } from 'react';
-import { Redirect } from 'react-router-dom';
-import Col from 'react-bootstrap/Col';
+import React, { useState} from 'react';
+
+import Alert from 'react-bootstrap/Alert';
 import Button from 'react-bootstrap/Button';
+import ButtonGroup from 'react-bootstrap/ButtonGroup';
+import Col from 'react-bootstrap/Col';
 import Form from 'react-bootstrap/Form';
 import InputGroup from 'react-bootstrap/InputGroup';
-import { AuthContext } from '../../contexts/AuthContext';
-import { AuthContextType, FixLater } from '../../models/types';
+import { FixLater } from '../../models/types';
+import { ERROR_NOTE } from '../../constants/modalConfig';
+import ErrorNotification from '../modals/ErrorNotification';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faLock, faUserNinja, faPaperPlane } from '@fortawesome/free-solid-svg-icons';
+import { LOST_PASSWORD, PROFILE, REGISTER } from '../../constants/paths';
+import BsSpinner from '../layout/Spinner';
+import { validate } from '../../validators/loginForm';
+import { useFormik } from 'formik';
+import { ILoginForm } from '../../models/forms';
+import AuthService from '../services/authService';
+import { useAuth } from '../../contexts/AuthContext';
+
 const passwordIcon = <FontAwesomeIcon icon={faLock} />;
 const pseudoIcon = <FontAwesomeIcon icon={faUserNinja} />;
 const submitIcon = <FontAwesomeIcon icon={faPaperPlane} />;
@@ -16,67 +27,125 @@ const submitIcon = <FontAwesomeIcon icon={faPaperPlane} />;
 type LoginProps = { history: FixLater };
 
 const Login: React.FC<{ history: FixLater }> = ({ history }: LoginProps) => {
-    const [pseudo, setPseudo] = useState('');
-    const [password, setPassword] = useState('');
-    const { setAuthData, auth }: AuthContextType = useContext<FixLater>(AuthContext);
+    const { setCurrentUser} = useAuth();
+    const loginStateInit = {
+        isLoading: false,
+        isSuccessful: false,
+        hasFailed: false,
+        errorCode: 0
+    };
+    const [loginState, setLoginState] = useState<FixLater>(loginStateInit);
 
-    const onFormSubmit = (e: FixLater) => {
-        e.preventDefault();
-        console.log(password);
-        setAuthData(pseudo);
-        history.replace('/profile');
+    const initialValues = {
+        pseudo: '',
+        password: '',
     };
 
-    if (auth.data) {
-        return <Redirect to="/profile" />;
-    }
+    const formik = useFormik({
+        initialValues,
+        validate,
+        onSubmit: (values) => {
+            loginAccount(values);
+        },
+    });
+
+    const loginAccount = (values) => {
+        setLoginState((prevState) => ({
+            ...prevState,
+            isLoading: true,
+        }));
+        const {pseudo, password} = values
+        const login: ILoginForm = { pseudo, password };
+
+        AuthService.login(login).then(
+            (data) => {
+                console.log('login result', data)
+                setLoginState((prevState) => ({
+                    ...prevState,
+                    isLoading: false,
+                    isSuccessful: true,
+                }))
+                setCurrentUser(data);
+              history.replace(PROFILE);
+            },
+            error => {              
+                setLoginState((prevState) => ({
+                    ...prevState,
+                    isLoading: false,
+                    hasFailed: true,
+                    errorCode: error.response.status || 999
+                }))
+            }
+          );
+    };
 
     return (
-        <>
+        <div className="home">
             <Col md="6" lg="4" className="mx-auto">
                 <h3 className="text-dark text-center pt-4 pb-3 ">Je me connecte...</h3>
-                <Form onSubmit={onFormSubmit}>
+                <Form onSubmit={formik.handleSubmit} noValidate>
                     <InputGroup className="mt-4" size="lg">
                         <InputGroup.Prepend>
-                            <InputGroup.Text>{pseudoIcon}</InputGroup.Text>
+                            <InputGroup.Text>{pseudoIcon}*</InputGroup.Text>
                         </InputGroup.Prepend>
                         <Form.Control
-                            name="pseudo"
                             type="text"
-                            placeholder="mon pseudo"
-                            onChange={(e) => {
-                                setPseudo(e.target.value);
-                            }}
+                            name="pseudo"
+                            id="pseudo"
+                            maxLength={20}
+                            placeholder="mon pseudonyme"
+                            value={formik.values.pseudo}
+                            onChange={formik.handleChange}
+                            onBlur={formik.handleBlur}
                         />
                     </InputGroup>
+                    {formik.errors.pseudo && formik.touched.pseudo && (
+                        <Alert variant="danger py-0">{formik.errors.pseudo}</Alert>
+                    )}
+
                     <InputGroup className="mt-4" size="lg">
                         <InputGroup.Prepend>
-                            <InputGroup.Text>{passwordIcon}</InputGroup.Text>
+                            <InputGroup.Text>{passwordIcon}*</InputGroup.Text>
                         </InputGroup.Prepend>
                         <Form.Control
-                            name="password"
                             type="password"
+                            name="password"
+                            id="password"
+                            maxLength={10}
                             placeholder="mon mot de passe"
-                            onChange={(e) => {
-                                setPassword(e.target.value);
-                            }}
+                            value={formik.values.password}
+                            onChange={formik.handleChange}
+                            onBlur={formik.handleBlur}
                         />
                     </InputGroup>
+                    {formik.errors.password && formik.touched.password && (
+                                <Alert variant="danger py-0">{formik.errors.password}</Alert>
+                            )}
 
-                    <Button type="submit" variant="send my-5 col-4 auto" size="lg">
-                        {submitIcon}
-                    </Button>
+                    <ButtonGroup className="mt-4 col p-0" size="lg">
+                        <Button type="submit" variant="send">
+                            {submitIcon} J&apos;envoie!
+                        </Button>
+                    </ButtonGroup>
 
-                    <Button variant="link mt-5" href="/register" block>
-                        Je n&apos;ai pas de compte
-                    </Button>
+                    {loginState.hasFailed && (loginState.errorCode === 401 || loginState.errorCode === 404) && (
+                        <Alert variant="danger py-0 mt-2">Mes identifiants sont incorrects</Alert>
+                    )}
+                        <ButtonGroup className="mt-5 col" vertical>
+                            <Button variant="gotolink p-1" href={REGISTER}>
+                                Je n&apos;ai pas de compte
+                            </Button>
 
-                    <Button variant="link my-3" href="/lost-password" block>
-                        J&apos;ai perdu mon mot de passe
-                    </Button>
+                            <Button variant="gotolink p-1" href={LOST_PASSWORD}>
+                                J&apos;ai perdu mon mot de passe
+                            </Button>
+                        </ButtonGroup>            
+
+                    {loginState.loading && <BsSpinner />}
                 </Form>
+                {loginState.hasFailed && (loginState.errorCode !== 401 && loginState.errorCode !== 404) && <ErrorNotification config={ERROR_NOTE} />}
             </Col>
-        </>
+        </div>
     );
 };
 

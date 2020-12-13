@@ -1,33 +1,46 @@
-import React from 'react'
-import Col from 'react-bootstrap/Col'
-import Button from 'react-bootstrap/Button'
-import Image from 'react-bootstrap/Image'
+import React from 'react';
+import Card from 'react-bootstrap/Card';
+import Col from 'react-bootstrap/Col';
+import Button from 'react-bootstrap/Button';
+import ButtonGroup from 'react-bootstrap/ButtonGroup';
+import Image from 'react-bootstrap/Image';
+import Media from 'react-bootstrap/Media';
+import { useAuth } from '../../contexts/AuthContext';
+import {ddmmyyyyFormat} from '../../utils/dateHandler'
 
 const Profile: React.FC = () => {
-  return (
-    <Col md="6" lg="4" className="mx-auto pt-3">
-      <h5 className="text-center text-white">Véroche</h5>
-      <div className="text-center">
-        <Image
-          src="https://res.cloudinary.com/ndege65/image/upload/v1603743572/patachou/assets/default-avatar_c2s9sr.png"
-          rounded
-          width="45px"
-        />
-        <div className="text-center">
-          <small className="text-white">Membre depuis le 01/10/2020</small>
+    const { currentUser } = useAuth();
+    return (
+        <div className="home">
+            <Col md={5} className="mx-auto">
+                <h3 className="text-dark text-center pt-4 pb-3 ">Mon profil</h3>
+                <Card className="m-0 border-0">
+                    <Card.Body>
+                        <div className="bg-profile p-2">
+                        <Media>
+                            <Image className="mr-2" src={currentUser.account.photoUrl} rounded width="60px" />
+                            <Media.Body>
+                                <h4 className="text-dark">{currentUser.account.pseudo}</h4>
+                                <small className="text-dark">Membre depuis le {ddmmyyyyFormat(new Date(currentUser.account.creationDate))}</small>
+                            </Media.Body>
+                        </Media>
+                        <hr style={{ border: '2px solid #343a40', borderRadius: '2px' }} />
+                        <p className="text-dark">{currentUser.account.presentation}</p>
+                        </div>
+                    </Card.Body>
+                </Card>
+                <ButtonGroup className="mt-5 col" size="lg">
+                    <Button variant="choice1" href="#">
+                        Mes recettes
+                    </Button>
+
+                    <Button variant="choice2" href="#">
+                        Mes potes
+                    </Button>
+                </ButtonGroup>
+            </Col>
         </div>
-      </div>
+    );
+};
 
-      <div className="mx-auto my-3">bla bla de présentation</div>
-
-      <Button className="my-3" variant="outline-primary" block>
-        Identifiants
-      </Button>
-      <Button className="my-3" variant="outline-primary" block>
-        Présentation
-      </Button>
-    </Col>
-  )
-}
-
-export default Profile
+export default Profile;

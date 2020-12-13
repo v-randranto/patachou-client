@@ -1,18 +1,22 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 import axios from 'axios';
 
-export const apiCall = async (service, method, data) => {
+export const apiCall = async (ressource, method, data, callback) => {
   const config = {
     method: method,
     data: data,
-    url: `http://localhost:3001/api/${service}`,
+    url: `http://localhost:3001/api/${ressource}`,
   };
 
   try {
     console.log('await axios with', config)
-    await axios(config);    
+    const res = await axios(config); 
+    if (callback) {
+      callback(res.data)   
+    }
+    return res.data  
   } catch (error) {
-    console.log(error.config);
+    console.log(error.response);
     throw error;
   }
 };

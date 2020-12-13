@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-import React, { FC, useState, useContext } from 'react';
-import { Redirect, useHistory } from 'react-router-dom';
+import React, { FC, useState} from 'react';
+import { useHistory } from 'react-router-dom';
 import Form from 'react-bootstrap/Form';
 import InputGroup from 'react-bootstrap/InputGroup';
 import Button from 'react-bootstrap/Button';
@@ -19,22 +19,19 @@ import {
     faCamera,
 } from '@fortawesome/free-solid-svg-icons';
 
-import { AuthContext } from '../../contexts/AuthContext';
-import { IAuth } from '../../models/auth';
 import { FixLater } from '../../models/types';
-import { Account, IProfile, IPhoto } from '../../models/account';
-
-import { ADD_ACCOUNT, ACTION_DONE, ACTION_FAILED } from '../../constants/events';
+import { IProfile, IPhoto } from '../../models/account';
 import { REGISTER, ERROR_NOTE } from '../../constants/modalConfig';
-// import { FORMAT_RULES } from '../../constants/formRules';
-// import BsSpinner from '../layout/Spinner'
+import BsSpinner from '../layout/Spinner';
 
 import { validate } from '../../validators/registerForm';
 import Notification from '../modals/Notification';
 import ErrorNotification from '../modals/ErrorNotification';
+import { LOGIN } from '../../constants/paths';
+import { FORMAT_RULES } from '../../constants/formRules';
+import AuthService from "../services/authService";
 
-// const acceptFileExtensions = FORMAT_RULES.fileExtensions.join(',');
-
+const acceptFileExtensions = FORMAT_RULES.fileExtensions.join(',');
 const passwordIcon = <FontAwesomeIcon icon={faLock} />,
     nextIcon = <FontAwesomeIcon icon={faAngleDoubleRight} />,
     photoIcon = <FontAwesomeIcon icon={faCamera} />,
@@ -43,17 +40,17 @@ const passwordIcon = <FontAwesomeIcon icon={faLock} />,
     submitIcon = <FontAwesomeIcon icon={faPaperPlane} />;
 
 const Register: FC = () => {
-    const [showStepOne, setShowStepOne] = useState<boolean>(true);
-    const [photoFile, setPhotoFile] = useState<any>(false);
-    const [success, setSuccess] = useState<boolean>(false);
-    const [failure, setFailure] = useState<boolean>(false);
-
+    
     const history = useHistory();
-    const { auth }: { auth: IAuth } = useContext<FixLater>(AuthContext);
-    if (auth.data) {
-        return <Redirect to="/profile" />;
-    }
-
+    const registerStateInit = {
+        showStepOne: true,
+        isLoading: false,
+        isSuccessful: false,
+        hasFailed: false,
+    };
+    const [registerState, setRegisterState] = useState<FixLater>(registerStateInit);
+    const [photoFile, setPhotoFile] = useState<any>(false);
+    
     const initialValues = {
         pseudo: '',
         presentation: '',
@@ -70,6 +67,7 @@ const Register: FC = () => {
             registerAccount(values);
         },
     });
+    
 
     const readFile = (file) => {
         const reader = new FileReader();
@@ -86,31 +84,45 @@ const Register: FC = () => {
     };
 
     const registerAccount = (values) => {
+        setRegisterState((prevState) => ({
+            ...prevState,
+            isLoading: true,
+        }));
         const profile: IProfile = { ...values };
         if (photoFile) {
             profile.photo = { ...photoFile };
         }
 
-        const account = new Account(profile);
-        account.emit(ADD_ACCOUNT);
-        account.on(ACTION_DONE, () => {
-            setSuccess(true);
-        });
-        account.on(ACTION_FAILED, () => {
-            setFailure(true);
-        });
+        AuthService.register(profile).then(
+            () => {
+                setRegisterState((prevState) => ({
+                    ...prevState,
+                    isLoading: false,
+                    isSuccessful: true,
+                }))
+            },
+            error => {              
+                setRegisterState((prevState) => ({
+                    ...prevState,
+                    isLoading: false,
+                    hasFailed: true,
+                    errorCode: error.response.status || 999
+                }))
+            }
+          );
     };
 
     const onCloseNotificationModal = () => {
-        history.push('/login');
+        history.push(LOGIN);
+        window.location.reload();
     };
 
     return (
-        <>
+        <div className="home">
             <Col md="6" lg="4" className="mx-auto">
                 <h3 className="text-dark text-center pt-4 pb-3 ">Je m&apos;inscris...</h3>
                 <Form onSubmit={formik.handleSubmit} noValidate>
-                    {showStepOne && (
+                    {registerState.showStepOne && (
                         <div>
                             <InputGroup className="mt-4" size="lg">
                                 <InputGroup.Prepend>
@@ -120,16 +132,19 @@ const Register: FC = () => {
                                     type="text"
                                     name="pseudo"
                                     id="pseudo"
+                                    maxLength={20}
                                     placeholder="mon pseudonyme"
                                     value={formik.values.pseudo}
                                     onChange={formik.handleChange}
                                     onBlur={formik.handleBlur}
                                 />
                             </InputGroup>
+                            <small>De longueur 20 max. et sans caractères spéciaux</small>
                             {formik.errors.pseudo && formik.touched.pseudo && (
                                 <Alert variant="danger py-0">{formik.errors.pseudo}</Alert>
                             )}
-                            <Form.Group className="mt-4">
+
+                            <Form.Group className="mt-2">
                                 <Form.Control
                                     size="lg"
                                     as="textarea"
@@ -143,49 +158,50 @@ const Register: FC = () => {
                                     onChange={formik.handleChange}
                                     onBlur={formik.handleBlur}
                                 />
-                                <small>Caractères disponibles: {120 - formik.values.presentation.length}</small>
+                                <small>{120 - formik.values.presentation.length} caractères disponibles </small>
                             </Form.Group>
 
-                            <InputGroup className="mt-4" size="lg">
+                            <InputGroup className="mt-2" size="lg">
                                 <InputGroup.Prepend>
                                     <InputGroup.Text>{photoIcon}</InputGroup.Text>
                                 </InputGroup.Prepend>
-                                <Form.Label className="form-control">je charge une photo
-                                <Form.File
-                                    id="photo"
-                                    name="photo"
-                                    className="form-control d-none"
-                                    onChange={(e) => {
-                                        if (e.target && e.target.files) {
-                                            readFile(e.target.files[0]);
-                                        }
-                                    }}
-                                    onBlur={formik.handleBlur}
-                                />
+                                <Form.Label className="form-control">
+                                    <span className="text-secondary">
+                                    {photoFile ? photoFile.name : 'Je charge ma photo'}                                        
+                                        </span>
+                                    <Form.File
+                                        className="form-control d-none"
+                                        accept={acceptFileExtensions}
+                                        onChange={(e) => {
+                                            if (e.target && e.target.files) {
+                                                readFile(e.target.files[0]);
+                                            }
+                                        }}
+                                        onBlur={formik.handleBlur}
+                                    />
                                 </Form.Label>
-                                
+                                <small>Fichier de 500ko max. et d&apos;extension jpg, jpeg, png ou gif</small>
                             </InputGroup>
                             {formik.errors.photo && <Alert variant="danger py-0">{formik.errors.photo}</Alert>}
 
-                            <ButtonGroup className="mt-4 col p-0" size="lg">                                
-                                <Button variant="outline-bland p-0" disabled>
-                                </Button>
+                            <ButtonGroup className="mt-4 col p-0" size="lg">
+                                <Button variant="outline-bland p-0" disabled></Button>
                                 <Button
-                                    variant="secondary col-4"
+                                    variant="info col-3"
                                     onClick={() => {
-                                        setShowStepOne(false);
+                                        setRegisterState((prevState) => ({
+                                            ...prevState,
+                                            showStepOne: false,
+                                        }));
                                     }}
                                 >
                                     {nextIcon}
                                 </Button>
                             </ButtonGroup>
-                            <div className="justify-content-right">
-                                
-                            </div>
                         </div>
                     )}
 
-                    {!showStepOne && (
+                    {!registerState.showStepOne && (
                         <div>
                             <InputGroup className="mt-4" size="lg">
                                 <InputGroup.Prepend>
@@ -213,17 +229,18 @@ const Register: FC = () => {
                                     type="password"
                                     name="password"
                                     id="password"
+                                    maxLength={10}
                                     placeholder="mon mot de passe"
                                     value={formik.values.password}
                                     onChange={formik.handleChange}
                                     onBlur={formik.handleBlur}
                                 />
-                                {formik.errors.password && formik.touched.password && (
-                                    <Alert variant="danger py-0">{formik.errors.password}</Alert>
-                                )}
                             </InputGroup>
-
-                            <InputGroup className="mt-4" size="lg">
+                            <small>De 8 à 15 caractères dont 1 maj, 1 min et 1 chiffre</small>
+                            {formik.errors.password && formik.touched.password && (
+                                <Alert variant="danger py-0">{formik.errors.password}</Alert>
+                            )}
+                            <InputGroup className="mt-2" size="lg">
                                 <InputGroup.Prepend>
                                     <InputGroup.Text>{passwordIcon}*</InputGroup.Text>
                                 </InputGroup.Prepend>
@@ -231,6 +248,7 @@ const Register: FC = () => {
                                     type="password"
                                     name="confirmPassword"
                                     id="confirmPassword"
+                                    maxLength={10}
                                     placeholder="je confirme"
                                     value={formik.values.confirmPassword}
                                     onChange={formik.handleChange}
@@ -240,32 +258,40 @@ const Register: FC = () => {
                             {formik.errors.confirmPassword && formik.touched.confirmPassword && (
                                 <Alert variant="danger py-0">{formik.errors.confirmPassword}</Alert>
                             )}
-                            <ButtonGroup className="mt-4 col p-0" size="lg">
-                                <Button
-                                    variant="secondary p-0 col-4"
-                                    onClick={() => {
-                                        setShowStepOne(true);
-                                    }}
-                                >
-                                    {previousIcon}
-                                </Button>
-                                <Button type="submit" variant="send" disabled={!formik.isValid}>
-                                    {submitIcon} J&apos;envoie!
-                                </Button>
-                            </ButtonGroup>
+
+                            {!registerState.loading && (
+                                <ButtonGroup className="mt-4 col p-0" size="lg">
+                                    <Button
+                                        variant="info p-0 col-3"
+                                        onClick={() => {
+                                            setRegisterState((prevState) => ({
+                                                ...prevState,
+                                                showStepOne: true,
+                                            }));
+                                        }}
+                                    >
+                                        {previousIcon}
+                                    </Button>
+                                    <Button type="submit" variant="send" disabled={!formik.isValid}>
+                                        {submitIcon} J&apos;envoie!
+                                    </Button>
+                                </ButtonGroup>
+                            )}
+
+                            {registerState.loading && <BsSpinner />}
                         </div>
                     )}
 
-                    <Button variant="info mt-5" href="/login" block>
+                    <Button variant="gotolink mt-5 p-1" href={LOGIN} block>
                         J&apos;ai déjà un compte
                     </Button>
                 </Form>
 
-                {success && <Notification config={REGISTER} onClose={onCloseNotificationModal} />}
+                {registerState.isSuccessful && <Notification config={REGISTER} onClose={onCloseNotificationModal} />}
 
-                {failure && <ErrorNotification config={ERROR_NOTE} />}
+                {registerState.hasFailed && <ErrorNotification config={ERROR_NOTE} />}
             </Col>
-        </>
+        </div>
     );
 };
 

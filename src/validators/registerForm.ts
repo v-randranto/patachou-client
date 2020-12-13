@@ -1,6 +1,5 @@
 import { IRegisterForm } from '../models/forms'
 import { FORMAT_RULES, ERRORS } from '../constants/formRules'
-// const acceptFileExtensions = FORMAT_RULES.fileExtensions.join(',');
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 const { pseudoPattern, pseudoMax, emailPattern, emailMax, passwordMax, presentationMax, fileLimit } = FORMAT_RULES

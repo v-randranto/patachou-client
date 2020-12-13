@@ -1,37 +1,25 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 /* eslint-disable react/prop-types */
-import React, { useContext } from 'react'
-import { Route, Redirect } from 'react-router-dom'
-import { AuthContext } from '../contexts/AuthContext'
+import React from 'react';
+import { Route, Redirect } from 'react-router-dom';
+import { LOGIN } from '../constants/paths';
+import { useAuth } from '../contexts/AuthContext.js';
 
 const PrivateRoute = ({ component: Component, ...rest }) => {
-    const { auth } = useContext(AuthContext);
-    const { loading } = auth
-  
-    if (loading) {
-      return (
-        <Route
-          {...rest}
-          render={() => {
-            return <p>Loading...</p>
-          }}
-        />
-      )
-    }
-  // if loading is set to true (when our function useEffect(() => {}, []) is not executed), we are rendering a loading component;
-  
+  const { currentUser } = useAuth();
     return (
-      <Route
-        {...rest}
-        render={routeProps => {
-          return auth.data ? (
-            <Component {...routeProps} />
-          ) : (
-            <Redirect to="/login" />
-          )
-        }}
-      />
-    )
-  }
+        <Route
+            {...rest}
+            render={(props) => {
+                if (!currentUser) {
+                    // not logged in so redirect to login page with the return url
+                    return <Redirect to={LOGIN} />;
+                }
 
-  export default PrivateRoute
+                // authorised so return component
+                return <Component {...props} />;
+            }}
+        />
+    );
+};
+export default PrivateRoute;

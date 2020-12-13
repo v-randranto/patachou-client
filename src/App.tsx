@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
-import React from 'react'
+import React, {useState} from 'react'
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
-
 import 'bootstrap/dist/css/bootstrap.min.css'
 import './App.css'
 
@@ -17,24 +16,43 @@ import Profile from './components/views/Profile'
 import LostPassword from './components/views/LostPassword'
 import PrivateRoute from './components/PrivateRoute.jsx'
 
+import BoardUser from "./components/views/BoardUser";
+import BoardAdmin from "./components/views/BoardAdmin";
+
+import { AuthContext } from "./contexts/AuthContext.js";
+import AuthService from "./components/services/authService.js";
+import { ABOUT, ADMIN, CONTACT, HOME, LOGIN, LOST_PASSWORD, PROFILE, REGISTER, USER} from './constants/paths'
+
 const App: React.FC = () => {
+
+    const [currentUser, setCurrentUser] = useState(AuthService.currentUser);   
+    const setUser = (data) => {
+        console.log('>set user data', data)
+        AuthService.setCurrentUser(data);
+        setCurrentUser(data);
+      }
+
     return (
-        <Router>
+        <AuthContext.Provider value={{currentUser, setCurrentUser: setUser}}>
+        <Router >
             <Container className="p-0">
                 <Header />
                 <Switch>
                     <Route exact path="/" component={Home} />
-                    <Route exact path="/home" component={Home} />
-                    <Route exact path="/about" component={About} />
-                    <Route exact path="/login" component={Login} />
-                    <Route exact path="/register" component={Register} />
-                    <Route exact path="/lost-password" component={LostPassword} />
-                    <PrivateRoute exact path="/contact" component={Contact} />
-                    <PrivateRoute exact path="/profile" component={Profile} />
+                    <Route exact path={ABOUT} component={About} />
+                    <Route exact path={HOME} component={Home} />
+                    <Route exact path={LOGIN} component={Login} />
+                    <Route exact path={LOST_PASSWORD} component={LostPassword} />
+                    <Route exact path={REGISTER} component={Register} />
+                    <PrivateRoute path={ADMIN} component={BoardAdmin} />
+                    <PrivateRoute exact path={CONTACT} component={Contact} />
+                    <PrivateRoute exact path={PROFILE} component={Profile} />
+                    <PrivateRoute path={USER} component={BoardUser} />
                     <Route component={NotFound} />
                 </Switch>
             </Container>
         </Router>
+        </AuthContext.Provider>
     );
 }
 

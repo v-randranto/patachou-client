@@ -4,8 +4,8 @@ import aboutImg from '../../img/about.jpg'
 
 const About: React.FC = () => {
   return (
-    <>
-    <Card className="col-lg-6 mx-auto pt-3">
+    <div className="home">
+    <Card className="col-lg-6 mx-auto pt-3 mt-5">
       <Card.Img variant="top" src={aboutImg} />
       <Card.Body>
         <Card.Title>Mais, qui c&apos;est-y qu&apos;on est ?</Card.Title>
@@ -18,7 +18,7 @@ const About: React.FC = () => {
         </Card.Text>
       </Card.Body>
     </Card>
-    </>
+    </div>
   )
 }
 

@@ -17,6 +17,7 @@ import {
     faAngleDoubleLeft,
     faAngleDoubleRight,
     faCamera,
+    faTimes,
 } from '@fortawesome/free-solid-svg-icons';
 
 import { FixLater } from '../../models/types';
@@ -37,19 +38,20 @@ const passwordIcon = <FontAwesomeIcon icon={faLock} />,
     photoIcon = <FontAwesomeIcon icon={faCamera} />,
     previousIcon = <FontAwesomeIcon icon={faAngleDoubleLeft} />,
     pseudoIcon = <FontAwesomeIcon icon={faUserNinja} />,
-    submitIcon = <FontAwesomeIcon icon={faPaperPlane} />;
+    submitIcon = <FontAwesomeIcon icon={faPaperPlane} />,
+    resetIcon = <FontAwesomeIcon icon={faTimes} />;
 
 const Register: FC = () => {
     const history = useHistory();
 
     const registerStateInit = {
-        showStepOne: true,
         isLoading: false,
         isSuccessful: false,
         emailHasFailed: false,
         hasFailed: false,
     };
     const [registerState, setRegisterState] = useState<FixLater>(registerStateInit);
+    const [showStepOne, setShowStepOne] = useState<boolean>(true);
     const [photoFile, setPhotoFile] = useState<any>();
 
     const initialValues = {
@@ -62,7 +64,7 @@ const Register: FC = () => {
     };
 
     const formik = useFormik({
-        initialValues,        
+        initialValues,
         validate,
         onSubmit: (values) => {
             registerAccount(values);
@@ -73,11 +75,17 @@ const Register: FC = () => {
     const emailRef = useRef<HTMLInputElement>(null);
 
     useEffect(() => {
-        if (pseudoRef && pseudoRef.current) {
-            pseudoRef.current.focus();
+        if (showStepOne) {
+            if (pseudoRef && pseudoRef.current) {
+                pseudoRef.current.focus();
+            }
+        } else {
+            if (emailRef && emailRef.current) {
+                emailRef.current.focus();
+            }
         }
-    }, []);
-    
+    }, [showStepOne]);
+
     const resetPhotoInput = () => {
         setPhotoFile(null);
     };
@@ -91,27 +99,28 @@ const Register: FC = () => {
         }
     };
 
-    const goToStepTwo = () => {
-        setRegisterState((prevState) => ({
-            ...prevState,
-            showStepOne: false,
-        }));
-        if (emailRef && emailRef.current) {
-            console.log('focus email');
-            emailRef.current.focus();
+    const disableResetStep = (step: string) => {
+        if (step === 'one') {
+            if (formik.touched.pseudo || formik.touched.presentation) {
+                return false;
+            }
+        } else {
+            if (formik.touched.email || formik.touched.password || formik.touched.confirmPassword) {
+                return false;
+            }
         }
+        return true;
     };
 
-    const resetStepOne = () => {
-        formik.setFieldValue('pseudo', '');
-        formik.setFieldValue('presentation', '');
-        formik.setFieldValue('photo', '');
+    const goToStepTwo = () => {
+        setShowStepOne(false);
     };
 
-    const resetStepTwo = () => {
-        formik.setFieldValue('email', '');
-        formik.setFieldValue('password', '');
-        formik.setFieldValue('confirmPassword', '');
+    const resetStep = (...props) => {
+        props.forEach((prop) => {
+            formik.setFieldValue(prop, '');
+            formik.setFieldTouched(prop, false);
+        });
     };
 
     const readFile = (file) => {
@@ -136,32 +145,25 @@ const Register: FC = () => {
             isLoading: true,
         }));
         const profile: IProfile = { ...values };
-        profile.pseudo = values.pseudo.trim()
-        profile.email = values.email.trim()
+        profile.pseudo = values.pseudo.trim();
+        profile.email = values.email.trim();
         if (photoFile) {
             profile.photo = { ...photoFile };
         }
 
         AuthService.register(profile).then(
             (status) => {
-                console.log(status)
+                console.log(status);
                 if (!status.pseudoUnavailable) {
                     setRegisterState((prevState) => ({
                         ...prevState,
                         isLoading: false,
                         isSuccessful: true,
-                        emailHasFailed: !status.email
+                        emailHasFailed: !status.email,
                     }));
-                   
                 } else {
                     formik.setFieldError('pseudo', 'Pseudo déjà utilisé');
-                    setRegisterState((prevState) => ({
-                        ...prevState,
-                        showStepOne: true,
-                    }));
-                    if (pseudoRef && pseudoRef.current) {
-                        pseudoRef.current.focus();
-                    }
+                    setShowStepOne(true);
                 }
             },
             (error) => {
@@ -185,7 +187,7 @@ const Register: FC = () => {
             <Col md="6" lg="4" className="mx-auto">
                 <h3 className="text-dark text-center pt-4 pb-3 ">Je m&apos;inscris...</h3>
                 <Form onSubmit={formik.handleSubmit} noValidate>
-                    {registerState.showStepOne && (
+                    {showStepOne && (
                         <div>
                             <InputGroup className="mt-4" size="lg">
                                 <InputGroup.Prepend>
@@ -250,9 +252,16 @@ const Register: FC = () => {
                             {formik.errors.photo && <Alert variant="danger py-0">{formik.errors.photo}</Alert>}
 
                             <ButtonGroup className="mt-4 col p-0" size="lg">
-                                <Button variant="secondary p-0" onClick={resetStepOne}>
-                                    Je refais
-                                </Button>
+                                <Button
+                                    variant="secondary offset-6 col-3"
+                                    onClick={() => {
+                                        resetStep('pseudo', 'presentation', 'photo');
+                                        setPhotoFile(null);
+                                    }}
+                                    disabled={disableResetStep('one')}
+                                >
+                                    {resetIcon}
+                                </Button> 
 
                                 <Button variant="info col-3" onClick={goToStepTwo} disabled={stepOneIsValid()}>
                                     {nextIcon}
@@ -261,7 +270,7 @@ const Register: FC = () => {
                         </div>
                     )}
 
-                    {!registerState.showStepOne && (
+                    {!showStepOne && (
                         <div>
                             <InputGroup className="mt-4" size="lg">
                                 <InputGroup.Prepend>
@@ -279,7 +288,7 @@ const Register: FC = () => {
                                 />
                             </InputGroup>
                             {formik.errors.email && formik.touched.email && (
-                                <Alert variant="danger py-0">{formik.errors.email}</Alert>
+                                <Alert variant="danger py-0 mt-1">{formik.errors.email}</Alert>
                             )}
 
                             <InputGroup className="mt-4" size="lg">
@@ -317,27 +326,23 @@ const Register: FC = () => {
                                 />
                             </InputGroup>
                             {formik.errors.confirmPassword && formik.touched.confirmPassword && (
-                                <Alert variant="danger py-0">{formik.errors.confirmPassword}</Alert>
+                                <Alert variant="danger py-0 mt-1">{formik.errors.confirmPassword}</Alert>
                             )}
 
                             {!registerState.loading && (
                                 <ButtonGroup className="mt-4 col p-0" size="lg">
-                                    <Button
-                                        variant="info p-0 col-3"
-                                        onClick={() => {
-                                            setRegisterState((prevState) => ({
-                                                ...prevState,
-                                                showStepOne: true,
-                                            }));
-                                        }}
-                                    >
+                                    <Button variant="info p-0 col-3" onClick={() => setShowStepOne(true)}>
                                         {previousIcon}
                                     </Button>
                                     <Button type="submit" variant="send" disabled={!formik.isValid}>
                                         {submitIcon} J&apos;envoie!
                                     </Button>
-                                    <Button variant="secondary p-0 col-3" onClick={resetStepTwo}>
-                                        Je refais
+                                    <Button
+                                        variant="secondary p-0 col-3"
+                                        onClick={() => resetStep('email', 'password', 'confirmPassword')}
+                                        disabled={disableResetStep('two')}
+                                    >
+                                        {resetIcon}
                                     </Button>
                                 </ButtonGroup>
                             )}
@@ -352,7 +357,11 @@ const Register: FC = () => {
                 </Form>
 
                 {registerState.isSuccessful && (
-                    <Notification config={REGISTER} emailHasFailed={registerState.emailHasFailed} onClose={onCloseNotificationModal} />
+                    <Notification
+                        config={REGISTER}
+                        emailHasFailed={registerState.emailHasFailed}
+                        onClose={onCloseNotificationModal}
+                    />
                 )}
 
                 {registerState.hasFailed && <ErrorNotification config={ERROR_NOTE} />}

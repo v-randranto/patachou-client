@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef} from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 
 import Alert from 'react-bootstrap/Alert';
 import Button from 'react-bootstrap/Button';
@@ -27,12 +27,12 @@ const submitIcon = <FontAwesomeIcon icon={faPaperPlane} />;
 type LoginProps = { history: FixLater };
 
 const Login: React.FC<{ history: FixLater }> = ({ history }: LoginProps) => {
-    const { setCurrentUser} = useAuth();
+    const { setCurrentUser } = useAuth();
     const loginStateInit = {
         isLoading: false,
         isSuccessful: false,
         hasFailed: false,
-        errorCode: 0
+        errorCode: 0,
     };
     const [loginState, setLoginState] = useState<FixLater>(loginStateInit);
 
@@ -52,39 +52,41 @@ const Login: React.FC<{ history: FixLater }> = ({ history }: LoginProps) => {
     const pseudoRef = useRef<HTMLInputElement>(null);
 
     useEffect(() => {
-       if (pseudoRef && pseudoRef.current) {
-            pseudoRef.current.focus()
-        }        
-    }, [])
+        if (pseudoRef && pseudoRef.current) {
+            pseudoRef.current.focus();
+        }
+    }, []);
 
     const loginAccount = (values) => {
         setLoginState((prevState) => ({
             ...prevState,
             isLoading: true,
         }));
-        const {pseudo, password} = values
+
+        const { pseudo, password } = values;
         const login: ILoginForm = { pseudo, password };
+        login.pseudo = values.pseudo.trim()
 
         AuthService.login(login).then(
             (data) => {
-                console.log('login result', data)
                 setLoginState((prevState) => ({
                     ...prevState,
                     isLoading: false,
                     isSuccessful: true,
-                }))
+                }));
                 setCurrentUser(data);
-              history.replace(PROFILE);
+                history.replace(PROFILE);
             },
-            error => {              
+            (error) => {
+                const errorCode = error.response && error.response.status ? error.response.status : 999;
                 setLoginState((prevState) => ({
                     ...prevState,
                     isLoading: false,
                     hasFailed: true,
-                    errorCode: error.response.status || 999
-                }))
-            }
-          );
+                    errorCode,
+                }));
+            },
+        );
     };
 
     return (
@@ -128,8 +130,8 @@ const Login: React.FC<{ history: FixLater }> = ({ history }: LoginProps) => {
                         />
                     </InputGroup>
                     {formik.errors.password && formik.touched.password && (
-                                <Alert variant="danger py-0">{formik.errors.password}</Alert>
-                            )}
+                        <Alert variant="danger py-0">{formik.errors.password}</Alert>
+                    )}
 
                     <ButtonGroup className="mt-4 col p-0" size="lg">
                         <Button type="submit" variant="send">
@@ -140,19 +142,21 @@ const Login: React.FC<{ history: FixLater }> = ({ history }: LoginProps) => {
                     {loginState.hasFailed && (loginState.errorCode === 401 || loginState.errorCode === 404) && (
                         <Alert variant="danger py-0 mt-2">Mes identifiants sont incorrects</Alert>
                     )}
-                        <ButtonGroup className="mt-5 col" vertical>
-                            <Button variant="gotolink p-1" href={REGISTER}>
-                                Je n&apos;ai pas de compte
-                            </Button>
+                    <ButtonGroup className="mt-5 col" vertical>
+                        <Button variant="gotolink p-1" href={REGISTER}>
+                            Je n&apos;ai pas de compte
+                        </Button>
 
-                            <Button variant="gotolink p-1" href={LOST_PASSWORD}>
-                                J&apos;ai perdu mon mot de passe
-                            </Button>
-                        </ButtonGroup>            
+                        <Button variant="gotolink p-1" href={LOST_PASSWORD}>
+                            J&apos;ai perdu mon mot de passe
+                        </Button>
+                    </ButtonGroup>
 
                     {loginState.loading && <BsSpinner />}
                 </Form>
-                {loginState.hasFailed && (loginState.errorCode !== 401 && loginState.errorCode !== 404) && <ErrorNotification config={ERROR_NOTE} />}
+                {loginState.hasFailed && loginState.errorCode !== 401 && loginState.errorCode !== 404 && (
+                    <ErrorNotification config={ERROR_NOTE} />
+                )}
             </Col>
         </div>
     );

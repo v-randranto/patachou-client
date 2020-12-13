@@ -62,7 +62,7 @@ const Register: FC = () => {
     };
 
     const formik = useFormik({
-        initialValues,
+        initialValues,        
         validate,
         onSubmit: (values) => {
             registerAccount(values);
@@ -74,7 +74,6 @@ const Register: FC = () => {
 
     useEffect(() => {
         if (pseudoRef && pseudoRef.current) {
-            console.log('focus pseudo');
             pseudoRef.current.focus();
         }
     }, []);
@@ -137,6 +136,8 @@ const Register: FC = () => {
             isLoading: true,
         }));
         const profile: IProfile = { ...values };
+        profile.pseudo = values.pseudo.trim()
+        profile.email = values.email.trim()
         if (photoFile) {
             profile.photo = { ...photoFile };
         }

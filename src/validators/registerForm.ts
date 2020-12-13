@@ -6,9 +6,11 @@ const { pseudoPattern, pseudoMax, emailPattern, emailMax, passwordMax, presentat
 const acceptFileExtensions = FORMAT_RULES.fileExtensions.join(',')
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export const validate = (values: any) => {
-    const { pseudo, presentation, photo, email, password, confirmPassword } = values
+    let {pseudo, email} = values
+    const { presentation, photo, password, confirmPassword } = values
     const errors: IRegisterForm | any = {}
-
+    pseudo = pseudo.trim()
+    email = email.trim()
     if (!pseudo) {
         errors.pseudo = ERRORS.required('mon pseudo')
     } else if (!(pseudoPattern.test(pseudo))) {

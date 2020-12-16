@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 import axios from 'axios';
 
-export const apiCall = async (ressource, method, data, callback) => {
+export const apiCall = async (ressource, method, data) => {
   const config = {
     method: method,
     data: data,
@@ -11,9 +11,6 @@ export const apiCall = async (ressource, method, data, callback) => {
   try {
     console.log('await axios with', config)
     const res = await axios(config); 
-    if (callback) {
-      callback(res.data)   
-    }
     return res.data  
   } catch (error) {
     console.log(error.response);

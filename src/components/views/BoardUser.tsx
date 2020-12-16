@@ -2,7 +2,7 @@ import React from 'react'
 
 const BoardUser: React.FC = () => {
   return (
-    <div className="home">
+    <div className="wrapper ">
     <h4>Welcome to the board user</h4>
     </div>
   )

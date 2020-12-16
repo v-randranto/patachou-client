@@ -12,7 +12,7 @@ const Contact: React.FC = () =>  {
   const [message, setMessage] = useState('')
   
   return (
-    <div className="home">
+    <div className="wrapper ">
       <Col md="6" lg="4" className="mx-auto">
         <h3 className="text-center text-color pt-5">Un &apos;ti mot à Patachou</h3>
         <Form>
@@ -30,10 +30,10 @@ const Contact: React.FC = () =>  {
           <small> {250 - message.length} caractères disponibles </small>
           </Form.Group>
 
-          <Button className="my-4" variant="send" block>
+          <Button className="my-4" variant="send" block disabled>
             {submitIcon}  J&apos;envoie
           </Button>
-          <Button className="my-4" variant="secondary" block>
+          <Button className="my-4" variant="secondary" block disabled>
             Je réinitialise
           </Button>
         </Form>

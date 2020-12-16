@@ -1,32 +1,31 @@
 import React, { useState, useEffect, useRef } from 'react';
-
+import { useHistory } from 'react-router-dom';
 import Alert from 'react-bootstrap/Alert';
 import Button from 'react-bootstrap/Button';
 import ButtonGroup from 'react-bootstrap/ButtonGroup';
 import Col from 'react-bootstrap/Col';
 import Form from 'react-bootstrap/Form';
 import InputGroup from 'react-bootstrap/InputGroup';
-import { FixLater } from '../../models/types';
-import { ERROR_NOTE } from '../../constants/modalConfig';
-import ErrorNotification from '../modals/ErrorNotification';
+import { FixLater } from '../../../models/types';
+import { ERROR_NOTE } from '../../../constants/modalConfig';
+import ErrorNotification from '../../modals/ErrorNotification';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faLock, faUserNinja, faPaperPlane } from '@fortawesome/free-solid-svg-icons';
-import { LOST_PASSWORD, PROFILE, REGISTER } from '../../constants/paths';
-import BsSpinner from '../layout/Spinner';
-import { validate } from '../../validators/loginForm';
+import { LOST_PASSWORD, PROFILE, REGISTER } from '../../../constants/paths';
+import BsSpinner from '../../layout/Spinner';
+import { validate } from '../../../validators/loginForm';
 import { useFormik } from 'formik';
-import { ILoginForm } from '../../models/forms';
-import AuthService from '../services/authService';
-import { useAuth } from '../../contexts/AuthContext';
+import { ILoginForm } from '../../../models/forms';
+import AuthService from '../../services/authService';
+import { useAuth } from '../../../contexts/AuthContext';
 
 const passwordIcon = <FontAwesomeIcon icon={faLock} />;
 const pseudoIcon = <FontAwesomeIcon icon={faUserNinja} />;
 const submitIcon = <FontAwesomeIcon icon={faPaperPlane} />;
 
-type LoginProps = { history: FixLater };
-
-const Login: React.FC<{ history: FixLater }> = ({ history }: LoginProps) => {
+const Login: React.FC = () => {
+    const history = useHistory();
     const { setCurrentUser } = useAuth();
     const loginStateInit = {
         isLoading: false,
@@ -90,7 +89,7 @@ const Login: React.FC<{ history: FixLater }> = ({ history }: LoginProps) => {
     };
 
     return (
-        <div className="home">
+        <div className="wrapper">
             <Col md="6" lg="4" className="mx-auto">
                 <h3 className="text-dark text-center pt-4 pb-3 ">Je me connecte...</h3>
                 <Form onSubmit={formik.handleSubmit} noValidate>

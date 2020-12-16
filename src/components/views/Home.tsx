@@ -11,7 +11,7 @@ const Home: React.FC = () => {
     const { currentUser } = useAuth();
     
     return (
-        <div className="home pt-5">
+        <div className="wrapper pt-5">
             <div className="h-40 mx-0" style={{ backgroundColor: 'ivory' }}>
                 <div className="mx-auto p-3">
                     <h2 className="display-5 text-center text-uppercase">Bienvenue sur Patachou !</h2>

@@ -4,7 +4,7 @@ import aboutImg from '../../img/about.jpg'
 
 const About: React.FC = () => {
   return (
-    <div className="home">
+    <div className="wrapper">
     <Card className="col-lg-6 mx-auto pt-3 mt-5">
       <Card.Img variant="top" src={aboutImg} />
       <Card.Body>

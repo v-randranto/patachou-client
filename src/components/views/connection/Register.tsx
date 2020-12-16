@@ -20,17 +20,17 @@ import {
     faTimes,
 } from '@fortawesome/free-solid-svg-icons';
 
-import { FixLater } from '../../models/types';
-import { IProfile, IPhoto } from '../../models/account';
-import { REGISTER, ERROR_NOTE } from '../../constants/modalConfig';
-import BsSpinner from '../layout/Spinner';
+import { FixLater } from '../../../models/types';
+import { IProfile, IPhoto } from '../../../models/account';
+import { REGISTER, ERROR_NOTE } from '../../../constants/modalConfig';
+import BsSpinner from '../../layout/Spinner';
 
-import { validate } from '../../validators/registerForm';
-import Notification from '../modals/Notification';
-import ErrorNotification from '../modals/ErrorNotification';
-import { LOGIN } from '../../constants/paths';
-import { FORMAT_RULES } from '../../constants/formRules';
-import AuthService from '../services/authService';
+import { validate } from '../../../validators/registerForm';
+import Notification from '../../modals/Notification';
+import ErrorNotification from '../../modals/ErrorNotification';
+import { LOGIN } from '../../../constants/paths';
+import { FORMAT_RULES } from '../../../constants/formRules';
+import AuthService from '../../services/authService';
 
 const acceptFileExtensions = FORMAT_RULES.fileExtensions.join(',');
 const passwordIcon = <FontAwesomeIcon icon={faLock} />,
@@ -183,7 +183,7 @@ const Register: FC = () => {
     };
 
     return (
-        <div className="home">
+        <div className="wrapper">
             <Col md="6" lg="4" className="mx-auto">
                 <h3 className="text-dark text-center pt-4 pb-3 ">Je m&apos;inscris...</h3>
                 <Form onSubmit={formik.handleSubmit} noValidate>

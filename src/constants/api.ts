@@ -12,3 +12,7 @@ export const AUTH_API = {
     LOGOUT : 'logout'
 }
 
+export const RESSOURCES_API = {
+    ACCOUNTS: 'accounts',
+    RECIPES: 'recipes'
+}

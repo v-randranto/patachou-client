@@ -6,7 +6,7 @@ const { ACCOUNTS, RECIPES } = RESSOURCES_API;
 class RecipesService {
     path = ``;
 
-    createOneRecipe(recipe) {
+    createRecipe(recipe) {
         return apiCall(this.path, METHOD.PUT, { recipe }).then((data) => {
             return data;
         });
@@ -19,25 +19,24 @@ class RecipesService {
         });
     }
 
-    getOneRecipe(id) {
+    getRecipe(id) {
         this.path = `${RECIPES}/${id}`;
         return apiCall(this.path, METHOD.GET).then((data) => {
             return data;
         });
     }
 
-    deleteOneRecipe(id) {
+    deleteRecipe(id) {
         this.path = `${RECIPES}/${id}`;
         return apiCall(this.path, METHOD.DELETE);
     }
 
-    updateOneRecipe(id, update) {
+    updateRecipe(id, update) {
         this.path = `${RECIPES}/${id}`;
         return apiCall(this.path, METHOD.PUT, update).then((data) => {
             return data;
         });
     }
-
 }
 
 export default new RecipesService();

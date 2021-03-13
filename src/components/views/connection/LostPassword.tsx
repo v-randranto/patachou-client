@@ -14,7 +14,6 @@ import { FixLater } from '../../../models/types';
 
 const submitIcon = <FontAwesomeIcon icon={faPaperPlane} />;
 
-
 const LostPassword: React.FC = () => {
     const history = useHistory();
     const [email, setEmail] = useState('');

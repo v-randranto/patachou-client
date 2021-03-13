@@ -1,48 +1,53 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 import React, { FC, useState, useRef, useEffect } from 'react';
+
 import { useHistory } from 'react-router-dom';
+import { useFormik } from 'formik';
+
+import Alert from 'react-bootstrap/Alert';
+import Button from 'react-bootstrap/Button';
+import ButtonGroup from 'react-bootstrap/ButtonGroup';
+import Col from 'react-bootstrap/Col';
 import Form from 'react-bootstrap/Form';
 import InputGroup from 'react-bootstrap/InputGroup';
-import Button from 'react-bootstrap/Button';
-import Col from 'react-bootstrap/Col';
-import Alert from 'react-bootstrap/Alert';
-import ButtonGroup from 'react-bootstrap/ButtonGroup';
-import { useFormik } from 'formik';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-    faLock,
-    faUserNinja,
-    faPaperPlane,
-    faAngleDoubleLeft,
-    faAngleDoubleRight,
-    faCamera,
-    faTimes,
-} from '@fortawesome/free-solid-svg-icons';
+
+import BsSpinner from '../../layout/Spinner';
+import Notification from '../../modals/Notification';
+import ErrorNotification from '../../modals/ErrorNotification';
 
 import { FixLater } from '../../../models/types';
 import { IProfile, IPhoto } from '../../../models/account';
-import { REGISTER, ERROR_NOTE } from '../../../constants/modalConfig';
-import BsSpinner from '../../layout/Spinner';
 
+import AuthService from '../../services/authService';
 import { validate } from '../../../validators/registerForm';
-import Notification from '../../modals/Notification';
-import ErrorNotification from '../../modals/ErrorNotification';
+
 import { LOGIN } from '../../../constants/paths';
 import { FORMAT_RULES } from '../../../constants/formRules';
-import AuthService from '../../services/authService';
+import { REGISTER, ERROR_NOTE } from '../../../constants/modalConfig';
+
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import {
+    faAngleDoubleLeft,
+    faAngleDoubleRight,
+    faCamera,
+    faLock,
+    faPaperPlane,
+    faTimes,    
+    faUserNinja
+} from '@fortawesome/free-solid-svg-icons';
 
 const acceptFileExtensions = FORMAT_RULES.fileExtensions.join(',');
-const passwordIcon = <FontAwesomeIcon icon={faLock} />,
+const 
     nextIcon = <FontAwesomeIcon icon={faAngleDoubleRight} />,
+    passwordIcon = <FontAwesomeIcon icon={faLock} />,    
     photoIcon = <FontAwesomeIcon icon={faCamera} />,
     previousIcon = <FontAwesomeIcon icon={faAngleDoubleLeft} />,
     pseudoIcon = <FontAwesomeIcon icon={faUserNinja} />,
-    submitIcon = <FontAwesomeIcon icon={faPaperPlane} />,
-    resetIcon = <FontAwesomeIcon icon={faTimes} />;
+    resetIcon = <FontAwesomeIcon icon={faTimes} />,    
+    submitIcon = <FontAwesomeIcon icon={faPaperPlane} />;
 
 const Register: FC = () => {
-    const history = useHistory();
 
     const registerStateInit = {
         isLoading: false,
@@ -71,6 +76,7 @@ const Register: FC = () => {
         },
     });
 
+    const history = useHistory();
     const pseudoRef = useRef<HTMLInputElement>(null);
     const emailRef = useRef<HTMLInputElement>(null);
 
@@ -85,19 +91,6 @@ const Register: FC = () => {
             }
         }
     }, [showStepOne]);
-
-    const resetPhotoInput = () => {
-        setPhotoFile(null);
-    };
-
-    const stepOneIsValid = () => {
-        if (!formik.touched.pseudo) return true;
-        if (formik.errors) {
-            if (formik.errors.pseudo || formik.errors.photo) {
-                return true;
-            }
-        }
-    };
 
     const disableResetStep = (step: string) => {
         if (step === 'one') {
@@ -115,12 +108,10 @@ const Register: FC = () => {
     const goToStepTwo = () => {
         setShowStepOne(false);
     };
-
-    const resetStep = (...props) => {
-        props.forEach((prop) => {
-            formik.setFieldValue(prop, '');
-            formik.setFieldTouched(prop, false);
-        });
+    
+    const onCloseNotificationModal = () => {
+        history.push(LOGIN);
+        window.location.reload();
     };
 
     const readFile = (file) => {
@@ -138,6 +129,26 @@ const Register: FC = () => {
             };
         }
     };
+
+    const resetPhotoInput = () => {
+        setPhotoFile(null);
+    };
+    
+    const resetStep = (...props) => {
+        props.forEach((prop) => {
+            formik.setFieldValue(prop, '');
+            formik.setFieldTouched(prop, false);
+        });
+    };
+
+    const stepOneIsValid = () => {
+        if (!formik.touched.pseudo) return true;
+        if (formik.errors) {
+            if (formik.errors.pseudo || formik.errors.photo) {
+                return true;
+            }
+        }
+    }; 
 
     const registerAccount = (values) => {
         setRegisterState((prevState) => ({
@@ -175,11 +186,6 @@ const Register: FC = () => {
                 }));
             },
         );
-    };
-
-    const onCloseNotificationModal = () => {
-        history.push(LOGIN);
-        window.location.reload();
     };
 
     return (

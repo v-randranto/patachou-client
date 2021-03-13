@@ -19,12 +19,13 @@ import PrivateRoute from './components/PrivateRoute.jsx'
 import Profile from './components/views/profile/Profile'
 import Recipes from './components/views/recipes/Recipes.jsx'
 import RecipeDetail from './components/views/recipes/RecipeDetail.jsx'
+import RecipeForm from './components/views/recipes/RecipeForm.jsx'
 import Register from './components/views/connection/Register'
 
 
 import { AuthContext } from "./contexts/AuthContext.js";
 import AuthService from "./components/services/authService.js";
-import { ABOUT, ADMIN, CONTACT, HOME, LOGIN, LOST_PASSWORD, PROFILE, RECIPES, RECIPE_DETAIL, REGISTER, USER} from './constants/paths'
+import { ABOUT, ADMIN, CONTACT, HOME, LOGIN, LOST_PASSWORD, PROFILE, RECIPES, RECIPE_DETAIL, RECIPE_FORM, REGISTER, USER} from './constants/paths'
 
 const App: React.FC = () => {
 
@@ -41,17 +42,18 @@ const App: React.FC = () => {
             <Container className="p-0">
                 <Header />
                 <Switch>
-                    <Route exact path="/" component={Home} />
-                    <Route exact path={ABOUT} component={About} />
-                    <Route exact path={HOME} component={Home} />
-                    <Route exact path={LOGIN} component={Login} />
-                    <Route exact path={LOST_PASSWORD} component={LostPassword} />
-                    <Route exact path={REGISTER} component={Register} />
-                    <PrivateRoute path={ADMIN} component={BoardAdmin} />
+                    <Route exact path="/"><Home /></Route>
+                    <Route exact path={ABOUT}><About /></Route>
+                    <Route exact path={HOME} ><Home /></Route>
+                    <Route exact path={LOGIN} ><Login /></Route>
+                    <Route exact path={LOST_PASSWORD} ><LostPassword /></Route>
+                    <Route exact path={REGISTER} ><Register /></Route>
+                    <PrivateRoute exact path={ADMIN} component={BoardAdmin} />
                     <PrivateRoute exact path={CONTACT} component={Contact} />
                     <PrivateRoute exact path={PROFILE} component={Profile} />
                     <PrivateRoute exact path={RECIPES} component={Recipes} />
                     <PrivateRoute exact path={RECIPE_DETAIL} component={RecipeDetail} />
+                    <PrivateRoute exact path={RECIPE_FORM} component={RecipeForm} />
                     <PrivateRoute path={USER} component={BoardUser} />
                     <Route component={NotFound} />
                 </Switch>

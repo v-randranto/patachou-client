@@ -34,7 +34,6 @@ const Login: React.FC = () => {
         errorCode: 0,
     };
     const [loginState, setLoginState] = useState<FixLater>(loginStateInit);
-
     const initialValues = {
         pseudo: '',
         password: '',

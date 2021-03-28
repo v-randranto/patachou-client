@@ -1,0 +1,16 @@
+{
+"ABOUT": "/about",
+"ADMIN": "/admin",
+"CONTACT": "/contact",
+"HOME": "/home",
+"LOGIN": "/login",
+"LOGOUT": "/logout",
+"LOST_PASSWORD": "/lost-password",
+"PROFILE": "/profile",
+"RECIPES": "/recipes",
+"RECIPE_DETAIL": "/recipe-detail",
+"RECIPE_FORM": "/recipe-form",
+"REGISTER": "/register",
+"RESET_PASSWORD": "/reset-password",
+"USER": "/user"
+}

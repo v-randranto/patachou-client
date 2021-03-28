@@ -12,12 +12,12 @@ import ErrorNotification from '../../modals/ErrorNotification';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faLock, faUserNinja, faPaperPlane } from '@fortawesome/free-solid-svg-icons';
-import { LOST_PASSWORD, PROFILE, REGISTER } from '../../../constants/paths';
+import paths from '../../../constants/paths.json';
 import BsSpinner from '../../layout/Spinner';
 import { validate } from '../../../validators/loginForm';
 import { useFormik } from 'formik';
 import { ILoginForm } from '../../../models/forms';
-import AuthService from '../../services/authService';
+import AuthService from '../../../services/authService';
 import { useAuth } from '../../../contexts/AuthContext';
 
 const passwordIcon = <FontAwesomeIcon icon={faLock} />;
@@ -31,7 +31,7 @@ const Login: React.FC = () => {
         isLoading: false,
         isSuccessful: false,
         hasFailed: false,
-        errorCode: 0,
+        errorCode: null,
     };
     const [loginState, setLoginState] = useState<FixLater>(loginStateInit);
     const initialValues = {
@@ -43,7 +43,7 @@ const Login: React.FC = () => {
         initialValues,
         validate,
         onSubmit: (values) => {
-            loginAccount(values);
+            loginSubmit(values);
         },
     });
 
@@ -55,17 +55,17 @@ const Login: React.FC = () => {
         }
     }, []);
 
-    const loginAccount = (values) => {
+    const loginSubmit = (values) => {
         setLoginState((prevState) => ({
             ...prevState,
             isLoading: true,
         }));
 
         const { pseudo, password } = values;
-        const login: ILoginForm = { pseudo, password };
-        login.pseudo = values.pseudo.trim()
+        const identification: ILoginForm = { pseudo, password };
+        identification.pseudo = values.pseudo.trim();
 
-        AuthService.login(login).then(
+        AuthService.login(identification).then(
             (data) => {
                 setLoginState((prevState) => ({
                     ...prevState,
@@ -73,15 +73,15 @@ const Login: React.FC = () => {
                     isSuccessful: true,
                 }));
                 setCurrentUser(data);
-                history.replace(PROFILE);
+                history.replace(paths.PROFILE);
             },
             (error) => {
-                const errorCode = error.response && error.response.status ? error.response.status : 999;
+                console.log('error login', error);
                 setLoginState((prevState) => ({
                     ...prevState,
                     isLoading: false,
                     hasFailed: true,
-                    errorCode,
+                    errorCode: error.statusCode
                 }));
             },
         );
@@ -141,11 +141,12 @@ const Login: React.FC = () => {
                         <Alert variant="danger py-0 mt-2">Mes identifiants sont incorrects</Alert>
                     )}
                     <ButtonGroup className="mt-5 col" vertical>
-                        <Button variant="gotolink p-1" href={REGISTER}>
+                        
+                        <Button variant="gotolink p-1" href={paths.REGISTER}>
                             Je n&apos;ai pas de compte
                         </Button>
 
-                        <Button variant="gotolink p-1" href={LOST_PASSWORD}>
+                        <Button variant="gotolink p-1" href={paths.LOST_PASSWORD}>
                             J&apos;ai perdu mon mot de passe
                         </Button>
                     </ButtonGroup>

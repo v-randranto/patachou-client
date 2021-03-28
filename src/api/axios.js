@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 import axios from 'axios';
+import HttpError from '../errors/httpError';
 
 export const apiCall = async (ressource, method, data) => {
   const config = {
@@ -14,6 +15,14 @@ export const apiCall = async (ressource, method, data) => {
     return res.data  
   } catch (error) {
     console.log(error.response);
-    throw error;
+    if (error.response) {
+      const {data, status} = error.response
+      console.log(data, status)
+      throw new HttpError(data.error, status)
+    } else {
+      throw error;
+    } 
+
+    
   }
 };

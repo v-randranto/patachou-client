@@ -4,7 +4,7 @@ import Card from 'react-bootstrap/Card';
 import Col from 'react-bootstrap/Col';
 import ListGroup from 'react-bootstrap/ListGroup';
 import { useAuth } from '../../../contexts/AuthContext';
-import RecipesService from '../../services/recipesService';
+import RecipesService from '../../../services/recipesService';
 import RecipesItem from './RecipesItem.jsx'
 
 const Recipes = () => {

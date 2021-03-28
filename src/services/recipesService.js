@@ -1,5 +1,5 @@
-import { apiCall } from '../../api/axios';
-import { RESSOURCES_API, METHOD } from '../../constants/api';
+import { apiCall } from '../api/axios';
+import { RESSOURCES_API, METHOD } from '../constants/api';
 
 const { ACCOUNTS, RECIPES } = RESSOURCES_API;
 

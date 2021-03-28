@@ -9,7 +9,9 @@ export const AUTH_API = {
     RESSOURCE: 'auth',
     REGISTER : 'register',
     LOGIN : 'login',
-    LOGOUT : 'logout'
+    LOGOUT : 'logout',
+    LOST_PASSWORD: 'lost-password',
+    RESET_PASSWORD: 'reset-password'
 }
 
 export const RESSOURCES_API = {

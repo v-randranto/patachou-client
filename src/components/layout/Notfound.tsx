@@ -13,7 +13,7 @@ const NotFound: React.FC = () => {
         <Card.Body>
           <Card.Title>Oups, ingrédient introuvable! </Card.Title>
           <Card.Text>
-            <p>Ah bin c&apos;est ballot! </p>
+            Ah bin c&apos;est ballot!
           </Card.Text>
         </Card.Body>
       </Card>

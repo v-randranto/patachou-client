@@ -7,7 +7,7 @@ import Image from 'react-bootstrap/Image';
 import Media from 'react-bootstrap/Media';
 import { useAuth } from '../../../contexts/AuthContext';
 import { ddmmyyyyFormat } from '../../../utils/dateHandler';
-import { RECIPES } from '../../../constants/paths';
+import paths from '../../../constants/paths.json';
 
 const Profile: React.FC = () => {
     const { currentUser } = useAuth();
@@ -39,7 +39,7 @@ const Profile: React.FC = () => {
                     </Card.Body>
                 </Card>
                 <ButtonGroup className="mt-5 col" size="lg">
-                    <Button variant="choice1" href={RECIPES}>
+                    <Button variant="choice1" href={paths.RECIPES}>
                         Mes recettes
                     </Button>
 

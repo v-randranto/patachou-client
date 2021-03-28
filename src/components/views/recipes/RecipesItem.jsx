@@ -4,13 +4,13 @@ import PropTypes from 'prop-types';
 import ListGroup from 'react-bootstrap/ListGroup';
 import {useHistory} from 'react-router-dom'
 
-import {RECIPE_FORM} from '../../../constants/paths'
+import paths from '../../../constants/paths.json'
 
 const RecipesItem = ({recipe}) => {  
     const history = useHistory()
     const handleClick = () => {
         history.push({ 
-            pathname: RECIPE_FORM,
+            pathname: paths.RECIPE_FORM,
             state: recipe._id
            })
     }

@@ -19,10 +19,10 @@ import ErrorNotification from '../../modals/ErrorNotification';
 import { FixLater } from '../../../models/types';
 import { IProfile, IPhoto } from '../../../models/account';
 
-import AuthService from '../../services/authService';
+import AuthService from '../../../services/authService';
 import { validate } from '../../../validators/registerForm';
 
-import { LOGIN } from '../../../constants/paths';
+import paths from '../../../constants/paths.json';
 import { FORMAT_RULES } from '../../../constants/formRules';
 import { REGISTER, ERROR_NOTE } from '../../../constants/modalConfig';
 
@@ -54,6 +54,7 @@ const Register: FC = () => {
         isSuccessful: false,
         emailHasFailed: false,
         hasFailed: false,
+        errorCode: null
     };
     const [registerState, setRegisterState] = useState<FixLater>(registerStateInit);
     const [showStepOne, setShowStepOne] = useState<boolean>(true);
@@ -110,7 +111,7 @@ const Register: FC = () => {
     };
     
     const onCloseNotificationModal = () => {
-        history.push(LOGIN);
+        history.push(paths.LOGIN);
         window.location.reload();
     };
 
@@ -182,7 +183,7 @@ const Register: FC = () => {
                     ...prevState,
                     isLoading: false,
                     hasFailed: true,
-                    errorCode: error.response.status || 999,
+                    errorCode: error.statusCode
                 }));
             },
         );
@@ -357,7 +358,7 @@ const Register: FC = () => {
                         </div>
                     )}
 
-                    <Button variant="gotolink mt-5 p-1" href={LOGIN} block>
+                    <Button variant="gotolink mt-5 p-1" href={paths.LOGIN} block>
                         J&apos;ai déjà un compte
                     </Button>
                 </Form>

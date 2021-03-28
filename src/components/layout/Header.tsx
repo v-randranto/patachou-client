@@ -5,7 +5,7 @@ import NavLink from 'react-bootstrap/NavLink';
 import Navbar from 'react-bootstrap/Navbar';
 import brandImg from '../../img/brand.png';
 
-import { ABOUT, CONTACT, HOME, LOGIN, REGISTER, PROFILE, USER } from '../../constants/paths';
+import paths from '../../constants/paths.json';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
     faHome,
@@ -34,27 +34,27 @@ const Header: React.FC = () => {
     const history = useHistory();
     const logOut = () => {
         setCurrentUser(null)
-        history.push(HOME)
+        history.push(paths.HOME)
     };
 
     return (
         <Navbar sticky="top" bg="patachou" variant="dark" className="py-0 pl-2 pr-0" expand="lg">
-            <Navbar.Brand href={HOME}>
+            <Navbar.Brand href={paths.HOME}>
                 <img src={brandImg} width="35" height="35" className="border rounded" alt="" />{' '}
                 <span className="d-none d-md-inline">Patachou</span>
             </Navbar.Brand>
             <Navbar className="mr-auto p-0">
                 <Nav activeKey={location.pathname}>
-                    <NavLink className="d-inline mx-1" href={HOME}>
+                    <NavLink className="d-inline mx-1" href={paths.HOME}>
                         {homeIcon}
                         <span className="d-none d-md-inline"> accueil</span>
                     </NavLink>
-                    <NavLink className="d-inline mx-1" href={ABOUT}>
+                    <NavLink className="d-inline mx-1" href={paths.ABOUT}>
                         {aboutIcon}
                         <span className="d-none d-md-inline"> à propos</span>
                     </NavLink>
                     {currentUser && currentUser.account && (
-                        <NavLink className="d-inline mx-1" href={CONTACT}>
+                        <NavLink className="d-inline mx-1" href={paths.CONTACT}>
                             {contactIcon} <span className="d-none d-md-inline"> contact</span>
                         </NavLink>
                     )}
@@ -63,7 +63,7 @@ const Header: React.FC = () => {
             <Navbar>
                 <Nav activeKey={location.pathname}>
                     {currentUser && currentUser.account && (
-                        <NavLink className="d-inline mx-1" href={USER}>
+                        <NavLink className="d-inline mx-1" href={paths.USER}>
                             {boardUserIcon} <span className="d-none d-md-inline">dashboard</span>
                         </NavLink>
                     )}
@@ -73,17 +73,17 @@ const Header: React.FC = () => {
             <Navbar className="ml-auto p-0">
                 <Nav activeKey={location.pathname}>
                     {currentUser && currentUser.account && (
-                        <NavLink className="d-inline mx-1" href={PROFILE}>
+                        <NavLink className="d-inline mx-1" href={paths.PROFILE}>
                             {profileIcon} <span className="d-none d-md-inline">{currentUser.account.pseudo}</span>
                         </NavLink>
                     )}
 
                     {!currentUser && (
                         <>
-                            <NavLink className="d-inline mx-1" href={REGISTER}>
+                            <NavLink className="d-inline mx-1" href={paths.REGISTER}>
                                 {registerIcon} <span className="d-none d-md-inline">inscription</span>
                             </NavLink>
-                            <NavLink className="d-inline mx-1" href={LOGIN}>
+                            <NavLink className="d-inline mx-1" href={paths.LOGIN}>
                                 {loginIcon}
                                 <span className="d-none d-md-inline"> connexion</span>
                             </NavLink>

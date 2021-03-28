@@ -4,7 +4,7 @@ import Button from 'react-bootstrap/Button';
 import ButtonGroup from 'react-bootstrap/ButtonGroup';
 import { useAuth } from '../../contexts/AuthContext';
 
-import { LOGIN, REGISTER } from '../../constants/paths';
+import paths from '../../constants/paths.json';
 
 const Home: React.FC = () => {
     const mediaQuery = window.matchMedia('(max-width: 640px)')
@@ -28,11 +28,11 @@ const Home: React.FC = () => {
             {!currentUser && (
                 <Col md={5} className="mx-auto my-5">
                   <ButtonGroup className="mt-4 col" size="lg" vertical={mediaQuery.matches}>
-                    <Button variant="choice1" href={REGISTER}>
+                    <Button variant="choice1" href={paths.REGISTER}>
                     &nbsp;&nbsp;&nbsp;Je m&apos;inscris&nbsp;&nbsp;&nbsp;
                     </Button>
 
-                    <Button variant="choice2" href={LOGIN}>
+                    <Button variant="choice2" href={paths.LOGIN}>
                         Je me connecte
                     </Button>
                     </ButtonGroup>

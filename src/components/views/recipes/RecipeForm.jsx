@@ -12,7 +12,7 @@ import FormGroup from 'react-bootstrap/FormGroup';
 import Row from 'react-bootstrap/Row';
 // import BsSpinner from '../../layout/Spinner';
 
-import RecipesService from '../../services/recipesService';
+import RecipesService from '../../../services/recipesService';
 import { validate } from '../../../validators/recipeForm';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';

@@ -1,4 +1,5 @@
 export const EDIT_PROFILE = {
+  type: 'EDIT_PROFILE',
   color: '#28a745',
   title: 'Demande traitée.',
   credentials_text: 'Vos identifiants sont modifiés.',
@@ -7,19 +8,29 @@ export const EDIT_PROFILE = {
 
 
 export const REGISTER = {
+  type: 'REGISTER',
   color: '#28a745',
   title: 'Vous êtes des nôtres!',
   text: 'Un email de confirmation vous a été envoyé. Si vous ne le recevez pas, vérifiez votre adresse dans le profil de votre compte.',
   text2: `Votre profil est créé.`
 }
 
-export const LOST_PASSWORD = {
+export const RESET_PASSWORD = {
+  type: 'RESET_PASSWORD',
   color: '#28a745',
   title: 'Demande traitée!',
-  text: 'Un mot de passe provisoire vous a été envoyé par email. Pensez à le modifier après connexion.'
+  text: 'Votre mot de passe est modifié',
+}
+
+export const LOST_PASSWORD = {
+  type: 'LOST_PASSWORD',
+  color: '#28a745',
+  title: 'Demande traitée!',
+  text: 'Un lien de réinitialisation du mot de passe vous a été envoyé par email'
 }
 
 export const CONTACT_EMAIL = {
+  type: 'CONTACT_EMAIL',
   color: '#28a745',
   title: `C'est dans la boîte!`,
   text: 'Merci pour votre message, nous y répondrons dans les plus brefs délais.'
@@ -35,6 +46,7 @@ export const NETWORK_REQUEST = {
 }
 
 export const ERROR_NOTE = {
+  type: 'ERROR_NOTE',
   color: '#e71837',
   title: 'Oups, une saucisse dans la pâte',
   text: 'Nous sommes désolés, un incident est intervenu. Merci de réessayer plus tard.'

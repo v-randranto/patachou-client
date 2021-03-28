@@ -1,5 +1,5 @@
 
-import AuthService from "../services/authService";
+import AuthService from "./authService";
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export default function authHeader():any {  
     const currentUser = AuthService.currentUserValue;
@@ -9,10 +9,4 @@ export default function authHeader():any {
     } else {
       return {};
     }
-    
-    // if (currentUser && currentUser.accessToken) {
-    //     return { Authorization: `Bearer ${currentUser.accessToken}` };
-    // } else {
-    //     return {};
-    // }
   }

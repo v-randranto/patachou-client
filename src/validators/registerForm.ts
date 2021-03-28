@@ -37,7 +37,7 @@ export const validate = (values: any) => {
     } else if (!(emailPattern.test(email))) {
         errors.email = ERRORS.format(`mon adresse email`)
     } else if (email.length > emailMax) {
-        errors.email = ERRORS.size(`mon adresse email`, pseudoMax)
+        errors.email = ERRORS.size(`mon adresse email`, emailMax)
     }
 
     if (!password) {

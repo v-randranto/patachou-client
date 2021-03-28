@@ -13,6 +13,15 @@ export interface ILoginForm {
   password: string;
 }
 
+export interface ILostPasswordForm {
+  email: string;
+}
+
+export interface IResetPasswordForm {
+  password: string;
+  confirmPassword: string;
+}
+
 export interface IRecipeForm {
   title: string
   category?: string,

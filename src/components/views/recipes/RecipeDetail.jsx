@@ -5,7 +5,7 @@ import Button from 'react-bootstrap/Button';
 import Card from 'react-bootstrap/Card';
 import Col from 'react-bootstrap/Col';
 import { useLocation } from 'react-router-dom';
-import RecipesService from '../../services/recipesService';
+import RecipesService from '../../../services/recipesService';
 
 const RecipeDetail = () => {
     const location = useLocation();

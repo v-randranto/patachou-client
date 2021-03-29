@@ -12,7 +12,7 @@ import BoardUser from "./components/views/BoardUser";
 import Contact from './components/views/Contact'
 import Header from './components/layout/Header'
 import Home from './components/views/Home'
-import Login from './components/views/connection/Login'
+import Login from './components/views/connection/Login.jsx'
 import LostPassword from './components/views/connection/LostPassword'
 import NotFound from './components/layout/NotFound'
 import PrivateRoute from './components/PrivateRoute.jsx'

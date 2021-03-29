@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useReducer } from 'react';
 import { useHistory } from 'react-router-dom';
 import Alert from 'react-bootstrap/Alert';
 import Button from 'react-bootstrap/Button';
@@ -6,7 +6,7 @@ import ButtonGroup from 'react-bootstrap/ButtonGroup';
 import Col from 'react-bootstrap/Col';
 import Form from 'react-bootstrap/Form';
 import InputGroup from 'react-bootstrap/InputGroup';
-import { FixLater } from '../../../models/types';
+
 import { ERROR_NOTE } from '../../../constants/modalConfig';
 import ErrorNotification from '../../modals/ErrorNotification';
 
@@ -16,9 +16,10 @@ import paths from '../../../constants/paths.json';
 import BsSpinner from '../../layout/Spinner';
 import { validate } from '../../../validators/loginForm';
 import { useFormik } from 'formik';
-import { ILoginForm } from '../../../models/forms';
 import AuthService from '../../../services/authService';
 import { useAuth } from '../../../contexts/AuthContext';
+import {process} from "../../../constants/actionTypes"
+import processReducer from "../../../reducers/processReducer"
 
 const passwordIcon = <FontAwesomeIcon icon={faLock} />;
 const pseudoIcon = <FontAwesomeIcon icon={faUserNinja} />;
@@ -27,13 +28,13 @@ const submitIcon = <FontAwesomeIcon icon={faPaperPlane} />;
 const Login: React.FC = () => {
     const history = useHistory();
     const { setCurrentUser } = useAuth();
-    const loginStateInit = {
+    const loginStatusInit = {
         isLoading: false,
         isSuccessful: false,
         hasFailed: false,
-        errorCode: null,
-    };
-    const [loginState, setLoginState] = useState<FixLater>(loginStateInit);
+        errorCode: null
+    }
+    const [loginStatus, loginStatusDispatch] = useReducer(processReducer, loginStatusInit)
     const initialValues = {
         pseudo: '',
         password: '',
@@ -47,7 +48,7 @@ const Login: React.FC = () => {
         },
     });
 
-    const pseudoRef = useRef<HTMLInputElement>(null);
+    const pseudoRef = useRef(null);
 
     useEffect(() => {
         if (pseudoRef && pseudoRef.current) {
@@ -56,33 +57,20 @@ const Login: React.FC = () => {
     }, []);
 
     const loginSubmit = (values) => {
-        setLoginState((prevState) => ({
-            ...prevState,
-            isLoading: true,
-        }));
-
+        loginStatusDispatch({type: process.REINIT})
         const { pseudo, password } = values;
-        const identification: ILoginForm = { pseudo, password };
+        const identification = { pseudo, password };
         identification.pseudo = values.pseudo.trim();
 
         AuthService.login(identification).then(
-            (data) => {
-                setLoginState((prevState) => ({
-                    ...prevState,
-                    isLoading: false,
-                    isSuccessful: true,
-                }));
-                setCurrentUser(data);
+            (user) => {
+                loginStatusDispatch({type: process.SUCCESS})
+                setCurrentUser(user);
                 history.replace(paths.PROFILE);
             },
             (error) => {
                 console.log('error login', error);
-                setLoginState((prevState) => ({
-                    ...prevState,
-                    isLoading: false,
-                    hasFailed: true,
-                    errorCode: error.statusCode
-                }));
+                loginStatusDispatch({type: process.FAILURE, errorCode: error.statusCode})
             },
         );
     };
@@ -137,7 +125,7 @@ const Login: React.FC = () => {
                         </Button>
                     </ButtonGroup>
 
-                    {loginState.hasFailed && (loginState.errorCode === 401 || loginState.errorCode === 404) && (
+                    {loginStatus.hasFailed && (loginStatus.errorCode === 401 || loginStatus.errorCode === 404) && (
                         <Alert variant="danger py-0 mt-2">Mes identifiants sont incorrects</Alert>
                     )}
                     <ButtonGroup className="mt-5 col" vertical>
@@ -151,9 +139,9 @@ const Login: React.FC = () => {
                         </Button>
                     </ButtonGroup>
 
-                    {loginState.loading && <BsSpinner />}
+                    {loginStatus.loading && <BsSpinner />}
                 </Form>
-                {loginState.hasFailed && loginState.errorCode !== 401 && loginState.errorCode !== 404 && (
+                {loginStatus.hasFailed && loginStatus.errorCode !== 401 && loginStatus.errorCode !== 404 && (
                     <ErrorNotification config={ERROR_NOTE} />
                 )}
             </Col>

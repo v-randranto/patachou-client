@@ -11,11 +11,12 @@ import ErrorNotification from '../../modals/ErrorNotification';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faLock, faPaperPlane } from '@fortawesome/free-solid-svg-icons';
-import { FixLater } from '../../../models/types';
 import { useFormik } from 'formik';
 import AuthService from '../../../services/authService';
 import { validate } from '../../../validators/lostPasswordForm';
 import { LOST_PASSWORD, ERROR_NOTE } from '../../../constants/modalConfig';
+import {process} from "../../../constants/actionTypes"
+import processReducer from "../../../reducers/processReducer"
 
 const submitIcon = <FontAwesomeIcon icon={faPaperPlane} />,
     passwordIcon = <FontAwesomeIcon icon={faLock} />;
@@ -27,7 +28,7 @@ const PasswordPassword: React.FC = () => {
         hasFailed: false,
         errorCode: null
     };
-    const [lostState, setLostState] = useState<FixLater>(lostStateInit);
+    const [lostState, setLostState] = useState(lostStateInit);
 
     const initialValues = {
         email: '',
@@ -40,7 +41,7 @@ const PasswordPassword: React.FC = () => {
             sendResetLink(values);
         },
     });
-    const emailRef = useRef<HTMLInputElement>(null);
+    const emailRef = useRef(null);
 
     useEffect(() => {
         if (emailRef && emailRef.current) {

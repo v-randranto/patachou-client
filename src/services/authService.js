@@ -16,17 +16,17 @@ class AuthService {
 
     lostPassword(email) {
         this.path = `${RESSOURCE}/${LOST_PASSWORD}`;
-        return apiCall(this.path, METHOD.POST, { email }).then(status => status);
+        return apiCall(this.path, METHOD.POST, { email }).then(data => data);
     }
 
     register(profile) {
         this.path = `${RESSOURCE}/${REGISTER}`;
-        return apiCall(this.path, METHOD.POST, { profile }).then(status => status);
+        return apiCall(this.path, METHOD.POST, { profile }).then(data => data);
     }
 
     resetPassword(password, resetToken) {
         this.path = `${RESSOURCE}/${RESET_PASSWORD}/${resetToken}`;
-        return apiCall(this.path, METHOD.PUT, { password }).then(status => status);
+        return apiCall(this.path, METHOD.PUT, { password }).then(data => data);
     }
 
     get currentUser() {

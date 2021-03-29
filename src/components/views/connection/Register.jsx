@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-import React, { FC, useState, useRef, useEffect } from 'react';
+import React, { FC, useRef, useEffect, useReducer, useState } from 'react';
 
 import { useHistory } from 'react-router-dom';
 import { useFormik } from 'formik';
@@ -15,9 +15,6 @@ import InputGroup from 'react-bootstrap/InputGroup';
 import BsSpinner from '../../layout/Spinner';
 import Notification from '../../modals/Notification';
 import ErrorNotification from '../../modals/ErrorNotification';
-
-import { FixLater } from '../../../models/types';
-import { IProfile, IPhoto } from '../../../models/account';
 
 import AuthService from '../../../services/authService';
 import { validate } from '../../../validators/registerForm';
@@ -37,6 +34,9 @@ import {
     faUserNinja
 } from '@fortawesome/free-solid-svg-icons';
 
+import {process} from "../../../constants/actionTypes"
+import processReducer from "../../../reducers/processReducer"
+
 const acceptFileExtensions = FORMAT_RULES.fileExtensions.join(',');
 const 
     nextIcon = <FontAwesomeIcon icon={faAngleDoubleRight} />,
@@ -49,16 +49,17 @@ const
 
 const Register: FC = () => {
 
-    const registerStateInit = {
+    const registerStatusInit = {
         isLoading: false,
         isSuccessful: false,
-        emailHasFailed: false,
         hasFailed: false,
+        emailHasFailed: false,        
         errorCode: null
     };
-    const [registerState, setRegisterState] = useState<FixLater>(registerStateInit);
-    const [showStepOne, setShowStepOne] = useState<boolean>(true);
-    const [photoFile, setPhotoFile] = useState<any>();
+    const [registerStatus, dispatch] = useReducer(processReducer,
+        registerStatusInit)
+    const [showStepOne, setShowStepOne] = useState(true);
+    const [photoFile, setPhotoFile] = useState();
 
     const initialValues = {
         pseudo: '',
@@ -78,8 +79,8 @@ const Register: FC = () => {
     });
 
     const history = useHistory();
-    const pseudoRef = useRef<HTMLInputElement>(null);
-    const emailRef = useRef<HTMLInputElement>(null);
+    const pseudoRef = useRef(null);
+    const emailRef = useRef(null);
 
     useEffect(() => {
         if (showStepOne) {
@@ -93,7 +94,7 @@ const Register: FC = () => {
         }
     }, [showStepOne]);
 
-    const disableResetStep = (step: string) => {
+    const disableResetStep = (step) => {
         if (step === 'one') {
             if (formik.touched.pseudo || formik.touched.presentation) {
                 return false;
@@ -121,7 +122,7 @@ const Register: FC = () => {
             formik.setFieldValue('photo', file);
             reader.readAsDataURL(file);
             reader.onload = () => {
-                const photo: IPhoto = {
+                const photo = {
                     name: file.name,
                     contentType: file.type,
                     content: reader.result,
@@ -152,11 +153,8 @@ const Register: FC = () => {
     }; 
 
     const registerAccount = (values) => {
-        setRegisterState((prevState) => ({
-            ...prevState,
-            isLoading: true,
-        }));
-        const profile: IProfile = { ...values };
+        dispatch({type: process.REINIT})
+        const profile = { ...values };
         profile.pseudo = values.pseudo.trim();
         profile.email = values.email.trim();
         if (photoFile) {
@@ -164,27 +162,13 @@ const Register: FC = () => {
         }
 
         AuthService.register(profile).then(
-            (status) => {
-                console.log(status);
-                if (!status.pseudoUnavailable) {
-                    setRegisterState((prevState) => ({
-                        ...prevState,
-                        isLoading: false,
-                        isSuccessful: true,
-                        emailHasFailed: !status.email,
-                    }));
-                } else {
-                    formik.setFieldError('pseudo', 'Pseudo déjà utilisé');
-                    setShowStepOne(true);
-                }
+            (data) => {
+                dispatch({type: process.SUCCESS, emailHasFailed: !data.emailIsSent})
             },
             (error) => {
-                setRegisterState((prevState) => ({
-                    ...prevState,
-                    isLoading: false,
-                    hasFailed: true,
-                    errorCode: error.statusCode
-                }));
+                // formik.setFieldError('pseudo', 'Pseudo déjà utilisé');
+                // setShowStepOne(true);
+                dispatch({type: process.FAILURE, errorCode: error.statusCode })
             },
         );
     };
@@ -336,7 +320,7 @@ const Register: FC = () => {
                                 <Alert variant="danger py-0 mt-1">{formik.errors.confirmPassword}</Alert>
                             )}
 
-                            {!registerState.loading && (
+                            {!registerStatus.loading && (
                                 <ButtonGroup className="mt-4 col p-0" size="lg">
                                     <Button variant="info p-0 col-3" onClick={() => setShowStepOne(true)}>
                                         {previousIcon}
@@ -354,7 +338,7 @@ const Register: FC = () => {
                                 </ButtonGroup>
                             )}
 
-                            {registerState.loading && <BsSpinner />}
+                            {registerStatus.loading && <BsSpinner />}
                         </div>
                     )}
 
@@ -363,15 +347,15 @@ const Register: FC = () => {
                     </Button>
                 </Form>
 
-                {registerState.isSuccessful && (
+                {registerStatus.isSuccessful && (
                     <Notification
                         config={REGISTER}
-                        emailHasFailed={registerState.emailHasFailed}
+                        emailHasFailed={registerStatus.emailHasFailed}
                         onClose={onCloseNotificationModal}
                     />
                 )}
 
-                {registerState.hasFailed && <ErrorNotification config={ERROR_NOTE} />}
+                {registerStatus.hasFailed && <ErrorNotification config={ERROR_NOTE} />}
             </Col>
         </div>
     );

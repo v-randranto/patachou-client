@@ -13,15 +13,15 @@ import Contact from './components/views/Contact'
 import Header from './components/layout/Header'
 import Home from './components/views/Home'
 import Login from './components/views/connection/Login.jsx'
-import LostPassword from './components/views/connection/LostPassword'
+import LostPassword from './components/views/connection/LostPassword.jsx'
 import NotFound from './components/layout/NotFound'
 import PrivateRoute from './components/PrivateRoute.jsx'
 import Profile from './components/views/profile/Profile'
 import Recipes from './components/views/recipes/Recipes.jsx'
 import RecipeDetail from './components/views/recipes/RecipeDetail.jsx'
 import RecipeForm from './components/views/recipes/RecipeForm.jsx'
-import Register from './components/views/connection/Register'
-import ResetPassword from './components/views/connection/ResetPassword'
+import Register from './components/views/connection/Register.jsx'
+import ResetPassword from './components/views/connection/ResetPassword.jsx'
 
 import { AuthContext } from "./contexts/AuthContext.js";
 import AuthService from "./services/authService.js";

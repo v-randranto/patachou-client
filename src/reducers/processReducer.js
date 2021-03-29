@@ -29,7 +29,8 @@ const processReducer = (state: fixLater, action: FixLater): FixLater => {
             return {
                 ...state,
                 isLoading: false,
-                    isSuccessful: true
+                isSuccessful: true,
+                emailHasFailed: action.emailHasFailed
             };
         default:
             return state;

@@ -13,11 +13,12 @@ import paths from '../../../constants/paths.json';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faLock, faPaperPlane } from '@fortawesome/free-solid-svg-icons';
-import { FixLater } from '../../../models/types';
 import { useFormik } from 'formik';
 import AuthService from '../../../services/authService';
 import { validate } from '../../../validators/resetPasswordForm';
 import { RESET_PASSWORD, ERROR_NOTE } from '../../../constants/modalConfig';
+import {process} from "../../../constants/actionTypes"
+import processReducer from "../../../reducers/processReducer"
 
 const submitIcon = <FontAwesomeIcon icon={faPaperPlane} />,
     passwordIcon = <FontAwesomeIcon icon={faLock} />;
@@ -29,7 +30,7 @@ const ResetPassword: React.FC = () => {
         hasFailed: false,
         errorCode: 0,
     };
-    const [resetState, setResetState] = useState<FixLater>(resetStateInit);
+    const [resetState, setResetState] = useState(resetStateInit);
 
     const initialValues = {
         password: '',
@@ -44,8 +45,8 @@ const ResetPassword: React.FC = () => {
         },
     });
     const history = useHistory();
-    const passwordRef = useRef<HTMLInputElement>(null);
-    const { resetToken } = useParams<{ resetToken: string }>();
+    const passwordRef = useRef(null);
+    const { resetToken } = useParams();
 
     useEffect(() => {
         if (passwordRef && passwordRef.current) {

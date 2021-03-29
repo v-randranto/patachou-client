@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useRef, useEffect, useReducer } from 'react';
 
 import { useHistory, useParams } from 'react-router-dom';
 import Alert from 'react-bootstrap/Alert';
@@ -24,13 +24,13 @@ const submitIcon = <FontAwesomeIcon icon={faPaperPlane} />,
     passwordIcon = <FontAwesomeIcon icon={faLock} />;
 
 const ResetPassword: React.FC = () => {
-    const resetStateInit = {
+    const resetStatusInit = {
         isLoading: false,
         isSuccessful: false,
         hasFailed: false,
         errorCode: 0,
     };
-    const [resetState, setResetState] = useState(resetStateInit);
+    const [resetStatus, dispatch] = useReducer(processReducer, resetStatusInit)
 
     const initialValues = {
         password: '',
@@ -61,24 +61,13 @@ const ResetPassword: React.FC = () => {
 
     const resetPassword = (values) => {
         const { password } = values;
-        setResetState((prevState) => ({
-            ...prevState,
-            isLoading: true,
-        }));
+        dispatch({type: process.REINIT})
         AuthService.resetPassword(password, resetToken).then(
             () => {
-                setResetState((prevState) => ({
-                    ...prevState,
-                    isLoading: false,
-                    isSuccessful: true,
-                }));
+                dispatch({type: process.SUCCESS})
             },
             () => {
-                setResetState((prevState) => ({
-                    ...prevState,
-                    isLoading: false,
-                    hasFailed: true
-                }));
+                dispatch({type: process.FAILURE, errorCode: error.statusCode})
             },
         );
     };
@@ -128,7 +117,7 @@ const ResetPassword: React.FC = () => {
                         <Alert variant="danger py-0 mt-1">{formik.errors.confirmPassword}</Alert>
                     )}
 
-                    {!resetState.loading && (
+                    {!resetStatus.loading && (
                         <Button
                             className="mt-4 col p-0"
                             size="lg"
@@ -139,11 +128,11 @@ const ResetPassword: React.FC = () => {
                             {submitIcon} J&apos;envoie!
                         </Button>
                     )}
-                    {resetState.loading && <BsSpinner />}
+                    {resetStatus.loading && <BsSpinner />}
                 </Form>
 
-                {resetState.isSuccessful && <Notification config={RESET_PASSWORD} onClose={onCloseNotificationModal} />}
-                {resetState.hasFailed && <ErrorNotification config={ERROR_NOTE} />}
+                {resetStatus.isSuccessful && <Notification config={RESET_PASSWORD} onClose={onCloseNotificationModal} />}
+                {resetStatus.hasFailed && <ErrorNotification config={ERROR_NOTE} />}
             </Col>
         </div>
     );

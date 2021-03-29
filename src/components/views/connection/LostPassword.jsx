@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useRef, useEffect, useReducer } from 'react';
 
 import Alert from 'react-bootstrap/Alert';
 import Col from 'react-bootstrap/Col';
@@ -22,13 +22,13 @@ const submitIcon = <FontAwesomeIcon icon={faPaperPlane} />,
     passwordIcon = <FontAwesomeIcon icon={faLock} />;
 
 const PasswordPassword: React.FC = () => {
-    const lostStateInit = {
+    const lostStatusInit = {
         isLoading: false,
         isSuccessful: false,
         hasFailed: false,
         errorCode: null
     };
-    const [lostState, setLostState] = useState(lostStateInit);
+    const [lostStatus, dispatch] = useReducer(processReducer, lostStatusInit)
 
     const initialValues = {
         email: '',
@@ -51,30 +51,18 @@ const PasswordPassword: React.FC = () => {
 
     const onCloseNotificationModal = () => {
         formik.resetForm();
-        setLostState(lostStateInit);
+        setLostState(lostStatusInit);
     };
 
     const sendResetLink = (values) => {
         const { email } = values;
-        setLostState((prevState) => ({
-            ...prevState,
-            isLoading: true,
-        }));
+        dispatch({type: process.REINIT})
         AuthService.lostPassword(email).then(
             () => {
-                setLostState((prevState) => ({
-                    ...prevState,
-                    isLoading: false,
-                    isSuccessful: true,
-                }));
+                dispatch({type: process.SUCCESS})
             },
             (error) => {
-                setLostState((prevState) => ({
-                    ...prevState,
-                    isLoading: false,
-                    hasFailed: true,
-                    errorCode: error.statusCode
-                }));
+                dispatch({type: process.FAILURE, errorCode: error.statusCode})
             },
         );
     };
@@ -104,7 +92,7 @@ const PasswordPassword: React.FC = () => {
                         <Alert variant="danger py-0">{formik.errors.email}</Alert>
                     )}
 
-                    {!lostState.loading && (
+                    {!lostStatus.loading && (
                         <Button
                             className="mt-4 col p-0"
                             size="lg"
@@ -115,13 +103,13 @@ const PasswordPassword: React.FC = () => {
                             {submitIcon} J&apos;envoie!
                         </Button>
                     )}
-                    {lostState.loading && <BsSpinner />}
+                    {lostStatus.loading && <BsSpinner />}
                 </Form>
-                {lostState.isSuccessful && <Notification config={LOST_PASSWORD} onClose={onCloseNotificationModal} />}
-                {lostState.hasFailed && lostState.errorCode === 404 && (
+                {lostStatus.isSuccessful && <Notification config={LOST_PASSWORD} onClose={onCloseNotificationModal} />}
+                {lostStatus.hasFailed && lostStatus.errorCode === 404 && (
                     <Alert variant="danger py-0 mt-2">Mon email est inconnue</Alert>
                 )}{' '}
-                {lostState.hasFailed && lostState.errorCode !== 404 && <ErrorNotification config={ERROR_NOTE} />}
+                {lostStatus.hasFailed && lostStatus.errorCode !== 404 && <ErrorNotification config={ERROR_NOTE} />}
             </Col>
         </div>
     );

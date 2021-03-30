@@ -10,7 +10,7 @@ import { ddmmyyyyFormat } from '../../../utils/dateHandler';
 import paths from '../../../constants/paths.json';
 
 const Profile: React.FC = () => {
-    const { currentUser } = useAuth();
+    const { account } = useAuth().currentUser.user;
     return (
         <div className="wrapper">
             <Col md={5} className="mx-auto">
@@ -19,17 +19,17 @@ const Profile: React.FC = () => {
                     <Card.Body>
                         <div className="bg-profile p-2">
                             <Media>
-                                <Image className="my-2 mr-2" src={currentUser.account.photoUrl} rounded width="60px" />
+                                <Image className="my-2 mr-2" src={account.photoUrl} rounded width="60px" />
                                 <Media.Body>
-                                    <h4 className="text-dark">{currentUser.account.pseudo}</h4>
+                                    <h4 className="text-dark">{account.pseudo}</h4>
                                     <p className="text-dark p-0 m-0">
-                                        Membre depuis le {ddmmyyyyFormat(new Date(currentUser.account.creationDate))}
+                                        Membre depuis le {ddmmyyyyFormat(new Date(account.creationDate))}
                                     </p>
                                 </Media.Body>
                             </Media>
 
                             <hr style={{ border: '2px solid #343a40', borderRadius: '2px' }} />
-                            <p className="text-dark">{currentUser.account.presentation}</p>
+                            <p className="text-dark">{account.presentation}</p>
                         </div>
                         <div className="d-flex justify-content-end">
                         <Button variant="info mt-3" href="#" disabled>

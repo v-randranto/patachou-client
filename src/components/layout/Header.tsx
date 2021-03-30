@@ -17,7 +17,10 @@ import {
     faAddressCard,
     faColumns,
 } from '@fortawesome/free-solid-svg-icons';
+
+import AuthService from "../../services/authService"
 import { useAuth } from '../../contexts/AuthContext';
+import { connection } from '../../constants/actionTypes';
 
 const homeIcon = <FontAwesomeIcon icon={faHome} />;
 const aboutIcon = <FontAwesomeIcon icon={faInfoCircle} />;
@@ -29,13 +32,16 @@ const profileIcon = <FontAwesomeIcon icon={faAddressCard} />;
 const boardUserIcon = <FontAwesomeIcon icon={faColumns} />;
 
 const Header: React.FC = () => {
-    const { currentUser, setCurrentUser } = useAuth();
+    const { currentUser, userDispatch } = useAuth();
     const location = useLocation();
     const history = useHistory();
     const logOut = () => {
-        setCurrentUser(null)
+        AuthService.logout()
+        userDispatch({type: connection.LOGOUT})
         history.push(paths.HOME)
     };
+
+    const {isAuthenticated, user} = currentUser
 
     return (
         <Navbar sticky="top" bg="patachou" variant="dark" className="py-0 pl-2 pr-0" expand="lg">
@@ -53,7 +59,7 @@ const Header: React.FC = () => {
                         {aboutIcon}
                         <span className="d-none d-md-inline"> à propos</span>
                     </NavLink>
-                    {currentUser && currentUser.account && (
+                    {isAuthenticated && (
                         <NavLink className="d-inline mx-1" href={paths.CONTACT}>
                             {contactIcon} <span className="d-none d-md-inline"> contact</span>
                         </NavLink>
@@ -62,7 +68,7 @@ const Header: React.FC = () => {
             </Navbar>
             <Navbar>
                 <Nav activeKey={location.pathname}>
-                    {currentUser && currentUser.account && (
+                    {isAuthenticated && (
                         <NavLink className="d-inline mx-1" href={paths.USER}>
                             {boardUserIcon} <span className="d-none d-md-inline">dashboard</span>
                         </NavLink>
@@ -72,13 +78,13 @@ const Header: React.FC = () => {
 
             <Navbar className="ml-auto p-0">
                 <Nav activeKey={location.pathname}>
-                    {currentUser && currentUser.account && (
+                    {isAuthenticated && (
                         <NavLink className="d-inline mx-1" href={paths.PROFILE}>
-                            {profileIcon} <span className="d-none d-md-inline">{currentUser.account.pseudo}</span>
+                            {profileIcon} <span className="d-none d-md-inline">{user.account.pseudo}</span>
                         </NavLink>
                     )}
 
-                    {!currentUser && (
+                    {!isAuthenticated && (
                         <>
                             <NavLink className="d-inline mx-1" href={paths.REGISTER}>
                                 {registerIcon} <span className="d-none d-md-inline">inscription</span>
@@ -90,7 +96,7 @@ const Header: React.FC = () => {
                         </>
                     )}
 
-                    {currentUser && currentUser.account && (
+                    {isAuthenticated && (
                         <NavLink className="d-inline mx-1" onClick={logOut}>
                             {logoutIcon}
                             <span className="d-none d-md-inline"> déconnexion</span>

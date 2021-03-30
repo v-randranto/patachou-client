@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
-import React, {useState} from 'react'
+import React, {useReducer} from 'react'
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import './App.css'
@@ -7,8 +7,8 @@ import './App.css'
 import Container from 'react-bootstrap/Container'
 
 import About from './components/views/About'
-import BoardAdmin from "./components/views/BoardAdmin";
-import BoardUser from "./components/views/BoardUser";
+import AdminBoard from "./components/views/AdminBoard";
+import UserBoard from "./components/views/UserBoard";
 import Contact from './components/views/Contact'
 import Header from './components/layout/Header'
 import Home from './components/views/Home'
@@ -26,18 +26,19 @@ import ResetPassword from './components/views/connection/ResetPassword.jsx'
 import { AuthContext } from "./contexts/AuthContext.js";
 import AuthService from "./services/authService.js";
 import paths from "./constants/paths.json"
+import authReducer from './reducers/authReducer'
+
+const currentUserInit = {
+    isAuthenticated: AuthService.isAuthenticated,
+    user: AuthService.currentUser
+}
 
 const App: React.FC = () => {
 
-    const [currentUser, setCurrentUser] = useState(AuthService.currentUser);   
-    const setUser = (data) => {
-        console.log('>set user data', data)
-        AuthService.setCurrentUser(data);
-        setCurrentUser(data);
-      }
+    const [currentUser, userDispatch] = useReducer(authReducer, currentUserInit);   
 
     return (
-        <AuthContext.Provider value={{currentUser, setCurrentUser: setUser}}>
+        <AuthContext.Provider value={{currentUser, userDispatch}}>
         <Router >
             <Container className="p-0">
                 <Header />
@@ -49,13 +50,13 @@ const App: React.FC = () => {
                     <Route exact path={paths.LOST_PASSWORD} ><LostPassword /></Route>
                     <Route exact path={paths.REGISTER} ><Register /></Route>
                     <Route exact path={`${paths.RESET_PASSWORD}/:resetToken`} ><ResetPassword /></Route>
-                    <PrivateRoute exact path={paths.ADMIN} component={BoardAdmin} />
+                    <PrivateRoute exact path={paths.ADMIN_BOARD} component={AdminBoard} />
+                    <PrivateRoute exact path={paths.USER_BOARD} component={UserBoard} />
                     <PrivateRoute exact path={paths.CONTACT} component={Contact} />
                     <PrivateRoute exact path={paths.PROFILE} component={Profile} />
                     <PrivateRoute exact path={paths.RECIPES} component={Recipes} />
                     <PrivateRoute exact path={paths.RECIPE_DETAIL} component={RecipeDetail} />
                     <PrivateRoute exact path={paths.RECIPE_FORM} component={RecipeForm} />
-                    <PrivateRoute path={paths.USER} component={BoardUser} />
                     <Route component={NotFound} />
                 </Switch>
             </Container>

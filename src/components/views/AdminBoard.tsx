@@ -1,6 +1,6 @@
 import React from 'react'
 
-const BoardAdmin: React.FC = () => {
+const AdminBoard: React.FC = () => {
   return (
     <div className="wrapper ">
         <h4>Welcome to the board admin</h4>    
@@ -8,4 +8,4 @@ const BoardAdmin: React.FC = () => {
   )
 }
 
-export default BoardAdmin
+export default AdminBoard

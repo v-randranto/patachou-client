@@ -1,6 +1,6 @@
 import React from 'react'
 
-const BoardUser: React.FC = () => {
+const UserBoard: React.FC = () => {
   return (
     <div className="wrapper ">
     <h4>Welcome to the board user</h4>
@@ -8,4 +8,4 @@ const BoardUser: React.FC = () => {
   )
 }
 
-export default BoardUser
+export default UserBoard

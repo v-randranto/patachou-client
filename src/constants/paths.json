@@ -1,6 +1,7 @@
 {
 "ABOUT": "/about",
-"ADMIN": "/admin",
+"ADMIN_BOARD": "/admin-board",
+"USER_BOARD": "/user-board",
 "CONTACT": "/contact",
 "HOME": "/home",
 "LOGIN": "/login",

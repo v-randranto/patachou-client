@@ -1,4 +1,5 @@
 import React, { useRef, useEffect, useReducer } from 'react';
+import { useHistory } from 'react-router-dom';
 
 import Alert from 'react-bootstrap/Alert';
 import Col from 'react-bootstrap/Col';
@@ -17,11 +18,18 @@ import { validate } from '../../../validators/lostPasswordForm';
 import { LOST_PASSWORD, ERROR_NOTE } from '../../../constants/modalConfig';
 import {process} from "../../../constants/actionTypes"
 import processReducer from "../../../reducers/processReducer"
+import { useAuth } from '../../../contexts/AuthContext';
+import paths from "../../../constants/paths.json"
 
 const submitIcon = <FontAwesomeIcon icon={faPaperPlane} />,
     passwordIcon = <FontAwesomeIcon icon={faLock} />;
 
 const PasswordPassword: React.FC = () => {
+    const { currentUser } = useAuth();
+    const history = useHistory();
+if (currentUser.isAuthenticated) {
+    history.replace(paths.HOME)
+}
     const lostStatusInit = {
         isLoading: false,
         isSuccessful: false,
@@ -51,7 +59,7 @@ const PasswordPassword: React.FC = () => {
 
     const onCloseNotificationModal = () => {
         formik.resetForm();
-        setLostState(lostStatusInit);
+        dispatch({type: process.REINIT})
     };
 
     const sendResetLink = (values) => {

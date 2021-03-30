@@ -18,7 +18,7 @@ import { validate } from '../../../validators/loginForm';
 import { useFormik } from 'formik';
 import AuthService from '../../../services/authService';
 import { useAuth } from '../../../contexts/AuthContext';
-import {process} from "../../../constants/actionTypes"
+import {process, connection} from "../../../constants/actionTypes"
 import processReducer from "../../../reducers/processReducer"
 
 const passwordIcon = <FontAwesomeIcon icon={faLock} />;
@@ -27,7 +27,10 @@ const submitIcon = <FontAwesomeIcon icon={faPaperPlane} />;
 
 const Login: React.FC = () => {
     const history = useHistory();
-    const { setCurrentUser } = useAuth();
+    const { currentUser, userDispatch } = useAuth();
+    if (currentUser.isAuthenticated) {
+        history.replace(paths.HOME)
+    }
     const loginStatusInit = {
         isLoading: false,
         isSuccessful: false,
@@ -49,7 +52,6 @@ const Login: React.FC = () => {
     });
 
     const pseudoRef = useRef(null);
-
     useEffect(() => {
         if (pseudoRef && pseudoRef.current) {
             pseudoRef.current.focus();
@@ -65,11 +67,10 @@ const Login: React.FC = () => {
         AuthService.login(identification).then(
             (user) => {
                 loginStatusDispatch({type: process.SUCCESS})
-                setCurrentUser(user);
+                userDispatch({type: connection.LOGIN, user});
                 history.replace(paths.PROFILE);
             },
             (error) => {
-                console.log('error login', error);
                 loginStatusDispatch({type: process.FAILURE, errorCode: error.statusCode})
             },
         );

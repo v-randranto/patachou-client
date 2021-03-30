@@ -19,11 +19,18 @@ import { validate } from '../../../validators/resetPasswordForm';
 import { RESET_PASSWORD, ERROR_NOTE } from '../../../constants/modalConfig';
 import {process} from "../../../constants/actionTypes"
 import processReducer from "../../../reducers/processReducer"
+import { useAuth } from '../../../contexts/AuthContext';
 
 const submitIcon = <FontAwesomeIcon icon={faPaperPlane} />,
     passwordIcon = <FontAwesomeIcon icon={faLock} />;
 
 const ResetPassword: React.FC = () => {
+    const {
+        currentUser
+    } = useAuth();
+    if (currentUser.isAuthenticated) {
+        history.replace(paths.HOME)
+    }
     const resetStatusInit = {
         isLoading: false,
         isSuccessful: false,

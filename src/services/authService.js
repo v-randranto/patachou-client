@@ -5,9 +5,27 @@ const { RESSOURCE, LOGIN, LOST_PASSWORD, REGISTER, RESET_PASSWORD } = AUTH_API;
 
 class AuthService {
     path = '';
+
+    get currentUser() {
+        return JSON.parse(localStorage.getItem('user'));
+    }
+
+    get isAuthenticated() {
+        if (this.currentUser) {
+            return true
+        }
+        return false;
+    }
+
+
     login(identification) {
         this.path = `${RESSOURCE}/${LOGIN}`;
-        return apiCall(this.path, METHOD.POST, { identification }).then(data => data)
+        return apiCall(this.path, METHOD.POST, { identification })
+        .then(user => {
+            this.storeCurrentUser(user)
+            return user
+        })
+        
     }
 
     logout() {
@@ -29,11 +47,7 @@ class AuthService {
         return apiCall(this.path, METHOD.PUT, { password }).then(data => data);
     }
 
-    get currentUser() {
-        return JSON.parse(localStorage.getItem('user'));
-    }
-
-    setCurrentUser(data) {
+    storeCurrentUser(data) {
         localStorage.setItem('user', JSON.stringify(data));
     }
 }

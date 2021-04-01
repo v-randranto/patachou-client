@@ -1,7 +1,7 @@
 import React from 'react';
-import { useHistory, useLocation, withRouter } from 'react-router-dom';
+import { Link, NavLink, useHistory, useLocation, withRouter } from 'react-router-dom';
 import Nav from 'react-bootstrap/Nav';
-import NavLink from 'react-bootstrap/NavLink';
+import BsNavLink from 'react-bootstrap/NavLink';
 import Navbar from 'react-bootstrap/Navbar';
 import brandImg from '../../img/brand.png';
 
@@ -45,33 +45,33 @@ const Header: React.FC = () => {
 
     return (
         <Navbar sticky="top" bg="patachou" variant="dark" className="py-0 pl-2 pr-0" expand="lg">
-            <Navbar.Brand href={paths.HOME}>
+            <Navbar.Brand as={Link} to={paths.HOME}>
                 <img src={brandImg} width="35" height="35" className="border rounded" alt="" />{' '}
                 <span className="d-none d-md-inline">Patachou</span>
             </Navbar.Brand>
             <Navbar className="mr-auto p-0">
                 <Nav activeKey={location.pathname}>
-                    <NavLink className="d-inline mx-1" href={paths.HOME}>
+                    <BsNavLink as={NavLink} className="d-inline mx-1" to={paths.HOME}>
                         {homeIcon}
                         <span className="d-none d-md-inline"> accueil</span>
-                    </NavLink>
-                    <NavLink className="d-inline mx-1" href={paths.ABOUT}>
+                    </BsNavLink>
+                    <BsNavLink as={NavLink} className="d-inline mx-1" to={paths.ABOUT}>
                         {aboutIcon}
                         <span className="d-none d-md-inline"> à propos</span>
-                    </NavLink>
+                    </BsNavLink>
                     {isAuthenticated && (
-                        <NavLink className="d-inline mx-1" href={paths.CONTACT}>
+                        <BsNavLink as={NavLink} className="d-inline mx-1" to={paths.CONTACT}>
                             {contactIcon} <span className="d-none d-md-inline"> contact</span>
-                        </NavLink>
+                        </BsNavLink>
                     )}
                 </Nav>
             </Navbar>
             <Navbar>
                 <Nav activeKey={location.pathname}>
                     {isAuthenticated && (
-                        <NavLink className="d-inline mx-1" href={paths.USER}>
+                        <BsNavLink as={NavLink} className="d-inline mx-1" to={paths.USER}>
                             {boardUserIcon} <span className="d-none d-md-inline">dashboard</span>
-                        </NavLink>
+                        </BsNavLink>
                     )}
                 </Nav>
             </Navbar>
@@ -79,28 +79,28 @@ const Header: React.FC = () => {
             <Navbar className="ml-auto p-0">
                 <Nav activeKey={location.pathname}>
                     {isAuthenticated && (
-                        <NavLink className="d-inline mx-1" href={paths.PROFILE}>
+                        <BsNavLink as={NavLink} className="d-inline mx-1" to={paths.PROFILE}>
                             {profileIcon} <span className="d-none d-md-inline">{user.account.pseudo}</span>
-                        </NavLink>
+                        </BsNavLink>
                     )}
 
                     {!isAuthenticated && (
                         <>
-                            <NavLink className="d-inline mx-1" href={paths.REGISTER}>
+                            <BsNavLink as={NavLink} className="d-inline mx-1" to={paths.REGISTER}>
                                 {registerIcon} <span className="d-none d-md-inline">inscription</span>
-                            </NavLink>
-                            <NavLink className="d-inline mx-1" href={paths.LOGIN}>
+                            </BsNavLink>
+                            <BsNavLink as={NavLink} className="d-inline mx-1" to={paths.LOGIN}>
                                 {loginIcon}
                                 <span className="d-none d-md-inline"> connexion</span>
-                            </NavLink>
+                            </BsNavLink>
                         </>
                     )}
 
                     {isAuthenticated && (
-                        <NavLink className="d-inline mx-1" onClick={logOut}>
+                        <BsNavLink  className="d-inline mx-1" onClick={logOut}>
                             {logoutIcon}
                             <span className="d-none d-md-inline"> déconnexion</span>
-                        </NavLink>
+                        </BsNavLink>
                     )}
                 </Nav>
             </Navbar>

@@ -36,11 +36,11 @@ const LoginForm = ({ loginSubmit, loginStatus }) => {
    })
 
    const pseudoRef = useRef(null)
-   useEffect(() => {
-      if (pseudoRef && pseudoRef.current) {
-         pseudoRef.current.focus()
-      }
-   }, [])
+   // useEffect(() => {
+   // if (pseudoRef && pseudoRef.current) {
+   // pseudoRef.current.focus()
+   // }
+   // }, [])
 
    return (
       <Form onSubmit={formik.handleSubmit} noValidate>

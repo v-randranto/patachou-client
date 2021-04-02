@@ -77,17 +77,17 @@ const Register = () => {
    const pseudoRef = useRef(null)
    const emailRef = useRef(null)
 
-   useEffect(() => {
-      if (showStepOne) {
-         if (pseudoRef && pseudoRef.current) {
-            pseudoRef.current.focus()
-         }
-      } else {
-         if (emailRef && emailRef.current) {
-            emailRef.current.focus()
-         }
-      }
-   }, [showStepOne])
+   // useEffect(() => {
+      // if (showStepOne) {
+         // if (pseudoRef && pseudoRef.current) {
+            // pseudoRef.current.focus()
+         // }
+      // } else {
+         // if (emailRef && emailRef.current) {
+            // emailRef.current.focus()
+         // }
+      // }
+   // }, [showStepOne])
 
    const disableResetStep = (step) => {
       if (step === 'one') {

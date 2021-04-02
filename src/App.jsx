@@ -40,7 +40,7 @@ const App = () => {
                 userDispatch,
             }}
         >
-            <Router>
+            <Router basename="patachou">
                 <Container className="p-0">
                     <Header />
                     <Switch>

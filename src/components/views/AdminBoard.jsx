@@ -1,6 +1,6 @@
 import React from 'react'
 
-const AdminBoard: React.FC = () => {
+const AdminBoard = () => {
   return (
     <div className="wrapper ">
         <h4>Welcome to the board admin</h4>    

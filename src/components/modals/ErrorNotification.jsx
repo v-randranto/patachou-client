@@ -1,19 +1,12 @@
-import React, { FC, useState } from 'react'
+import React, { useState } from 'react'
 import Modal from 'react-bootstrap/Modal'
-import CSS from 'csstype';
-import { ModalConfig } from '../../types/modals'
-
 
 // TODO text color of title
 
-type ErrorProps = { 
-    config: ModalConfig,
-}
-
-const ErrorNotification: FC<ErrorProps> = ({config}:ErrorProps) => {
+const ErrorNotification = ({config}) => {
     const { color, title, text } = config;
     const [show, setShow] = useState(true);
-    const colorStyle: CSS.Properties = {
+    const colorStyle = {
         color: color
     }
 

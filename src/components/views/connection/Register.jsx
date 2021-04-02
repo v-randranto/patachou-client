@@ -1,6 +1,4 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-import React, { FC, useRef, useEffect, useReducer, useState } from 'react';
+import React, { useRef, useEffect, useReducer, useState } from 'react';
 
 import { useHistory } from 'react-router-dom';
 import { useFormik } from 'formik';
@@ -30,34 +28,31 @@ import {
     faCamera,
     faLock,
     faPaperPlane,
-    faTimes,    
-    faUserNinja
+    faTimes,
+    faUserNinja,
 } from '@fortawesome/free-solid-svg-icons';
 
-import {process} from "../../../constants/actionTypes"
-import processReducer from "../../../reducers/processReducer"
+import { process } from '../../../constants/actionTypes';
+import processReducer from '../../../reducers/processReducer';
 
 const acceptFileExtensions = FORMAT_RULES.fileExtensions.join(',');
-const 
-    nextIcon = <FontAwesomeIcon icon={faAngleDoubleRight} />,
-    passwordIcon = <FontAwesomeIcon icon={faLock} />,    
+const nextIcon = <FontAwesomeIcon icon={faAngleDoubleRight} />,
+    passwordIcon = <FontAwesomeIcon icon={faLock} />,
     photoIcon = <FontAwesomeIcon icon={faCamera} />,
     previousIcon = <FontAwesomeIcon icon={faAngleDoubleLeft} />,
     pseudoIcon = <FontAwesomeIcon icon={faUserNinja} />,
-    resetIcon = <FontAwesomeIcon icon={faTimes} />,    
+    resetIcon = <FontAwesomeIcon icon={faTimes} />,
     submitIcon = <FontAwesomeIcon icon={faPaperPlane} />;
 
-const Register: FC = () => {
-
+const Register = () => {
     const registerStatusInit = {
         isLoading: false,
         isSuccessful: false,
         hasFailed: false,
-        emailHasFailed: false,        
-        errorCode: null
+        emailHasFailed: false,
+        errorCode: null,
     };
-    const [registerStatus, dispatch] = useReducer(processReducer,
-        registerStatusInit)
+    const [registerStatus, dispatch] = useReducer(processReducer, registerStatusInit);
     const [showStepOne, setShowStepOne] = useState(true);
     const [photoFile, setPhotoFile] = useState();
 
@@ -110,7 +105,7 @@ const Register: FC = () => {
     const goToStepTwo = () => {
         setShowStepOne(false);
     };
-    
+
     const onCloseNotificationModal = () => {
         history.push(paths.LOGIN);
         window.location.reload();
@@ -135,7 +130,7 @@ const Register: FC = () => {
     const resetPhotoInput = () => {
         setPhotoFile(null);
     };
-    
+
     const resetStep = (...props) => {
         props.forEach((prop) => {
             formik.setFieldValue(prop, '');
@@ -150,10 +145,10 @@ const Register: FC = () => {
                 return true;
             }
         }
-    }; 
+    };
 
     const registerAccount = (values) => {
-        dispatch({type: process.REINIT})
+        dispatch({ type: process.REINIT });
         const profile = { ...values };
         profile.pseudo = values.pseudo.trim();
         profile.email = values.email.trim();
@@ -163,12 +158,12 @@ const Register: FC = () => {
 
         AuthService.register(profile).then(
             (data) => {
-                dispatch({type: process.SUCCESS, emailHasFailed: !data.emailIsSent})
+                dispatch({ type: process.SUCCESS, emailHasFailed: !data.emailIsSent });
             },
             (error) => {
                 // formik.setFieldError('pseudo', 'Pseudo déjà utilisé');
                 // setShowStepOne(true);
-                dispatch({type: process.FAILURE, errorCode: error.statusCode })
+                dispatch({ type: process.FAILURE, errorCode: error.statusCode });
             },
         );
     };
@@ -252,7 +247,7 @@ const Register: FC = () => {
                                     disabled={disableResetStep('one')}
                                 >
                                     {resetIcon}
-                                </Button> 
+                                </Button>
 
                                 <Button variant="info col-3" onClick={goToStepTwo} disabled={stepOneIsValid()}>
                                     {nextIcon}

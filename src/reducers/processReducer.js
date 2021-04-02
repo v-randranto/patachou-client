@@ -1,15 +1,12 @@
 import {
     process
 } from "../constants/actionTypes"
-import {
-    FixLater
-} from "../models/types"
 const {
     FAILURE,
     REINIT,
     SUCCESS
 } = process;
-const processReducer = (state: fixLater, action: FixLater): FixLater => {
+const processReducer = (state, action) => {
     switch (action.type) {
         case FAILURE:
             return {

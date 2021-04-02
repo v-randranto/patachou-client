@@ -9,7 +9,7 @@ import { useAuth } from '../../../contexts/AuthContext';
 import { ddmmyyyyFormat } from '../../../utils/dateHandler';
 import paths from '../../../constants/paths.json';
 
-const Profile: React.FC = () => {
+const Profile = () => {
     const { account } = useAuth().currentUser.user;
     return (
         <div className="wrapper">

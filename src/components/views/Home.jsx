@@ -6,7 +6,7 @@ import { useAuth } from '../../contexts/AuthContext';
 
 import paths from '../../constants/paths.json';
 
-const Home: React.FC = () => {
+const Home = () => {
     const mediaQuery = window.matchMedia('(max-width: 640px)')
     const { currentUser } = useAuth();
     

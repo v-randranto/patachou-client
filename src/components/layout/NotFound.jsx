@@ -2,7 +2,7 @@ import React from 'react'
 import Card from 'react-bootstrap/Card'
 import notFoundImg from '../../img/404.png'
 
-const NotFound: React.FC = () => {
+const NotFound = () => {
   return (
     <>
       <Card bg="secondary" text="white" className="col-lg-3 mx-auto pt-3">

@@ -2,7 +2,7 @@ import React from 'react';
 import Card from 'react-bootstrap/Card';
 import aboutImg from '../../img/about.jpg';
 
-const About: React.FC = () => {
+const About = () => {
     return (
         <div className="wrapper">
             <Card className="col-lg-6 mx-auto pt-3 mt-5">

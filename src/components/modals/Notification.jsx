@@ -1,24 +1,15 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-import React, { FC, useState } from 'react';
+import React, { useState } from 'react';
 import Modal from 'react-bootstrap/Modal';
-import CSS from 'csstype';
-import { ModalConfig } from '../../types/modals';
 
 // TODO text color of title
 
-type NotifProps = {
-    config: ModalConfig;
-    emailHasFailed?: boolean;
-    onClose: any;
-};
-
-const Notification: FC<NotifProps> = ({ config, emailHasFailed, onClose }: NotifProps) => {
+const Notification = ({ config, emailHasFailed, onClose }) => {
     const [show, setShow] = useState(true);
     const { type, color, title, text, text2 } = config;
-    const colorStyle: CSS.Properties = {
+    const colorStyle = {
         color: color,
     };
-    let bodyText: string = text;
+    let bodyText = text;
     if (type === 'REGISTER' && text2) {
         bodyText = emailHasFailed ? text2 : text;
     }

@@ -7,7 +7,7 @@ import { faPaperPlane } from '@fortawesome/free-solid-svg-icons';
 
 const submitIcon = <FontAwesomeIcon icon={faPaperPlane} />;
 
-const Contact: React.FC = () =>  {
+const Contact = () =>  {
   
   const [message, setMessage] = useState('')
   

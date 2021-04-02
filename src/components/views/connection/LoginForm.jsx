@@ -20,7 +20,7 @@ const passwordIcon = <FontAwesomeIcon icon={faLock} />;
 const pseudoIcon = <FontAwesomeIcon icon={faUserNinja} />;
 const submitIcon = <FontAwesomeIcon icon={faPaperPlane} />;
 
-const LoginForm: React.FC = ({loginSubmit, loginStatus}) => {
+const LoginForm = ({loginSubmit, loginStatus}) => {
     const initialValues = {
         pseudo: '',
         password: '',

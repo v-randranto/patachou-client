@@ -18,7 +18,7 @@ import { LOST_PASSWORD, ERROR_NOTE } from '../../../constants/modalConfig';
 const submitIcon = <FontAwesomeIcon icon={faPaperPlane} />,
     passwordIcon = <FontAwesomeIcon icon={faLock} />;
 
-const LostPasswordForm: React.FC = ({sendPasswordLink, lostStatus}) => {
+const LostPasswordForm = ({sendPasswordLink, lostStatus}) => {
 
     const initialValues = {
         email: '',

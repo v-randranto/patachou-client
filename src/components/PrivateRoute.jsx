@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 /* eslint-disable react/prop-types */
 import React from 'react';
 import { Route, Redirect } from 'react-router-dom';
@@ -6,7 +5,7 @@ import paths from '../constants/paths.json';
 import { useAuth } from '../contexts/AuthContext.js';
 
 const PrivateRoute = ({ component: Component, ...rest }) => {
-  const { currentUser } = useAuth();
+    const { currentUser } = useAuth();
     return (
         <Route
             {...rest}

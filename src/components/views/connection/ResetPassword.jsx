@@ -1,6 +1,6 @@
 import React, { useEffect, useReducer, useRef } from 'react';
 
-import { useParams } from 'react-router-dom';
+import { useHistory,  useParams } from 'react-router-dom';
 import Col from 'react-bootstrap/Col';
 import paths from '../../../constants/paths.json';
 
@@ -10,10 +10,11 @@ import processReducer from "../../../reducers/processReducer"
 import { useAuth } from '../../../contexts/AuthContext';
 import ResetPasswordForm from "./ResetPasswordForm"
 
-const ResetPassword: React.FC = () => {
+const ResetPassword = () => {
     const {
         currentUser
     } = useAuth();
+    const history = useHistory()
     if (currentUser.isAuthenticated) {
         history.replace(paths.HOME)
     }
@@ -40,7 +41,7 @@ const ResetPassword: React.FC = () => {
             () => {
                 dispatch({type: process.SUCCESS})
             },
-            () => {
+            (error) => {
                 dispatch({type: process.FAILURE, errorCode: error.statusCode})
             },
         );

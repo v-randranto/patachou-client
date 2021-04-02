@@ -9,7 +9,7 @@ import { useAuth } from '../../../contexts/AuthContext';
 import {process, connection} from "../../../constants/actionTypes"
 import processReducer from "../../../reducers/processReducer"
 
-const Login: React.FC = () => {
+const Login = () => {
     const history = useHistory();
     const { currentUser, userDispatch } = useAuth();
     if (currentUser.isAuthenticated) {

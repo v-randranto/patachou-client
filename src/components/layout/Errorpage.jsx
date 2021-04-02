@@ -2,8 +2,7 @@ import React from 'react'
 import Card from 'react-bootstrap/Card'
 import errorImg from '../../img/error.jpg'
 
-const ErrorPage: React.FC = () => {
-  
+const ErrorPage = () => {  
   return (
     <>
       <Card className="col-lg-6 mx-auto pt-3">

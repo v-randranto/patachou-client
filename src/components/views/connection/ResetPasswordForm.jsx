@@ -20,7 +20,7 @@ import { RESET_PASSWORD, ERROR_NOTE } from '../../../constants/modalConfig';
 const submitIcon = <FontAwesomeIcon icon={faPaperPlane} />,
     passwordIcon = <FontAwesomeIcon icon={faLock} />;
 
-const ResetPasswordForm: React.FC = ({resetPassword, resetStatus}) => {
+const ResetPasswordForm = ({resetPassword, resetStatus}) => {
 
     const initialValues = {
         password: '',

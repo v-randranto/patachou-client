@@ -9,7 +9,7 @@ import { useAuth } from '../../../contexts/AuthContext';
 import paths from "../../../constants/paths.json"
 import LostPasswordForm from "./LostPasswordForm"
 
-const LostPassword: React.FC = () => {
+const LostPassword = () => {
     const { currentUser } = useAuth();
     const history = useHistory();
 if (currentUser.isAuthenticated) {

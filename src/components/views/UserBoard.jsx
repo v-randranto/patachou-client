@@ -1,6 +1,6 @@
 import React from 'react'
 
-const UserBoard: React.FC = () => {
+const UserBoard = () => {
   return (
     <div className="wrapper ">
     <h4>Welcome to the board user</h4>

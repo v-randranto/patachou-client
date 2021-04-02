@@ -1,12 +1,11 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { useHistory } from 'react-router-dom';
+/* eslint-disable react/prop-types */
+import React, { useEffect, useRef } from 'react';
 import Alert from 'react-bootstrap/Alert';
 import Button from 'react-bootstrap/Button';
 import ButtonGroup from 'react-bootstrap/ButtonGroup';
-import Col from 'react-bootstrap/Col';
 import Form from 'react-bootstrap/Form';
 import InputGroup from 'react-bootstrap/InputGroup';
-import { FixLater } from '../../../models/types';
+
 import { ERROR_NOTE } from '../../../constants/modalConfig';
 import ErrorNotification from '../../modals/ErrorNotification';
 
@@ -16,24 +15,12 @@ import paths from '../../../constants/paths.json';
 import BsSpinner from '../../layout/Spinner';
 import { validate } from '../../../validators/loginForm';
 import { useFormik } from 'formik';
-import { ILoginForm } from '../../../models/forms';
-import AuthService from '../../../services/authService';
-import { useAuth } from '../../../contexts/AuthContext';
 
 const passwordIcon = <FontAwesomeIcon icon={faLock} />;
 const pseudoIcon = <FontAwesomeIcon icon={faUserNinja} />;
 const submitIcon = <FontAwesomeIcon icon={faPaperPlane} />;
 
-const Login: React.FC = () => {
-    const history = useHistory();
-    const { setCurrentUser } = useAuth();
-    const loginStateInit = {
-        isLoading: false,
-        isSuccessful: false,
-        hasFailed: false,
-        errorCode: null,
-    };
-    const [loginState, setLoginState] = useState<FixLater>(loginStateInit);
+const LoginForm: React.FC = ({loginSubmit, loginStatus}) => {
     const initialValues = {
         pseudo: '',
         password: '',
@@ -47,50 +34,14 @@ const Login: React.FC = () => {
         },
     });
 
-    const pseudoRef = useRef<HTMLInputElement>(null);
-
+    const pseudoRef = useRef(null);
     useEffect(() => {
         if (pseudoRef && pseudoRef.current) {
             pseudoRef.current.focus();
         }
     }, []);
 
-    const loginSubmit = (values) => {
-        setLoginState((prevState) => ({
-            ...prevState,
-            isLoading: true,
-        }));
-
-        const { pseudo, password } = values;
-        const identification: ILoginForm = { pseudo, password };
-        identification.pseudo = values.pseudo.trim();
-
-        AuthService.login(identification).then(
-            (data) => {
-                setLoginState((prevState) => ({
-                    ...prevState,
-                    isLoading: false,
-                    isSuccessful: true,
-                }));
-                setCurrentUser(data);
-                history.replace(paths.PROFILE);
-            },
-            (error) => {
-                console.log('error login', error);
-                setLoginState((prevState) => ({
-                    ...prevState,
-                    isLoading: false,
-                    hasFailed: true,
-                    errorCode: error.statusCode
-                }));
-            },
-        );
-    };
-
     return (
-        <div className="wrapper">
-            <Col md="6" lg="4" className="mx-auto">
-                <h3 className="text-dark text-center pt-4 pb-3 ">Je me connecte...</h3>
                 <Form onSubmit={formik.handleSubmit} noValidate>
                     <InputGroup className="mt-4" size="lg">
                         <InputGroup.Prepend>
@@ -137,7 +88,7 @@ const Login: React.FC = () => {
                         </Button>
                     </ButtonGroup>
 
-                    {loginState.hasFailed && (loginState.errorCode === 401 || loginState.errorCode === 404) && (
+                    {loginStatus.hasFailed && (loginStatus.errorCode === 401 || loginStatus.errorCode === 404) && (
                         <Alert variant="danger py-0 mt-2">Mes identifiants sont incorrects</Alert>
                     )}
                     <ButtonGroup className="mt-5 col" vertical>
@@ -151,14 +102,12 @@ const Login: React.FC = () => {
                         </Button>
                     </ButtonGroup>
 
-                    {loginState.loading && <BsSpinner />}
-                </Form>
-                {loginState.hasFailed && loginState.errorCode !== 401 && loginState.errorCode !== 404 && (
-                    <ErrorNotification config={ERROR_NOTE} />
-                )}
-            </Col>
-        </div>
+                    {loginStatus.loading && <BsSpinner />}
+                    {loginStatus.hasFailed && loginStatus.errorCode !== 401 && loginStatus.errorCode !== 404 && (
+            <ErrorNotification config={ERROR_NOTE} />
+                    )}
+                </Form>       
     );
 };
 
-export default Login;
+export default LoginForm;

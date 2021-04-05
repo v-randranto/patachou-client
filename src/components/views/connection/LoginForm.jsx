@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-import React, { useEffect, useRef } from 'react'
+import React, { useRef } from 'react'
 import { Link } from 'react-router-dom'
 import Alert from 'react-bootstrap/Alert'
 import Button from 'react-bootstrap/Button'

@@ -16,6 +16,7 @@ const Register = () => {
    const [registerStatus, dispatch] = useReducer(processReducer, registerStatusInit)
 
    const registerAccount = (values, photoFile) => {
+      console.log(values)
       dispatch({ type: process.REINIT })
       const profile = { ...values }
       profile.pseudo = values.pseudo.trim()

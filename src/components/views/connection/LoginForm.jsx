@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-import React, { useRef } from 'react'
+import React, { useEffect, useRef } from 'react'
 import { Link } from 'react-router-dom'
 import Alert from 'react-bootstrap/Alert'
 import Button from 'react-bootstrap/Button'
@@ -14,7 +14,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faLock, faUserNinja, faPaperPlane } from '@fortawesome/free-solid-svg-icons'
 import paths from '../../../constants/paths.json'
 import BsSpinner from '../../layout/Spinner'
-import { validate } from '../../../validators/loginForm'
+import loginSchema from '../../../validators/loginSchema'
 import { useFormik } from 'formik'
 
 const passwordIcon = <FontAwesomeIcon icon={faLock} />
@@ -29,18 +29,19 @@ const LoginForm = ({ loginSubmit, loginStatus }) => {
 
    const formik = useFormik({
       initialValues,
-      validate,
+      validationSchema: loginSchema,
       onSubmit: (values) => {
          loginSubmit(values)
       },
    })
 
    const pseudoRef = useRef(null)
-   // useEffect(() => {
-   // if (pseudoRef && pseudoRef.current) {
-   // pseudoRef.current.focus()
-   // }
-   // }, [])
+
+   useEffect(() => {
+   if (pseudoRef && pseudoRef.current) {
+   pseudoRef.current.focus()
+   }
+   }, [])
 
    return (
       <Form onSubmit={formik.handleSubmit} noValidate>
@@ -50,7 +51,7 @@ const LoginForm = ({ loginSubmit, loginStatus }) => {
             </InputGroup.Prepend>
             <Form.Control
                ref={pseudoRef}
-               type="text"
+               type="search"
                name="pseudo"
                id="pseudo"
                maxLength={20}
@@ -91,7 +92,7 @@ const LoginForm = ({ loginSubmit, loginStatus }) => {
             <Alert variant="danger py-0 mt-2">Mes identifiants sont incorrects</Alert>
          )}
          <ButtonGroup className="mt-5 col" vertical>
-            <Button as={Link} variant="gotolink p-1" to={paths.REGISTER}>
+            <Button variant="gotolink p-1" to={paths.REGISTER}>
                Je n&apos;ai pas de compte
             </Button>
 

@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-import React, { useRef, useEffect } from 'react'
+import React, { useRef } from 'react'
 
 import Alert from 'react-bootstrap/Alert'
 import Form from 'react-bootstrap/Form'
@@ -12,7 +12,7 @@ import ErrorNotification from '../../modals/ErrorNotification'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faLock, faPaperPlane } from '@fortawesome/free-solid-svg-icons'
 import { useFormik } from 'formik'
-import { validate } from '../../../validators/lostPasswordForm'
+import lostPasswordSchema from '../../../validators/lostPasswordSchema'
 import { LOST_PASSWORD, ERROR_NOTE } from '../../../constants/modalConfig'
 
 const submitIcon = <FontAwesomeIcon icon={faPaperPlane} />,
@@ -25,7 +25,7 @@ const LostPasswordForm = ({ sendPasswordLink, lostStatus }) => {
 
    const formik = useFormik({
       initialValues,
-      validate,
+      validationSchema: lostPasswordSchema,
       onSubmit: (values) => {
          sendPasswordLink(values)
       },

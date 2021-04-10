@@ -13,7 +13,6 @@ import RegisterProfileStep from './RegisterProfileStep'
 import BsSpinner from '../../layout/Spinner'
 import Notification from '../../modals/Notification'
 import ErrorNotification from '../../modals/ErrorNotification'
-import { validate } from '../../../validators/registerForm'
 import registrationSchema from '../../../validators/registrationSchema'
 
 import paths from '../../../constants/paths.json'
@@ -78,7 +77,7 @@ const RegisterForm = ({ registerStatus, registerAccount }) => {
                      {resetIcon}
                   </Button>
 
-                  <Button variant="info col-3" onClick={() => setStepState(2)} >
+                  <Button variant="info col-3" onClick={() => setStepState(2)}>
                      {nextIcon}
                   </Button>
                </ButtonGroup>

@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-import React, { useRef, useEffect } from 'react'
+import React, { useRef } from 'react'
 
 import { useHistory } from 'react-router-dom'
 import Alert from 'react-bootstrap/Alert'
@@ -14,7 +14,7 @@ import paths from '../../../constants/paths.json'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faLock, faPaperPlane } from '@fortawesome/free-solid-svg-icons'
 import { useFormik } from 'formik'
-import { validate } from '../../../validators/resetPasswordForm'
+import resetPasswordSchema from '../../../validators/resetPasswordSchema'
 import { RESET_PASSWORD, ERROR_NOTE } from '../../../constants/modalConfig'
 
 const submitIcon = <FontAwesomeIcon icon={faPaperPlane} />,
@@ -28,7 +28,7 @@ const ResetPasswordForm = ({ resetPassword, resetStatus }) => {
 
    const formik = useFormik({
       initialValues,
-      validate,
+      validationSchema: resetPasswordSchema,
       onSubmit: (values) => {
          resetPassword(values)
       },

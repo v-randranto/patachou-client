@@ -2,47 +2,47 @@ export const EDIT_PROFILE = {
   type: 'EDIT_PROFILE',
   color: '#28a745',
   title: 'Demande traitée.',
-  credentials_text: 'Vos identifiants sont modifiés.',
-  personal_data_text: 'Vos données personnelles sont modifiées'
+  credentials_text: 'Tes identifiants sont modifiés.',
+  personal_data_text: 'Tes données persos sont modifiées.'
 }
 
 
 export const REGISTER = {
   type: 'REGISTER',
   color: '#28a745',
-  title: 'Vous êtes des nôtres!',
-  text: 'Un email de confirmation vous a été envoyé. Si vous ne le recevez pas, vérifiez votre adresse dans le profil de votre compte.',
-  text2: `Votre profil est créé.`
+  title: 'Tu es des nôtres!',
+  text: 'Tu vas recevoir un email de confirmation. Pas reçu? vérifie ton adresse dans le profil de ton compte.',
+  text2: `Ton profil est créé.`
 }
 
 export const RESET_PASSWORD = {
   type: 'RESET_PASSWORD',
   color: '#28a745',
-  title: 'Demande traitée!',
-  text: 'Votre mot de passe est modifié',
+  title: `C'est fait!`,
+  text: 'Ton mot de passe est modifié.',
 }
 
 export const LOST_PASSWORD = {
   type: 'LOST_PASSWORD',
   color: '#28a745',
-  title: 'Demande traitée!',
-  text: 'Un lien de réinitialisation du mot de passe vous a été envoyé par email'
+  title: `C'est fait!`,
+  text: 'Tu vas recevoir un email contenant le lien de réinitialisation.'
 }
 
 export const CONTACT_EMAIL = {
   type: 'CONTACT_EMAIL',
   color: '#28a745',
   title: `C'est dans la boîte!`,
-  text: 'Merci pour votre message, nous y répondrons dans les plus brefs délais.'
+  text: 'Merci pour ton message, nous y répondrons dans les plus brefs délais.'
 }
 
 export const NETWORK_REQUEST = {
   color: '#28a745',
-  title: 'Demande traitée!',
-  request_text: 'Votre demande a été envoyée à',
-  confirm_text: 'Vous êtes désormais pote avec',
-  reject_text: 'Vous avez refusé la demande de',
-  unfriend_text: `Vous n'êtes plus pote avec`
+  title: `C'est fait!`,
+  request_text: 'Ta demande a été envoyée à',
+  confirm_text: 'Tu es désormais pote avec',
+  reject_text: 'Tu as refusé la demande de',
+  unfriend_text: `Tu n'es plus pote avec`
 }
 
 export const ERROR_NOTE = {

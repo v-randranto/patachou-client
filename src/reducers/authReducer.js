@@ -1,26 +1,16 @@
-import {
-    connection
-} from "../constants/actionTypes"
-import {
-    FixLater
-} from "../models/types"
-const {
-    LOGIN,
-    LOGOUT
-} = connection
+import { connection } from '../constants/actionTypes'
+const { LOGIN, LOGOUT } = connection
 
-const authReducer = (state: FixLater, action: FixLater): FixLater => {
-    const {user} = action
-    switch (action.type) {
-        case LOGIN:
-            return {
-                isAuthenticated: true, user
-            }
-            case LOGOUT:
-                return {
-                    isAuthenticated: false, user: null
-                }
-    }
+const authReducer = (state, action) => {
+   const { user } = action
+   switch (action.type) {
+      case LOGIN:
+         return { isAuthenticated: true, user }
+      case LOGOUT:
+         return { isAuthenticated: false, user: null }
+      default:
+         return state
+   }
 }
 
-export default authReducer;
+export default authReducer

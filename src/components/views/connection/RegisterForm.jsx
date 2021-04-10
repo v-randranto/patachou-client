@@ -14,6 +14,7 @@ import BsSpinner from '../../layout/Spinner'
 import Notification from '../../modals/Notification'
 import ErrorNotification from '../../modals/ErrorNotification'
 import { validate } from '../../../validators/registerForm'
+import registrationSchema from '../../../validators/registrationSchema'
 
 import paths from '../../../constants/paths.json'
 import { REGISTER, ERROR_NOTE } from '../../../constants/modalConfig'
@@ -34,7 +35,6 @@ const RegisterForm = ({ registerStatus, registerAccount }) => {
    const initialValues = {
       pseudo: '',
       presentation: '',
-      // photo: '',
       email: '',
       password: '',
       confirmPassword: '',
@@ -42,7 +42,7 @@ const RegisterForm = ({ registerStatus, registerAccount }) => {
 
    const formik = useFormik({
       initialValues,
-      validate,
+      validationSchema: registrationSchema,
       onSubmit: (values) => {
          registerAccount(values, photoFile)
       },

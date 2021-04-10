@@ -20,6 +20,7 @@ const RegisterAuthStep = ({formik}) => {
                name="email"
                id="email"
                placeholder="mon.adresse@email.com"
+               maxLength={50}
                value={formik.values.email}
                onChange={formik.handleChange}
                onBlur={formik.handleBlur}
@@ -37,6 +38,7 @@ const RegisterAuthStep = ({formik}) => {
                type="password"
                name="password"
                id="password"
+               minLength={4}
                maxLength={10}
                placeholder="mon mot de passe"
                value={formik.values.password}
@@ -44,10 +46,10 @@ const RegisterAuthStep = ({formik}) => {
                onBlur={formik.handleBlur}
             />
          </InputGroup>
-         <small>De 8 à 15 caractères dont 1 maj, 1 min et 1 chiffre</small>
          {formik.errors.password && formik.touched.password && (
             <Alert variant="danger py-0">{formik.errors.password}</Alert>
          )}
+         
          <InputGroup className="mt-2" size="lg">
             <InputGroup.Prepend>
                <InputGroup.Text>{passwordIcon}*</InputGroup.Text>

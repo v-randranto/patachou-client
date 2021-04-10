@@ -8,6 +8,7 @@ import Image from 'react-bootstrap/Image'
 import Media from 'react-bootstrap/Media'
 import { useAuth } from '../../../contexts/AuthContext'
 import { ddmmyyyyFormat } from '../../../utils/dateHandler'
+import { toTitleCase } from '../../../utils/textFormat'
 import paths from '../../../constants/paths.json'
 
 const Profile = () => {
@@ -22,7 +23,7 @@ const Profile = () => {
                      <Media>
                         <Image className="my-2 mr-2" src={account.photoUrl} rounded width="60px" />
                         <Media.Body>
-                           <h4 className="text-dark">{account.pseudo}</h4>
+                           <h4 className="text-dark">{toTitleCase(account.pseudo)}</h4>
                            <p className="text-dark p-0 m-0">
                               Membre depuis le {ddmmyyyyFormat(new Date(account.creationDate))}
                            </p>

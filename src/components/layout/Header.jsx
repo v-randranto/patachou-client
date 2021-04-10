@@ -6,6 +6,7 @@ import Navbar from 'react-bootstrap/Navbar'
 import brandImg from '../../img/brand.png'
 
 import paths from '../../constants/paths.json'
+import { toTitleCase } from '../../utils/textFormat'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {
    faHome,
@@ -80,7 +81,7 @@ const Header = () => {
             <Nav activeKey={location.pathname}>
                {isAuthenticated && (
                   <BsNavLink as={NavLink} className="d-inline mx-1" to={paths.PROFILE}>
-                     {profileIcon} <span className="d-none d-md-inline">{user.account.pseudo}</span>
+                     {profileIcon} <span className="d-none d-md-inline">{toTitleCase(user.account.pseudo)}</span>
                   </BsNavLink>
                )}
 

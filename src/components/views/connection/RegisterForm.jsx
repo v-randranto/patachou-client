@@ -15,7 +15,6 @@ import Notification from '../../modals/Notification'
 import ErrorNotification from '../../modals/ErrorNotification'
 import { validate } from '../../../validators/registerForm'
 
-
 import paths from '../../../constants/paths.json'
 import { REGISTER, ERROR_NOTE } from '../../../constants/modalConfig'
 
@@ -63,12 +62,6 @@ const RegisterForm = ({ registerStatus, registerAccount }) => {
       })
    }
 
-   const stepOneIsValid = () => {
-      if (formik.errors) {
-         if (formik.errors.email || formik.errors.password || formik.errors.confirm) return false
-      } else return true  
-   }
-
    return (
       <Form onSubmit={formik.handleSubmit} noValidate>
          {stepState === 1 && (
@@ -80,13 +73,12 @@ const RegisterForm = ({ registerStatus, registerAccount }) => {
                      variant="secondary offset-6 col-3"
                      onClick={() => {
                         resetStep('email', 'password', 'confirmPassword')
-                        
                      }}
                   >
                      {resetIcon}
                   </Button>
 
-                  <Button variant="info col-3" onClick={() => setStepState(2)} disabled={stepOneIsValid()}>
+                  <Button variant="info col-3" onClick={() => setStepState(2)} >
                      {nextIcon}
                   </Button>
                </ButtonGroup>
@@ -95,7 +87,7 @@ const RegisterForm = ({ registerStatus, registerAccount }) => {
 
          {stepState === 2 && (
             <div>
-               <RegisterProfileStep formik={formik} setPhotoFile={setPhotoFile} photoFile={photoFile}/>
+               <RegisterProfileStep formik={formik} setPhotoFile={setPhotoFile} photoFile={photoFile} />
                {!registerStatus.loading && (
                   <ButtonGroup className="mt-4 col p-0" size="lg">
                      <Button variant="info p-0 col-3" onClick={() => setStepState(1)}>
@@ -104,10 +96,7 @@ const RegisterForm = ({ registerStatus, registerAccount }) => {
                      <Button type="submit" variant="send" disabled={!formik.isValid}>
                         {submitIcon} J&apos;envoie!
                      </Button>
-                     <Button
-                        variant="secondary p-0 col-3"
-                        onClick={() => resetStep('pseudo', 'presentation', 'photo')}
-                     >
+                     <Button variant="secondary p-0 col-3" onClick={() => resetStep('pseudo', 'presentation', 'photo')}>
                         {resetIcon}
                      </Button>
                   </ButtonGroup>

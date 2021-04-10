@@ -37,7 +37,7 @@ const RegisterProfileStep = ({ formik, setPhotoFile, photoFile }) => {
                <InputGroup.Text>{pseudoIcon}*</InputGroup.Text>
             </InputGroup.Prepend>
             <Form.Control
-               type="text"
+               type="search"
                name="pseudo"
                id="pseudo"
                maxLength={20}

@@ -18,14 +18,16 @@ const Register = () => {
    const registerAccount = (values, photoFile) => {
       console.log(values)
       dispatch({ type: process.REINIT })
-      const profile = { ...values }
-      profile.pseudo = values.pseudo.trim()
-      profile.email = values.email.trim()
+      const account = { ...values }
+      account.pseudo = values.pseudo.trim()
+      account.email = values.email.trim()
       if (photoFile) {
-         profile.photo = { ...photoFile }
+         account.photo = { ...photoFile }
+      } else {
+         account.photo = null
       }
 
-      AuthService.register(profile).then(
+      AuthService.register(account).then(
          (data) => {
             dispatch({ type: process.SUCCESS, emailHasFailed: !data.emailIsSent })
          },

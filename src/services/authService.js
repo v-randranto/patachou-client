@@ -36,9 +36,10 @@ class AuthService {
       return apiCall(this.path, METHOD.POST, { email }).then((data) => data)
    }
 
-   register(profile) {
+   register(account) {
+      console.log("account", account)
       this.path = `${RESSOURCE}/${REGISTER}`
-      return apiCall(this.path, METHOD.POST, { profile }).then((data) => data)
+      return apiCall(this.path, METHOD.POST, { account}).then((data) => data)
    }
 
    resetPassword(password, resetToken) {

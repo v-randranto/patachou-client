@@ -49,8 +49,8 @@ const RegisterAuthStep = ({formik}) => {
          {formik.errors.password && formik.touched.password && (
             <Alert variant="danger py-0">{formik.errors.password}</Alert>
          )}
-         
-         <InputGroup className="mt-2" size="lg">
+
+         <InputGroup className="mt-4" size="lg">
             <InputGroup.Prepend>
                <InputGroup.Text>{passwordIcon}*</InputGroup.Text>
             </InputGroup.Prepend>

@@ -5,7 +5,7 @@ export const apiCall = async (ressource, method, data) => {
    const config = {
       method: method,
       data: data,
-      url: `http://localhost:3001/api/${ressource}`,
+      url: `/api/${ressource}`,
    }
 
    try {

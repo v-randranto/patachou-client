@@ -14,7 +14,7 @@ export const AUTH_API = {
     RESET_PASSWORD: 'reset-password'
 }
 
-export const RESSOURCES_API = {
-    ACCOUNTS: 'accounts',
-    RECIPES: 'recipes'
+export const RECIPES_API = {
+    RESSOURCE: 'recipes'
+    
 }

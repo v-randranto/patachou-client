@@ -16,6 +16,7 @@ import LostPassword from './components/views/connection/LostPassword'
 import NotFound from './components/layout/NotFound'
 import PrivateRoute from './components/PrivateRoute'
 import Profile from './components/views/profile/Profile'
+import Recipes from './components/views/recipes/Recipes'
 
 import Register from './components/views/connection/Register'
 import ResetPassword from './components/views/connection/ResetPassword'
@@ -69,6 +70,7 @@ const App = () => {
                   <PrivateRoute exact path={paths.USER_BOARD} component={UserBoard} />
                   <PrivateRoute exact path={paths.CONTACT} component={Contact} />
                   <PrivateRoute exact path={paths.PROFILE} component={Profile} />
+                  <PrivateRoute exact path={paths.RECIPES} component={Recipes} />
                   <Route component={NotFound} />
                </Switch>
             </Container>
